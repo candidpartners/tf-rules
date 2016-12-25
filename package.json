@@ -1,0 +1,34 @@
+{
+  "name": "tf-rules",
+  "version": "0.0.1",
+  "description": "Rules engine for checking Terraform",
+  "main": "index.js",
+  "scripts": {
+    "test": "true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clearly/tf-rules.git"
+  },
+  "keywords": [
+    "terraform",
+    "error"
+  ],
+  "author": "Aaron Bawcom <abawcom@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clearly/tf-rules/issues"
+  },
+  "homepage": "https://github.com/clearly/tf-rules#readme",
+  "dependencies": {
+    "ajv": "^4.10.1",
+    "aws-sdk": "^2.7.19",
+    "co": "^4.6.0",
+    "colors": "^1.1.2",
+    "jmespath": "^0.15.0",
+    "lodash": "^4.17.2",
+    "nconf": "^0.8.4",
+    "nconf-yaml": "^1.0.2",
+    "tf-parse": "^0.1.1"
+  }
+}

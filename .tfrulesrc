@@ -1,0 +1,2 @@
+rules :
+  ebs-volume-encryption : true
