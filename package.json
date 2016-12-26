@@ -1,6 +1,6 @@
 {
   "name": "tf-rules",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
