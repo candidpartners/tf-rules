@@ -30,9 +30,9 @@ function validateConfig( rules, config ) {
   }, [] );
 }
 
-function report( result ) {
+function report( result, instanceName, rule ) {
   if( result.valid == 'success' ) {
-    console.log( symbols.ok );
+    console.log( colors.green( symbols.ok ), " ", colors.gray( rule.docs.description ), instanceName );
   }
 }
 
@@ -54,7 +54,7 @@ function *validatePlan( rules, allConfig, plan ) {
         for( let instanceName of _.keys( searchResult.search ) ) {
           let instance = searchResult.search[ instanceName ];
           let result = yield rule.validate({ config, instance, plan, jp });
-          report( result );
+          report( result, instanceName, rule );
         }
       }
     }
@@ -74,7 +74,6 @@ function *main() {
     let plan = new Plan();
     let target = plan.parse( fs.readFileSync( nconf.get( 'plan' ), 'utf8' ) );
     yield validatePlan( rules, config, target.add );
-    console.log( target );
   }
 
   return rules;  
@@ -86,7 +85,7 @@ function handleError( error ) {
 }
 
 function handleSuccess( value ) {
-  console.log( value );
+  // console.log( value );
   process.exit( 0 );
 }
 
