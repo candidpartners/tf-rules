@@ -1,4 +1,5 @@
 'use strict';
+const debug     = require('debug')('tf-rules/index');
 const _         = require('lodash');
 const fs        = require('fs');
 const co        = require('co');
@@ -30,8 +31,10 @@ function report( result, instanceName, rule ) {
 }
 
 function *validatePlan( rules, allConfig, plan ) {
+  debug( 'allConfig: %O', allConfig );
   let results = [];
   for( let ruleKey of _.keys( rules ) ) {
+    debug( 'ruleKey: %s', ruleKey );
     let config = allConfig[ ruleKey ];
     let rule = rules[ ruleKey ];
     let paths = rule.paths;
