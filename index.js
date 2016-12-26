@@ -33,10 +33,13 @@ function validateConfig( rules, config ) {
 function report( result, instanceName, rule ) {
   if( result.valid == 'success' ) {
     console.log( colors.green( symbols.ok ), " ", colors.gray( rule.docs.description ), instanceName );
+  } else if( result.valid == 'fail' ) {
+    console.log( colors.red( symbols.err ), " ", colors.gray( rule.docs.description ), instanceName );
   }
 }
 
 function *validatePlan( rules, allConfig, plan ) {
+  let results = [];
   for( let ruleKey of _.keys( rules ) ) {
     let config = allConfig[ ruleKey ];
     let rule = rules[ ruleKey ];
@@ -54,15 +57,17 @@ function *validatePlan( rules, allConfig, plan ) {
         for( let instanceName of _.keys( searchResult.search ) ) {
           let instance = searchResult.search[ instanceName ];
           let result = yield rule.validate({ config, instance, plan, jp });
+          results.push( result );
           report( result, instanceName, rule );
         }
       }
     }
   }
-  return;
+  return results;
 }
 
 function *main() {
+  let results = null;
   const rules   = require('./lib/rules');
   const config = nconf.get('rules');
   
@@ -73,10 +78,10 @@ function *main() {
   if( nconf.get( 'plan' ) ) {
     let plan = new Plan();
     let target = plan.parse( fs.readFileSync( nconf.get( 'plan' ), 'utf8' ) );
-    yield validatePlan( rules, config, target.add );
+    results = yield validatePlan( rules, config, target.add );
   }
 
-  return rules;  
+  return results;
 }
 
 function handleError( error ) {
@@ -85,8 +90,12 @@ function handleError( error ) {
 }
 
 function handleSuccess( value ) {
-  // console.log( value );
-  process.exit( 0 );
+  let results = _.filter( value, { valid : 'success' } );
+  if( results.length != value.length ) {
+    process.exit( 1 );
+  } else {
+    process.exit( 0 );
+  }
 }
 
 co( main ).catch( handleError ).then( handleSuccess );
