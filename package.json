@@ -1,6 +1,6 @@
 {
   "name": "tf-rules",
-  "version": "0.3.1",
+  "version": "0.3.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
@@ -33,9 +33,9 @@
     "lodash": "^4.17.2",
     "nconf": "^0.8.4",
     "nconf-yaml": "^1.0.2",
-    "tf-parse": "^0.2.0"
+    "tf-parse": "^0.2.0",
+    "debug": "*"
   },
   "devDependencies": {
-    "debug": "^2.5.2"
   }
 }
