@@ -14,6 +14,9 @@
     "terraform",
     "error"
   ],
+  "bin": {
+    "tfrules": "./bin/tfrules.js"
+  },
   "author": "Aaron Bawcom <abawcom@gmail.com>",
   "license": "ISC",
   "bugs": {
@@ -25,6 +28,7 @@
     "aws-sdk": "^2.7.19",
     "co": "^4.6.0",
     "colors": "^1.1.2",
+    "get-stdin": "^5.0.1",
     "jmespath": "^0.15.0",
     "lodash": "^4.17.2",
     "nconf": "^0.8.4",

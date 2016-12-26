@@ -2,8 +2,6 @@
 const _         = require('lodash');
 const fs        = require('fs');
 const co        = require('co');
-const Plan      = require('tf-parse').Plan;
-const nconf     = require('nconf');
 const Ajv       = require('ajv');
 const colors    = require('colors');
 const jp        = require('jmespath');
@@ -11,13 +9,6 @@ const jp        = require('jmespath');
 const symbols   = require('./lib/reporters/symbols');
 
 const ajv = new Ajv(); 
-
-nconf.argv()
-.env()
-.file({
-  file: '.tfrulesrc',
-  format: require('nconf-yaml')
-});
 
 function validateConfig( rules, config ) {
   return _.reduce( config, ( accum, value, key ) => {
@@ -66,38 +57,9 @@ function *validatePlan( rules, allConfig, plan ) {
   return results;
 }
 
-function *main() {
-  let results = null;
-  const rules   = require('./lib/rules');
-  const config = nconf.get('rules');
-  
-  const errors = validateConfig( rules, config );
-  
-  if( errors.length > 0 ) throw { message : 'Configuration errors', errors };
 
-  if( nconf.get( 'plan' ) ) {
-    let plan = new Plan();
-    let target = plan.parse( fs.readFileSync( nconf.get( 'plan' ), 'utf8' ) );
-    results = yield validatePlan( rules, config, target.add );
-  }
-
-  return results;
-}
-
-function handleError( error ) {
-  console.log( error );
-  process.exit( 1 );
-}
-
-function handleSuccess( value ) {
-  let results = _.filter( value, { valid : 'success' } );
-  if( results.length != value.length ) {
-    process.exit( 1 );
-  } else {
-    process.exit( 0 );
-  }
-}
-
-co( main ).catch( handleError ).then( handleSuccess );
-
+module.exports = {
+  validateConfig,
+  validatePlan
+};
 
