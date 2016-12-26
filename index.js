@@ -8,6 +8,8 @@ const Ajv       = require('ajv');
 const colors    = require('colors');
 const jp        = require('jmespath');
 
+const symbols   = require('./lib/reporters/symbols');
+
 const ajv = new Ajv(); 
 
 nconf.argv()
@@ -28,6 +30,12 @@ function validateConfig( rules, config ) {
   }, [] );
 }
 
+function report( result ) {
+  if( result.valid == 'success' ) {
+    console.log( symbols.ok );
+  }
+}
+
 function *validatePlan( rules, allConfig, plan ) {
   for( let ruleKey of _.keys( rules ) ) {
     let config = allConfig[ ruleKey ];
@@ -45,7 +53,8 @@ function *validatePlan( rules, allConfig, plan ) {
       if( _.isObject( searchResult.search ) && ! _.isArray( searchResult.search ) ) {
         for( let instanceName of _.keys( searchResult.search ) ) {
           let instance = searchResult.search[ instanceName ];
-          yield rule.validate({ config, instance, plan, jp });
+          let result = yield rule.validate({ config, instance, plan, jp });
+          report( result );
         }
       }
     }
