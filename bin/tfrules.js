@@ -9,6 +9,8 @@ const nconf     = require('nconf');
 const Plan      = require('tf-parse').Plan;
 const colors    = require('colors');
 
+// TODO Add schema valdiation for config file
+
 nconf.argv()
 .env()
 .file({

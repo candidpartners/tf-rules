@@ -9,17 +9,19 @@ const jp        = require('jmespath');
 
 const symbols   = require('./lib/reporters/symbols');
 
-const ajv = new Ajv(); 
+const ajv = new Ajv();
 
 function validateConfig( rules, config ) {
-  return _.reduce( config, ( accum, value, key ) => {
+  let errors = [];
+  errors = _.reduce( config, ( accum, value, key ) => {
     if( rules[ key ] == undefined ) {
       accum.push( { severity : 'warning', message : `${key} rule not available in this version` } );
     } else if ( ! ajv.validate( rules[ key ].schema || {}, value ) ) {
       accum.push( { severity : 'error', message : `${key} configuration invalid`, details : ajv.errors } );
     }
     return accum;
-  }, [] );
+  }, errors );
+  return errors;
 }
 
 function report( result, instanceName, rule ) {
