@@ -75,8 +75,8 @@ function handleError( error ) {
 }
 
 function handleSuccess( value ) {
-  let results = _.filter( value, { valid : 'success' } );
-  if( results.length != value.length ) {
+  let results = _.filter( value, { valid : 'fail' } );
+  if( results.length > 0 ) {
     process.exit( 1 );
   } else {
     process.exit( 0 );
