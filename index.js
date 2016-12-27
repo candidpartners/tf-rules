@@ -26,7 +26,7 @@ function report( result, instanceName, rule ) {
   if( result.valid == 'success' ) {
     console.log( colors.green( symbols.ok ), colors.red( 'OK' ), colors.gray( rule.docs.description ), instanceName );
   } else if( result.valid == 'fail' ) {
-    console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( rule.docs.description ), instanceName );
+    console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( rule.docs.description ), ': ', instanceName );
   }
 }
 
