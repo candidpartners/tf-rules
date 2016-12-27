@@ -35,7 +35,7 @@ function *validatePlan( rules, allConfig, plan ) {
   let results = [];
   for( let ruleKey of _.keys( rules ) ) {
     debug( 'ruleKey: %s', ruleKey );
-    let config = allConfig[ ruleKey ];
+    let config = allConfig[ ruleKey ] || {};
     let rule = rules[ ruleKey ];
     let paths = rule.paths;
     let searchResults = _.keys( paths ).map( path => ({

@@ -12,7 +12,7 @@ const colors    = require('colors');
 nconf.argv()
 .env()
 .file({
-  file: '.tfrulesrc',
+  file: 'terraform.tfrules',
   format: require('nconf-yaml')
 });
 
@@ -31,7 +31,7 @@ function *main() {
   }
   
   if( ! nconf.get( 'rules' ) ) {
-    console.log( colors.red( 'ERR!' ), ` Could not load configuration from .tfrulesrc file in the ${process.cwd()}. Specify the location of the file using --config` );
+    console.log( colors.red( 'ERR!' ), ` Could not load configuration from terraform.tfrules file in the ${process.cwd()}. Specify the location of the file using --config` );
     process.exit( 1 );
   }
   
