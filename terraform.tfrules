@@ -3,3 +3,4 @@ provider :
 rules :
 - ebs-volume-encryption : true
 - rds-encryption-key-exists : true
+- tagging-exists : true
