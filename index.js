@@ -10,38 +10,62 @@ const jp        = require('jmespath');
 const symbols   = require('./lib/reporters/symbols');
 
 const ajv = new Ajv();
+function getKey( ob ) {
+  if( ! _.isObject( ob ) ) {
+    throw { severity : 'error', message : 'An individual rule configuration must be an object' };
+  }
+  const keys = _.keys( ob );
+  if( keys.length != 1 ) {
+    throw { severity : 'error', message : 'An individual rule configuration must have a single key that is the name of the rule' };
+  }
+  return keys[ 0 ];
+}
 
 function validateConfig( rules, config ) {
   let errors = [];
-  errors = _.reduce( config, ( accum, value, key ) => {
-    if( rules[ key ] == undefined ) {
-      accum.push( { severity : 'warning', message : `${key} rule not available in this version` } );
-    } else if ( ! ajv.validate( rules[ key ].schema || {}, value ) ) {
-      accum.push( { severity : 'error', message : `${key} configuration invalid`, details : ajv.errors } );
+  try {
+    if( ! _.isArray( config ) ) {
+      errors.push({ severity : 'error', message : 'The rules configuration must be an array.' });
+    } else {
+      errors = _.reduce( config, ( accum, item ) => {
+        let ruleId = getKey( item );
+        let rule = rules[ ruleId ];
+        let ruleConfig = item[ ruleId ];
+        if( rule == undefined ) {
+          accum.push( { severity : 'warning', message : `${ruleId} rule not available in this version` } );
+        } else if ( ! ajv.validate( rule.schema || {}, ruleConfig ) ) {
+          accum.push( { severity : 'error', message : `${ruleId} configuration invalid`, details : ajv.errors } );
+        }
+        return accum;
+      }, errors );
     }
-    return accum;
-  }, errors );
+  } catch ( err ) {
+    errors.push( err );
+  }
   return errors;
 }
 
 function report( result, instanceName, rule ) {
-  if( result.valid == 'success' ) {
-    console.log( colors.green( symbols.ok ), colors.red( 'OK' ), colors.gray( rule.docs.description ), ':', instanceName );
-  } else if( result.valid == 'fail' ) {
-    console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( rule.docs.description ), ': ', instanceName );
+  if( result ) {
+    if( result.valid == 'success' ) {
+      console.log( colors.green( symbols.ok ), colors.green( 'OK' ), colors.gray( rule.docs.description ), colors.gray( ':' ), instanceName );
+    } else if( result.valid == 'fail' ) {
+      console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( rule.docs.description ), colors.gray( ':' ), instanceName );
+    }
   }
 }
 
 function *validatePlan( rules, allConfig, plan ) {
-  debug( 'allConfig: %O', allConfig );
+  debug( 'allConfig: %j', allConfig );
   let results = [];
-  for( let ruleKey of _.keys( rules ) ) {
-    debug( 'ruleKey: %s', ruleKey );
-    let config = allConfig[ ruleKey ] || {};
-    let rule = rules[ ruleKey ];
+  for( let ruleInstance of allConfig ) {
+    debug( 'ruleInstance: %j', ruleInstance );
+    let ruleId = getKey( ruleInstance );
+    let rule = rules[ ruleId ];
+    let config = ruleInstance[ ruleId ];
     let paths = rule.paths;
     let searchResults = _.keys( paths ).map( path => ({
-      rule    : ruleKey,
+      rule    : ruleId,
       path    : {
         name  : path,
         query : paths[ path ]
