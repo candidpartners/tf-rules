@@ -18,7 +18,6 @@ nconf.argv()
 
 function *main() {
   debug( '*main' );
-  let results = null;
   const rules = require( '../lib/rules' );
 
   if( ! nconf.get( 'rules' ) ) {
@@ -64,7 +63,10 @@ function *main() {
   debug( 'Parsing plan' );
   let target = plan.parse( inputPlan );
   debug( 'Calling validatePlan' );
-  results = yield tfRules.validatePlan( rules, config, target.add );
+  let results = [];
+  results = results.concat( yield tfRules.validatePlan( rules, config, target.add ) );
+  results = results.concat( yield tfRules.validatePlan( rules, config, target.rep.next ) );
+  results = results.concat( yield tfRules.validatePlan( rules, config, target.mod.next ) );
 
   return results;
 }
