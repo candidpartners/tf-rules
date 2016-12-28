@@ -8,6 +8,8 @@ const getStdin  = require('get-stdin');
 const nconf     = require('nconf');
 const Plan      = require('tf-parse').Plan;
 const colors    = require('colors');
+const iniParser = require('ini-parser');
+const AWS       = require('aws-sdk');
 
 nconf.argv()
 .env()
@@ -28,6 +30,8 @@ function *main() {
       });      
     }
   }
+  
+  const provider = getProvider( _.defaults( nconf.get('provider'), {} ) );
   
   if( ! nconf.get( 'rules' ) ) {
     console.log( colors.red( 'ERR!' ), ` Could not load configuration from terraform.tfrules file in the ${process.cwd()}. Specify the location of the file using --config` );
@@ -64,12 +68,39 @@ function *main() {
   let target = plan.parse( inputPlan );
   debug( 'Calling validatePlan' );
   let results = [];
-  results = results.concat( yield tfRules.validatePlan( rules, config, target.add ) );
-  results = results.concat( yield tfRules.validatePlan( rules, config, target.rep.next ) );
-  results = results.concat( yield tfRules.validatePlan( rules, config, target.mod.next ) );
+  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add, provider } ) );
+  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.rep.next, provider } ) );
+  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.mod.next, provider } ) );
 
   return results;
 }
+
+function getProvider( providerConfig ) {
+  const targetConfig = {};
+  if( providerConfig.region ) {
+    _.defaults( targetConfig, { region : providerConfig.region } );
+  }
+  if( providerConfig.shared_credentials_file ) {
+    const fileContents = fs.readFileSync( providerConfig.shared_credentials_file, 'utf8' );
+    const iniConfig = iniParser.parse( fileContents );
+    const profile = providerConfig.profile || 'default';
+    if( iniConfig[ profile ] ) {
+      _.defaults( targetConfig, {
+        credentials : {
+          accessKeyId     : iniConfig[ profile ].aws_access_key_id,
+          secretAccessKey : iniConfig[ profile ].aws_secret_access_key,
+          sessionToken    : iniConfig[ profile ].aws_session_token
+        }
+      });
+    } else {
+      console.log( colors.red( 'ERR!' ), `provider.shared_credentials_file specified but [${profile}] profile not found` );
+      process.exit( 1 );
+    }
+  }
+  AWS.config.update( targetConfig );
+  return AWS;
+}
+
 
 function handleError( error ) {
   console.log( error );

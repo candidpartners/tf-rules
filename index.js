@@ -1,8 +1,6 @@
 'use strict';
 const debug     = require('debug')('tf-rules/index');
 const _         = require('lodash');
-const fs        = require('fs');
-const co        = require('co');
 const Ajv       = require('ajv');
 const colors    = require('colors');
 const jp        = require('jmespath');
@@ -50,19 +48,21 @@ function report( result, instanceName, rule ) {
     if( result.valid == 'success' ) {
       console.log( colors.green( symbols.ok ), colors.green( 'OK' ), colors.gray( rule.docs.description ), colors.gray( ':' ), instanceName );
     } else if( result.valid == 'fail' ) {
-      console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( rule.docs.description ), colors.gray( ':' ), instanceName );
+      console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( result.message || rule.docs.description ), colors.gray( ':' ), instanceName );
     }
   }
 }
 
-function *validatePlan( rules, allConfig, plan ) {
-  debug( 'allConfig: %j', allConfig );
+function *validatePlan( params ) {
+  const plan = params.plan;
+  const provider = params.provider;
+  debug( 'allConfig: %j', params.config );
   let results = [];
   if( _.isObject( plan ) && ! _.isArray( plan ) && ! _.isEmpty( plan ) ) {
-    for( let ruleInstance of allConfig ) {
+    for( let ruleInstance of params.config ) {
       debug( 'ruleInstance: %j', ruleInstance );
       let ruleId = getKey( ruleInstance );
-      let rule = rules[ ruleId ];
+      let rule = params.rules[ ruleId ];
       let config = ruleInstance[ ruleId ];
       let paths = rule.paths;
       let searchResults = _.keys( paths ).map( path => ({
@@ -77,7 +77,7 @@ function *validatePlan( rules, allConfig, plan ) {
         if( _.isObject( searchResult.search ) && ! _.isArray( searchResult.search ) ) {
           for( let instanceName of _.keys( searchResult.search ) ) {
             let instance = searchResult.search[ instanceName ];
-            let result = yield rule.validate({ config, instance, plan, jp });
+            let result = yield rule.validate( { config, instance, plan, jp, provider, _ } );
             results.push( result );
             report( result, instanceName, rule );
           }

@@ -25,11 +25,12 @@
   "homepage": "https://github.com/clearly/tf-rules#readme",
   "dependencies": {
     "ajv": "^4.10.1",
-    "aws-sdk": "^2.7.19",
+    "aws-sdk": "*",
     "co": "^4.6.0",
     "colors": "^1.1.2",
     "debug": "^2.5.2",
     "get-stdin": "^5.0.1",
+    "ini-parser": "0.0.2",
     "jmespath": "^0.15.0",
     "lodash": "^4.17.2",
     "nconf": "^0.8.4",

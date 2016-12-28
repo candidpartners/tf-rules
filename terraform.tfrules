@@ -1,2 +1,7 @@
+provider :
+  region                    : us-west-2
+  shared_credentials_file   : /Users/abawcom/.aws/credentials
+  profile                   : CCNA_SharedServices_Architect
 rules :
 - ebs-volume-encryption : true
+- rds-encryption-key-exists : true
