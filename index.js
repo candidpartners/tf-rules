@@ -48,7 +48,13 @@ function report( result, instanceName, rule ) {
     if( result.valid == 'success' ) {
       console.log( colors.green( symbols.ok ), colors.green( 'OK' ), colors.gray( rule.docs.description ), colors.gray( ':' ), instanceName );
     } else if( result.valid == 'fail' ) {
-      console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( result.message || rule.docs.description ), colors.gray( ':' ), instanceName );
+      if ( _.isArray(result.message)) {
+        for ( let error of result.message ){
+          console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( error || rule.docs.description ), colors.gray( ':' ), instanceName );
+        }
+      } else {
+        console.log( colors.red( symbols.err ), colors.red( 'ERR' ), colors.gray( result.message || rule.docs.description ), colors.gray( ':' ), instanceName );  
+      }
     }
   }
 }
