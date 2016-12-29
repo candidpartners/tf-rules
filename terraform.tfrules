@@ -3,3 +3,11 @@ provider :
 rules :
 - ebs-volume-encryption : true
 - rds-encryption-key-exists : true
+- ec2-instance-tag-compliance :
+  - Name
+  - ApplicationId
+  - name : ApplicationCode
+    value : '^[A-Z]{3}$'
+  - name : Environment
+    value : ^(DEV|QA|TEST|STAGING|PROD)$
+  - CostCenter
