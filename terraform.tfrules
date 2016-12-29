@@ -6,8 +6,10 @@ rules :
 - ec2-instance-tag-compliance :
   - Name
   - ApplicationId
-  - name : ApplicationCode
-    value : '^[A-Z]{3}$'
-  - name : Environment
-    value : ^(DEV|QA|TEST|STAGING|PROD)$
+  - ApplicationCode
+  - Environment
   - CostCenter
+- ec2-instance-tag-format :
+  - name : ApplicationCode
+    format : '^[A-Z]{3}$'
+  - name : Environment
