@@ -7,7 +7,7 @@ rules :
   - Name
   - ApplicationId
   - name : ApplicationCode
-    format : /[A-Z]{3}/
+    value : '^[A-Z]{3}$'
   - name : Environment
-    format : /(DEV|QA|TEST|STAGING|PROD)/
+    value : ^(DEV|QA|TEST|STAGING|PROD)$
   - CostCenter
