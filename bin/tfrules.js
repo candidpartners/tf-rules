@@ -102,9 +102,10 @@ function getProvider( providerConfig ) {
   
   if( nconf.get( 'HTTPS_PROXY' ) ) {
     const proxy = require('proxy-agent');
-    debug( 'Using proxy of : %s', nconf.get( 'HTTPS_PROXY' ) );
+    const encodedProxy = encodeURIComponent( nconf.get( 'HTTPS_PROXY' ) );
+    debug( 'Using proxy of : %s', encodedProxy );
     targetConfig.httpOptions = {
-      agent: proxy( nconf.get( 'HTTPS_PROXY' ) )
+      agent: proxy( encodedProxy )
     };
   }
   AWS.config.update( targetConfig );
