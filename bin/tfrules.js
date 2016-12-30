@@ -99,6 +99,13 @@ function getProvider( providerConfig ) {
       process.exit( 1 );
     }
   }
+  
+  if( nconf.get( 'proxy' ) ) {
+    const proxy = require('proxy-agent');
+    targetConfig.httpOptions = {
+      agent: proxy( nconf.get( 'proxy' ) )
+    };
+  }
   AWS.config.update( targetConfig );
   return AWS;
 }
