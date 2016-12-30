@@ -1,6 +1,7 @@
 'use strict';
 const debug     = require('debug')('tfrules');
 const fs        = require('fs');
+const url       = require('url');
 const _         = require('lodash');
 const tfRules   = require('../index');
 const co        = require('co');
@@ -102,7 +103,9 @@ function getProvider( providerConfig ) {
   
   if( nconf.get( 'HTTPS_PROXY' ) ) {
     const proxy = require('proxy-agent');
-    const encodedProxy = encodeURIComponent( nconf.get( 'HTTPS_PROXY' ) );
+    const urlObject = url.parse( nconf.get( 'HTTPS_PROXY' ) );
+    urlObject.auth = _.get( urlObject, 'auth', '' ).split(':').map( part => unescape(encodeURIComponent(part)) ).join(':');
+    const encodedProxy = url.format( urlObject );
     debug( 'Using proxy of : %s', encodedProxy );
     targetConfig.httpOptions = {
       agent: proxy( encodedProxy )
