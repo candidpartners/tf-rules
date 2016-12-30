@@ -100,10 +100,10 @@ function getProvider( providerConfig ) {
     }
   }
   
-  if( nconf.get( 'proxy' ) ) {
+  if( nconf.get( 'HTTPS_PROXY' ) ) {
     const proxy = require('proxy-agent');
     targetConfig.httpOptions = {
-      agent: proxy( nconf.get( 'proxy' ) )
+      agent: proxy( nconf.get( 'HTTPS_PROXY' ) )
     };
   }
   AWS.config.update( targetConfig );
