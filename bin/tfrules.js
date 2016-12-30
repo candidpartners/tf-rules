@@ -102,6 +102,7 @@ function getProvider( providerConfig ) {
   
   if( nconf.get( 'HTTPS_PROXY' ) ) {
     const proxy = require('proxy-agent');
+    debug( 'Using proxy of : %s', nconf.get( 'HTTPS_PROXY' ) );
     targetConfig.httpOptions = {
       agent: proxy( nconf.get( 'HTTPS_PROXY' ) )
     };
