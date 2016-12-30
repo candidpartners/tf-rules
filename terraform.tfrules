@@ -16,4 +16,6 @@ rules :
     format : '^[A-Z]{3}$'
   - name : Environment
     format : ^(DEV|QA|TEST|STAGING|PROD)$
+- aws-ec2-key-pair-exists : true
 - aws-ec2-has-key-pair : true
+- aws-ec2-uses-key-pair : MyKey
