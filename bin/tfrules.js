@@ -11,6 +11,8 @@ const colors    = require('colors');
 const iniParser = require('ini-parser');
 const AWS       = require('aws-sdk');
 
+const symbols   = require('../lib/reporters/symbols');
+
 nconf.argv()
 .env()
 .file({
@@ -112,6 +114,7 @@ function handleSuccess( value ) {
   if( results.length > 0 ) {
     process.exit( 1 );
   } else {
+    console.log( colors.green(symbols.ok), `${results.length} tests ran with no errors` );
     process.exit( 0 );
   }
 }
