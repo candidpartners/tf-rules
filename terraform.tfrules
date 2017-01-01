@@ -1,7 +1,5 @@
 provider :
   region                    : us-west-2
-  shared_credentials_file   : /Users/aaronbawcom/.aws/credentials
-  profile                   : CCNA_SharedServices_Architect
 rules :
 - ebs-volume-encryption : true
 - rds-encryption-key-exists : true
@@ -19,3 +17,4 @@ rules :
 - aws-ec2-key-pair-exists : true
 - aws-ec2-has-key-pair : true
 - aws-ec2-uses-key-pair : MyKey
+- aws-ec2-ami-includes-sql-server : false

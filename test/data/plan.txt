@@ -78,7 +78,7 @@ Note: You didn't specify an "-out" parameter to save this plan, so when
     type:              "<computed>"
 [0m
 [0m[32m+ aws_instance.XYZ_XMDXYZA5006
-[0m    ami:                                   "ami-cf9722af"
+[0m    ami:                                   "ami-d89d28b8"
     associate_public_ip_address:               "<computed>"
     availability_zone:                         "<computed>"
     disable_api_termination:                   "false"
