@@ -1,15 +1,15 @@
 provider :
   region                    : us-west-2
 rules :
-- ebs-volume-encryption : true
-- rds-encryption-key-exists : true
-- ec2-instance-tag-exists :
+- aws-ebs-volume-encryption : true
+- aws-rds-encryption-key-exists : true
+- aws-ec2-instance-tag-exists :
   - Name
   - ApplicationId
   - ApplicationCode
   - Environment
   - CostCenter
-- ec2-instance-tag-format :
+- aws-ec2-instance-tag-format :
   - name : ApplicationCode
     format : '^[A-Z]{3}$'
   - name : Environment
