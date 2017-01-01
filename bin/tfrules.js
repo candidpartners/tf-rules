@@ -21,6 +21,12 @@ nconf.argv()
   format: require('nconf-yaml')
 });
 
+nconf.add('provider', {
+  type: 'file',
+  file: 'credentials.tfrules',
+  format: require('nconf-yaml')
+});
+
 function *main() {
   debug( '*main' );
   const rules = require( '../lib/rules' );
