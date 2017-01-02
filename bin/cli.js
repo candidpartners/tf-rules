@@ -11,16 +11,15 @@ const colors    = require('colors');
 const iniParser = require('ini-parser');
 const AWS       = require('aws-sdk');
 const yaml      = require('nconf-yaml');
+const loadYaml  = require('js-yaml');
 const symbols   = require('../lib/reporters/symbols');
 
-module.exports.main = function *main( testVars ) {
-  debug( 'Entry' );
-  
-  nconf.argv().env().file( { file: 'terraform.tfrules', format: yaml }).defaults( testVars );
-  nconf.add( 'provider', { type: 'file', file: 'credentials.tfrules', format: yaml });
+function loadConfig() {
 
-  const rules = require( '../lib/rules' );
-  module.exports.rules = rules;
+  if( ! nconf.get( 'rules' ) ) {
+    console.log( colors.red( 'ERR!' ), ` Could not load configuration from terraform.tfrules file in the ${process.cwd()}. Specify the location of the file using --config` );
+    process.exit( 1 );
+  }
 
   if( ! nconf.get( 'rules' ) ) {
     if( nconf.get( 'config' ) ) {
@@ -30,23 +29,44 @@ module.exports.main = function *main( testVars ) {
       });      
     }
   }
+
+  let config = nconf.get('rules');
+  const files = fs.readdirSync('.');
   
-  const provider = getProvider( _.defaults( nconf.get('provider'), {} ) );
-  
-  if( ! nconf.get( 'rules' ) ) {
-    console.log( colors.red( 'ERR!' ), ` Could not load configuration from terraform.tfrules file in the ${process.cwd()}. Specify the location of the file using --config` );
-    process.exit( 1 );
+  for( let file of files ) {
+    if( file.endsWith( '.tfrules') && ! file.startsWith( 'terraform') && ! file.startsWith( 'credentials' ) ) {
+      debug( 'Loading .tfrules %s', file );
+      const yamlFile = loadYaml.safeLoad( fs.readFileSync( file, 'utf8' ) );
+      if( _.isArray( yamlFile.rules ) ) {
+        config = config.concat( yamlFile.rules );
+      }
+    }
   }
-  
-  const config = nconf.get('rules');
+
   module.exports.config = config;
+  
+  return config;
+}
+
+module.exports.main = function *main( testVars ) {
+  debug( 'Entry %O', testVars );
+  
+  nconf.argv().env().file( { file: 'terraform.tfrules', format: yaml }).defaults( testVars );
+  nconf.add( 'provider', { type: 'file', file: 'credentials.tfrules', format: yaml });
+
+  const provider = getProvider( _.defaults( nconf.get('provider'), {} ) );
+
+  const rules = require( '../lib/rules' );
+  module.exports.rules = rules;
+
+  const config = loadConfig();
 
   debug( 'Validating config...' );
   
   const errors = tfRules.validateConfig( rules, config );
-  
+
   if( errors.length > 0 ) throw { message : 'Configuration errors', errors };
-  
+
   let inputPlan = '';
   let plan = new Plan();
 
@@ -67,12 +87,14 @@ module.exports.main = function *main( testVars ) {
 
   debug( 'Parsing plan' );
   let target = plan.parse( inputPlan );
-  debug( 'Calling validatePlan' );
   let results = [];
-  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add, provider } ) );
-  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.rep.next, provider } ) );
-  results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.mod.next, provider } ) );
-
+  
+  if( nconf.get( 'dryRun' ) != true ) {
+    debug( 'Calling validatePlan' );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add, provider } ) );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.rep.next, provider } ) );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.mod.next, provider } ) );
+  }
   return results;
 };
 
