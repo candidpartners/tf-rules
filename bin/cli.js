@@ -39,6 +39,7 @@ module.exports.main = function *main( testVars ) {
   }
   
   const config = nconf.get('rules');
+  module.exports.config = config;
 
   debug( 'Validating config...' );
   

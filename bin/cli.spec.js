@@ -10,10 +10,16 @@ require('mocha-generators').install();
 const expect = chai.expect;
 
 describe('CLI', function() {
-  it("should load rules", function *() {
+  before(function *() {
     yield cli.main({ plan : './test/data/plan.txt' });
+    debug( 'Rules loaded %O', cli.rules );
+    debug( 'Config %O', cli.config );
+  });  
+  it("should load rules as an object", function () {
     expect( cli.rules ).to.be.an('object');
-    debug( 'Rules loaded %j', cli.rules );
+  });
+  it("should load rule configurations as an array", function *() {
+    expect( cli.config ).to.be.an('array');
   });
 });
 
