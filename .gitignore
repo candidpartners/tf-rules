@@ -1,4 +1,5 @@
 # Logs
+credentials.tfrules
 logs
 *.log
 npm-debug.log*

@@ -1,6 +1,6 @@
 {
   "name": "tf-rules",
-  "version": "0.8.2",
+  "version": "0.9.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "get-stdin": "^5.0.1",
     "ini-parser": "0.0.2",
     "jmespath": "^0.15.0",
+    "js-yaml": "^3.7.0",
     "lodash": "^4.17.2",
     "nconf": "^0.8.4",
     "nconf-yaml": "^1.0.2",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^1.6.1",
+    "aws-stub": "^0.1.0",
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
     "mocha-generators": "^1.2.0"
