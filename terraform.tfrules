@@ -17,3 +17,4 @@ rules :
 - aws-ec2-key-pair-exists : true
 - aws-ec2-has-key-pair : true
 - aws-ec2-ami-includes-sql-server : false
+- aws-security-group-exists : true
