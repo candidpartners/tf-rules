@@ -23,3 +23,6 @@ rules :
 - aws-security-group-does-not-allow-inbound :
     cidr : '204.4.6.2/32'
     port : '9032-9034'
+- aws-security-group-does-not-allow-outbound :
+    cidr : '204.4.6.2/32'
+    port : '9032-9034'
