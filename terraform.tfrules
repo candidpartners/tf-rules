@@ -29,3 +29,6 @@ rules :
 - aws-security-group-allow-inbound : 
     cidr : '127.0.0.1/32'
     port : '80'
+- aws-security-group-allow-outbound : 
+    cidr : '127.0.0.2/32'
+    port : '22'
