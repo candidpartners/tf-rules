@@ -19,7 +19,7 @@ rules :
 - aws-ec2-ami-includes-sql-server : false
 - aws-security-group-exists : true
 - aws-ec2-instance-uses-security-group :
-  - sg-24a9b85d
+  - sg-24b9b85d
 - aws-security-group-does-not-allow-inbound :
     cidr : '204.4.6.2/32'
     port : '9032-9034'
