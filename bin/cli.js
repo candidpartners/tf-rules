@@ -54,7 +54,7 @@ module.exports.main = function *main( testVars ) {
   nconf.argv().env().file( { file: 'terraform.tfrules', format: yaml }).defaults( testVars );
   nconf.add( 'provider', { type: 'file', file: 'credentials.tfrules', format: yaml });
 
-  const provider = getProvider( _.defaults( nconf.get('provider'), {} ) );
+  const provider = yield getProvider( _.defaults( nconf.get('provider'), {} ) );
 
   const rules = require( '../lib/rules' );
   module.exports.rules = rules;
@@ -98,11 +98,23 @@ module.exports.main = function *main( testVars ) {
   return results;
 };
 
-function getProvider( providerConfig ) {
+function *getProvider( providerConfig ) {
   const targetConfig = {};
   if( providerConfig.region ) {
     _.defaults( targetConfig, { region : providerConfig.region } );
   }
+
+  if( nconf.get( 'HTTPS_PROXY' ) ) {
+    const proxy = require('proxy-agent');
+    const urlObject = url.parse( nconf.get( 'HTTPS_PROXY' ) );
+    urlObject.auth = _.get( urlObject, 'auth', '' ).split(':').map( part => unescape(encodeURIComponent(part)) ).join(':');
+    const encodedProxy = url.format( urlObject );
+    debug( 'Using proxy of : %s', encodedProxy );
+    targetConfig.httpOptions = {
+      agent: proxy( encodedProxy )
+    };
+  }
+
   if( providerConfig.shared_credentials_file ) {
     const fileContents = fs.readFileSync( providerConfig.shared_credentials_file, 'utf8' );
     const iniConfig = iniParser.parse( fileContents );
@@ -119,18 +131,27 @@ function getProvider( providerConfig ) {
       console.log( colors.red( 'ERR!' ), `provider.shared_credentials_file specified but [${profile}] profile not found` );
       process.exit( 1 );
     }
-  }
-  
-  if( nconf.get( 'HTTPS_PROXY' ) ) {
-    const proxy = require('proxy-agent');
-    const urlObject = url.parse( nconf.get( 'HTTPS_PROXY' ) );
-    urlObject.auth = _.get( urlObject, 'auth', '' ).split(':').map( part => unescape(encodeURIComponent(part)) ).join(':');
-    const encodedProxy = url.format( urlObject );
-    debug( 'Using proxy of : %s', encodedProxy );
-    targetConfig.httpOptions = {
-      agent: proxy( encodedProxy )
+  } else if( providerConfig.assume_role ) {
+    const sts = new AWS.STS( _.merge( {}, { apiVersion: '2011-06-15' }, targetConfig ) );
+    const params = {
+      RoleArn: providerConfig.assume_role.role_arn,
+      RoleSessionName: providerConfig.assume_role.session_name,
+      DurationSeconds: 3600
     };
+    if( providerConfig.external_id ) {
+      params.ExternalId = providerConfig.external_id;
+    }
+    const result = yield sts.assumeRole( params ).promise();
+    
+    _.defaults( targetConfig, {
+      credentials : {
+        accessKeyId     : result.Credentials.AccessKeyId,
+        secretAccessKey : result.Credentials.SecretAccessKey,
+        sessionToken    : result.Credentials.SessionToken
+      }
+    });
   }
+
   AWS.config.update( targetConfig );
   return AWS;
 }
@@ -145,7 +166,7 @@ module.exports.handleSuccess = function handleSuccess( value ) {
   if( results.length > 0 ) {
     process.exit( 1 );
   } else {
-    console.log( colors.green(symbols.ok), `${results.length} tests ran with no errors` );
+    console.log( colors.green(symbols.ok), `${value.length} tests ran with no errors` );
     process.exit( 0 );
   }
 };
