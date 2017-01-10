@@ -103,6 +103,18 @@ function *getProvider( providerConfig ) {
   if( providerConfig.region ) {
     _.defaults( targetConfig, { region : providerConfig.region } );
   }
+
+  if( nconf.get( 'HTTPS_PROXY' ) ) {
+    const proxy = require('proxy-agent');
+    const urlObject = url.parse( nconf.get( 'HTTPS_PROXY' ) );
+    urlObject.auth = _.get( urlObject, 'auth', '' ).split(':').map( part => unescape(encodeURIComponent(part)) ).join(':');
+    const encodedProxy = url.format( urlObject );
+    debug( 'Using proxy of : %s', encodedProxy );
+    targetConfig.httpOptions = {
+      agent: proxy( encodedProxy )
+    };
+  }
+
   if( providerConfig.shared_credentials_file ) {
     const fileContents = fs.readFileSync( providerConfig.shared_credentials_file, 'utf8' );
     const iniConfig = iniParser.parse( fileContents );
@@ -120,10 +132,10 @@ function *getProvider( providerConfig ) {
       process.exit( 1 );
     }
   } else if( providerConfig.assume_role ) {
-    const sts = new AWS.STS( { apiVersion: '2011-06-15' } );
+    const sts = new AWS.STS( _.merge( {}, { apiVersion: '2011-06-15' }, targetConfig ) );
     const params = {
-      RoleArn: providerConfig.role_arn,
-      RoleSessionName: providerConfig.session_name,
+      RoleArn: providerConfig.assume_role.role_arn,
+      RoleSessionName: providerConfig.assume_role.session_name,
       DurationSeconds: 3600
     };
     if( providerConfig.external_id ) {
@@ -140,16 +152,6 @@ function *getProvider( providerConfig ) {
     });
   }
 
-  if( nconf.get( 'HTTPS_PROXY' ) ) {
-    const proxy = require('proxy-agent');
-    const urlObject = url.parse( nconf.get( 'HTTPS_PROXY' ) );
-    urlObject.auth = _.get( urlObject, 'auth', '' ).split(':').map( part => unescape(encodeURIComponent(part)) ).join(':');
-    const encodedProxy = url.format( urlObject );
-    debug( 'Using proxy of : %s', encodedProxy );
-    targetConfig.httpOptions = {
-      agent: proxy( encodedProxy )
-    };
-  }
   AWS.config.update( targetConfig );
   return AWS;
 }
