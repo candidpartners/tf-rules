@@ -132,17 +132,19 @@ function *getProvider( providerConfig ) {
       process.exit( 1 );
     }
   } else if( providerConfig.assume_role ) {
+    debug( 'assumeRule configured: %O', providerConfig.assume_role );
     const sts = new AWS.STS( _.merge( {}, { apiVersion: '2011-06-15' }, targetConfig ) );
-    const params = {
+    let params = {
       RoleArn: providerConfig.assume_role.role_arn,
       RoleSessionName: providerConfig.assume_role.session_name,
       DurationSeconds: 3600
     };
-    if( providerConfig.external_id ) {
-      params.ExternalId = providerConfig.external_id;
+    if( _.get( providerConfig.assume_role, 'external_id' ) ) {
+      debug( 'external_id set : %s', providerConfig.assume_role.external_id );
+      params.ExternalId = providerConfig.assume_role.external_id;
     }
-    const result = yield sts.assumeRole( params ).promise();
-    
+    debug( 'assumeRule: %O', params );
+    const result = yield sts.assumeRole( params ).promise();    
     _.defaults( targetConfig, {
       credentials : {
         accessKeyId     : result.Credentials.AccessKeyId,
