@@ -3,6 +3,7 @@ provider :
 rules :
 - aws-ebs-volume-encryption : true
 - aws-rds-encryption-key-exists : true
+- aws-ec2-instance-generic-tag-format : true
 - aws-ec2-instance-tag-exists :
   - Name
   - ApplicationId
