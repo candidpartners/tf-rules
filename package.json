@@ -39,7 +39,8 @@
     "nconf": "^0.8.4",
     "nconf-yaml": "^1.0.2",
     "proxy-agent": "^2.0.0",
-    "tf-parse": "*"
+    "tf-parse": "*",
+    "xregexp": "^3.1.1"
   },
   "devDependencies": {
     "aws-sdk-mock": "^1.6.1",

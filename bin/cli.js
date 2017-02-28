@@ -88,12 +88,12 @@ module.exports.main = function *main( testVars ) {
   debug( 'Parsing plan' );
   let target = plan.parse( inputPlan );
   let results = [];
-  
+
   if( nconf.get( 'dryRun' ) != true ) {
     debug( 'Calling validatePlan' );
-    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add, provider } ) );
-    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.rep.next, provider } ) );
-    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.mod.next, provider } ) );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add,      planType: 'add',     provider } ) );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.rep.next, planType: 'replace', provider } ) );
+    results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.mod.next, planType: 'modify',  provider } ) );
   }
   return results;
 };
