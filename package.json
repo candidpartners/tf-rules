@@ -4,7 +4,8 @@
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
