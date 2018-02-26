@@ -4,7 +4,7 @@
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
-    "test": "true"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
     "in-range": "^1.0.0",
     "ini-parser": "0.0.2",
     "ip": "^1.1.4",
+    "jest": "^22.4.2",
     "jmespath": "^0.15.0",
     "js-yaml": "^3.7.0",
     "lodash": "^4.17.2",
@@ -43,9 +44,6 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^1.6.1",
-    "aws-stub": "^0.1.0",
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0",
-    "mocha-generators": "^1.2.0"
+    "aws-stub": "^0.1.0"
   }
 }
