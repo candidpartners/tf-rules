@@ -18,7 +18,7 @@ rules :
 - aws-ec2-has-key-pair : true
 - aws-ec2-ami-includes-sql-server : false
 - aws-security-group-exists : true
-- aws-ec2-instance-uses-security-group :
+- aws-ec2-uses-security-group :
   - sg-24b9b85d
 - aws-security-group-does-not-allow-inbound :
     cidr : '204.4.6.2/32'
@@ -26,9 +26,9 @@ rules :
 - aws-security-group-does-not-allow-outbound :
     cidr : '204.4.6.2/32'
     port : '9032-9034'
-- aws-security-group-allow-inbound : 
+- aws-security-group-allows-inbound :
     cidr : '127.0.0.1/32'
     port : '80'
-- aws-security-group-allow-outbound : 
+- aws-security-group-allows-outbound :
     cidr : '127.0.0.2/32'
     port : '22'
