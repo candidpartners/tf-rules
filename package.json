@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "cli": "node bin/tfrules.js --plan"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "nconf": "^0.8.4",
     "nconf-yaml": "^1.0.2",
     "proxy-agent": "^2.0.0",
+    "rxjs": "^5.5.6",
     "tf-parse": "*"
   },
   "devDependencies": {

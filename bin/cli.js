@@ -88,7 +88,7 @@ module.exports.main = function *main( testVars ) {
   debug( 'Parsing plan' );
   let target = plan.parse( inputPlan );
   let results = [];
-  
+
   if( nconf.get( 'dryRun' ) != true ) {
     debug( 'Calling validatePlan' );
     results = results.concat( yield tfRules.validatePlan( { rules, config, plan : target.add, provider } ) );

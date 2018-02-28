@@ -1,4 +1,5 @@
 # Logs
+.terraform
 credentials.tfrules
 logs
 *.log
