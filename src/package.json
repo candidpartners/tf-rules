@@ -1,0 +1,52 @@
+{
+  "name": "@candidpartners/tf-rules",
+  "version": "1.0.0",
+  "description": "Rules engine for checking Terraform",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "cli": "node bin/tfrules.js --plan"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clearly/tf-rules.git"
+  },
+  "keywords": [
+    "terraform",
+    "error"
+  ],
+  "bin": {
+    "tfrules": "./bin/tfrules.js"
+  },
+  "author": "Aaron Bawcom <abawcom@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/clearly/tf-rules/issues"
+  },
+  "homepage": "https://github.com/clearly/tf-rules#readme",
+  "dependencies": {
+    "@candidpartners/tf-parse": "^1.0.0",
+    "ajv": "^4.10.1",
+    "aws-sdk": "^2.203.0",
+    "co": "^4.6.0",
+    "colors": "^1.1.2",
+    "debug": "^2.5.2",
+    "get-stdin": "^5.0.1",
+    "in-range": "^1.0.0",
+    "ini-parser": "0.0.2",
+    "ip": "^1.1.4",
+    "jmespath": "^0.15.0",
+    "js-yaml": "^3.7.0",
+    "lodash": "^4.17.2",
+    "nconf": "^0.8.4",
+    "nconf-yaml": "^1.0.2",
+    "papaparse": "^4.3.7",
+    "proxy-agent": "^2.0.0",
+    "rxjs": "^5.5.6"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^1.6.1",
+    "aws-stub": "^0.1.0"
+  }
+}

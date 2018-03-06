@@ -1,4 +1,5 @@
 # Logs
+.terraform
 credentials.tfrules
 logs
 *.log
@@ -13,7 +14,7 @@ pids
 lib-cov
 
 # Coverage directory used by tools like istanbul
-coverage
+src/coverage
 
 # nyc test coverage
 .nyc_output

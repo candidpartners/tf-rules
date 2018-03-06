@@ -1,0 +1,43 @@
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+data.aws_iam_policy.example: Refreshing state...
+
+------------------------------------------------------------------------
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  + create
+ <= read (data resources)
+
+Terraform will perform the following actions:
+
+<= data.aws_iam_policy.example
+      id:            <computed>
+      arn:           "arn:aws:iam::123456789012:policy/UsersManageOwnCredentials"
+      description:   <computed>
+      name:          <computed>
+      path:          <computed>
+      policy:        <computed>
+
+  + aws_iam_user.user
+      id:            <computed>
+      arn:           <computed>
+      force_destroy: "false"
+      name:          "test-user"
+      path:          "/"
+      unique_id:     <computed>
+
+  + aws_iam_user_policy_attachment.test-attach
+      id:            <computed>
+      policy_arn:    "arn:aws:iam::123456789012:policy/UsersManageOwnCredentials"
+      user:          "test-user"
+Plan: 2 to add, 0 to change, 0 to destroy.
+
+------------------------------------------------------------------------
+
+Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+can't guarantee that exactly these actions will be performed if
+"terraform apply" is subsequently run.
+
