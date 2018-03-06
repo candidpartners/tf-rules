@@ -64,7 +64,6 @@ function *validatePlan( params ) {
   const provider = params.provider;
   debug( 'allConfig: %j', params.config );
   let results = [];
-  console.log(plan);
   if( _.isObject( plan ) && ! _.isArray( plan ) && ! _.isEmpty( plan ) ) {
     for( let ruleInstance of params.config ) {
       debug( 'ruleInstance: %j', ruleInstance );

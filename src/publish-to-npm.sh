@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
 
-version=$(cat ./package.json | jq '.version')
+# Check if any changes are pending
+git diff --quiet --exit-code HEAD
 
-echo Publishing @CandidPartners/tf-parse $version
-npm publish --access public
+if [ "$?" = "0" ]; then
+    git ls-files --modified --deleted
+    version=$(cat ./package.json | jq '.version')
 
-echo Tagging Git Repo with version $version
-git tag -a $version -m $version
+    echo Publishing @CandidPartners/tf-parse ${version}
+    npm publish --access public
 
-echo Pushing $version tag up to repo
-git push origin $version
+    echo Tagging Git Repo with version $version
+    git tag -a ${version} -m ${version}
 
+    echo Pushing ${version} tag up to repo
+    git push origin ${version}
+else
+    echo "Error: You have unstaged changes!" 1>&2
+    exit 1
+fi
