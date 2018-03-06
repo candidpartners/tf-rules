@@ -1,4 +1,4 @@
-const Plan      = require('tf-parse').Plan;
+const Plan      = require('@candidpartners/tf-parse').Plan;
 const path = require('path');
 const fs = require('fs');
 

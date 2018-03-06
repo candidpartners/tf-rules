@@ -10,13 +10,13 @@ describe('CLI', function() {
     debug( 'Rules loaded %O', cli.rules );
     debug( 'Config %O', cli.config );
   }));
-  it("should load rules as an object", function () {
+  test("should load rules as an object", function () {
     expect( typeof cli.rules ).toBe('object');
   });
-  it("should load rule configurations as an array", co.wrap(function *() {
+  test("should load rule configurations as an array", co.wrap(function *() {
     expect( _.isArray(cli.config)).toBeTruthy();
   }));
-  it("should load custom rule configuration aws-ec2-uses-key-pair", co.wrap(function *() {
+  test("should load custom rule configuration aws-ec2-uses-key-pair", co.wrap(function *() {
     const config = _.find( cli.config, { 'aws-ec2-uses-key-pair': 'MyKey' } );
     expect(config).not.toBe(null);
   }));
