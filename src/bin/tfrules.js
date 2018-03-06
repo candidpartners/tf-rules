@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 const co      = require('co');
 const cli     = require('./cli');
