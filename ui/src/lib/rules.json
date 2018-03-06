@@ -190,12 +190,6 @@
     }
   },
   {
-    "name": "cidr-comparison"
-  },
-  {
-    "name": "port-comparison"
-  },
-  {
     "name": "aws-rds-encryption-key-exists",
     "uuid": "196beb21-bb42-4a58-9ea0-0478c5f1042a",
     "groupName": "RDS",
