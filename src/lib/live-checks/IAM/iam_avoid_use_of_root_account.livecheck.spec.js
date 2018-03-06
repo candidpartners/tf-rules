@@ -37,7 +37,7 @@ describe("IAM_AVOID_USE_OF_ROOT_ACCOUNT", () => {
     test("It recognizes when the root account logged in recently", async () => {
         let result = await rule.validate({provider: _AWS}, 5);
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe('Requires <root_account> to not have logged in during the past 5 days. <root_account> logged in 2.53 days ago.')
+        expect(result.message.includes(`Requires <root_account> to not have logged in during the past 5 days.`)).toBeTruthy()
     });
 
     test("It recognizes when the root account has not logged in recently", async () => {
