@@ -7,7 +7,7 @@ if [ "$?" = "0" ]; then
     git ls-files --modified --deleted
     version=$(cat ./package.json | jq '.version')
 
-    echo Publishing @CandidPartners/tf-parse ${version}
+    echo Publishing @CandidPartners/tf-rules ${version}
     npm publish --access public
 
     echo Tagging Git Repo with version $version

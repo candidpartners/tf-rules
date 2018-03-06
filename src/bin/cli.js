@@ -14,6 +14,8 @@ const yaml      = require('nconf-yaml');
 const loadYaml  = require('js-yaml');
 const symbols   = require('../lib/reporters/symbols');
 
+const packageJSON = require('../package.json');
+
 //Can comment in to track down where console.logs are coming from
 
 // ['log', 'warn'].forEach(function(method) {
@@ -41,13 +43,13 @@ function loadConfig() {
       nconf.file( 'rules', {
         file: nconf.get( 'config' ),
         format: yaml
-      });      
+      });
     }
   }
 
   let config = nconf.get('rules');
   const files = fs.readdirSync('.');
-  
+
   for( let file of files ) {
     if( file.endsWith( '.tfrules') && ! file.startsWith( 'terraform') && ! file.startsWith( 'credentials' ) ) {
       debug( 'Loading .tfrules %s', file );
@@ -59,15 +61,33 @@ function loadConfig() {
   }
 
   module.exports.config = config;
-  
+
   return config;
 }
 
 module.exports.main = function *main( testVars ) {
   debug( 'Entry %O', testVars );
-  
+
+  // CLI only arguments
+  let cliArgs = require('nconf').argv();
+
+  // Get Version
+  if(cliArgs.get('v') || cliArgs.get('version')){
+    console.log(packageJSON.version);
+    process.exit(0)
+  }
+
+  // Set up nconf
   nconf.argv().env().file( { file: 'terraform.tfrules', format: yaml }).defaults( testVars );
+
   nconf.add( 'provider', { type: 'file', file: 'credentials.tfrules', format: yaml });
+
+
+  // Version option
+  // if(nconf.get('v')){
+  //   console.log(packageJSON.version);
+  //   process.exit(0);
+  // }
 
   const provider = yield getProvider( _.defaults( nconf.get('provider'), {} ) );
 
@@ -77,7 +97,7 @@ module.exports.main = function *main( testVars ) {
   const config = loadConfig();
 
   debug( 'Validating config...' );
-  
+
   const errors = tfRules.validateConfig( rules, config );
 
   if( errors.length > 0 ) throw { message : 'Configuration errors', errors };
@@ -90,11 +110,11 @@ module.exports.main = function *main( testVars ) {
   } else {
     inputPlan = yield getStdin();
   }
-  
+
   debug( inputPlan );
-  
+
   inputPlan = inputPlan || '';
-  
+
   if( inputPlan.length == 0) {
     console.log( colors.red( 'ERR!' ), " terraform plan input must be specified as a file using --plan or come from stdin" );
     process.exit( 1 );
@@ -159,7 +179,7 @@ function *getProvider( providerConfig ) {
       params.ExternalId = providerConfig.assume_role.external_id;
     }
     debug( 'assumeRule: %O', params );
-    const result = yield sts.assumeRole( params ).promise();    
+    const result = yield sts.assumeRole( params ).promise();
     _.defaults( targetConfig, {
       credentials : {
         accessKeyId     : result.Credentials.AccessKeyId,
