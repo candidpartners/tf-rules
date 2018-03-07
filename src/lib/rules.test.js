@@ -29,7 +29,6 @@ describe("Rules", () => {
     });
 
     test("Each rule has a groupName", () => {
-
         _.forEach(rules,(rule,ruleName) => {
             expect(rule.groupName).toBeTruthy();
         })

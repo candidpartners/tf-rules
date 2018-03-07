@@ -1,6 +1,7 @@
 provider :
   region                    : us-west-2
 rules :
+- aws-kms-ensure-key-rotation: true
 - aws-cloudtrail-logs-are-encrypted: true
 - aws-cloudtrail-ensure-s3-bucket-acl-type:
     - private
