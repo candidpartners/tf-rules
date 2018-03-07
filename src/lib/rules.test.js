@@ -3,7 +3,7 @@ const _ = require('lodash');
 const validator = require('validator');
 
 describe("Rules", () => {
-    test("Each rule has a uuid", async () => {
+    test("Each rule has a uuid", () => {
 
         let noUUID = _.filter(rules, (rule,ruleName) => !rule.uuid);
         if(noUUID.length > 0){
@@ -18,15 +18,13 @@ describe("Rules", () => {
         expect(invalidUUID).toHaveLength(0);
     });
 
-    test("Each rule uuid is unique", async () => {
+    test("Each rule uuid is unique", () => {
         let groupByUUID = _.groupBy(rules,r => r.uuid);
 
-        _.forEach(groupByUUID, (rules,uuid) => {
-            if(rules.length > 1){
-                console.error(`The following rules all share uuid ${uuid}: ${JSON.stringify(rules,null,2)}`)
-            }
+        _.forEach(groupByUUID, (rulesArray,uuid) => {
+            //For better output
+            expect({uuid,length:rulesArray.length, rulesArray}).toEqual({uuid,length:1,rulesArray})
         });
-
         expect(_.every(groupByUUID,(rules,uuid) => rules.length == 1)).toBeTruthy();
     })
 });
