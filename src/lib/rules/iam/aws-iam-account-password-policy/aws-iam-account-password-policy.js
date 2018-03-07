@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const IAMAccountPasswordPolicy = {};
 
+IAMAccountPasswordPolicy.uuid = "8acddea0-73b7-474a-9f65-5db172c5aefb";
+IAMAccountPasswordPolicy.groupName = "IAM";
+
 IAMAccountPasswordPolicy.docs = {
     description: "The IAM Account Password Policy must comply to CIS standards.",
     recommended: false

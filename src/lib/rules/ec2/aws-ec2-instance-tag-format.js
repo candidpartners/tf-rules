@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const EC2TagFormat = {};
 
+EC2TagFormat.uuid = "d2065bd9-4ece-4cb7-a4dc-3ad161415e15";
+EC2TagFormat.groupName = "EC2";
+
 EC2TagFormat.docs = {
   description: "Tag values must match provided format",
   recommended: false

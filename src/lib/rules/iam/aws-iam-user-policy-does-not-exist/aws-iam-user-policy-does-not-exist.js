@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const IAMUserPolicyDoesNotExist = {};
 
+IAMUserPolicyDoesNotExist.uuid = "1d00c52d-ad5b-40a7-bcaf-3a3ba5f86873";
+IAMUserPolicyDoesNotExist.groupName = "IAM";
+
 IAMUserPolicyDoesNotExist.docs = {
     description: "No IAM policies can be attached directly to a user.",
     recommended: false

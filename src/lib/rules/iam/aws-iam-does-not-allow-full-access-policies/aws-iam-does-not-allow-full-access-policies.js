@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const IAMDoesNotAllowFullAccessPolicies = {};
 
+IAMDoesNotAllowFullAccessPolicies.uuid = "345b6958-9966-4cb7-814b-4daea7857c79";
+IAMDoesNotAllowFullAccessPolicies.groupName = "IAM";
+
 IAMDoesNotAllowFullAccessPolicies.docs = {
     description: "No IAM policies can allow Action:* on Resource: *",
     recommended: false
