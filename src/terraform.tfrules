@@ -1,6 +1,9 @@
 provider :
   region                    : us-west-2
 rules :
+- aws-cloudtrail-ensure-s3-bucket-acl-type:
+    - private
+    - aws-exec-read
 - aws-cloudtrail-ensure-log-file-validation: true
 - aws-iam-does-not-allow-full-access-policies: true
 - aws-iam-account-password-policy : true
