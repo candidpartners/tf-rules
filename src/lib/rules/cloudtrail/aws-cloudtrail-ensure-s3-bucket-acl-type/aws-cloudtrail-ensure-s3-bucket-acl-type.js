@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const CloudtrailEnsureS3BucketACLType = {};
 
+CloudtrailEnsureS3BucketACLType.uuid = "58b2045a-3313-42db-abea-939af2330d11";
+CloudtrailEnsureS3BucketACLType.groupName = "Cloudtrail";
+
 CloudtrailEnsureS3BucketACLType.docs = {
     description: "Ensures the s3 bucket used for Cloudtrail logs has a configured ACL type. This will only work if the s3 bucket is included as part of the tf-plan, and will not fail if the s3 bucket is not included in the plan.",
     recommended: false

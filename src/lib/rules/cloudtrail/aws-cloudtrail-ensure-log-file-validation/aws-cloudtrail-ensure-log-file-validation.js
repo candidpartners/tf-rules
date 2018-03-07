@@ -8,6 +8,9 @@ const debug = require('debug')('tfrules/tag-format');
 
 const CloudtrailLogFileValidation = {};
 
+CloudtrailLogFileValidation.uuid = "87dfba99-8a5e-4a7b-b408-1b41d8088a8a";
+CloudtrailLogFileValidation.groupName = "Cloudtrail";
+
 CloudtrailLogFileValidation.docs = {
     description: "Ensures LogFileValidationEnabled is enabled on each Cloudtrail",
     recommended: false
