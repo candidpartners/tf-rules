@@ -26,5 +26,12 @@ describe("Rules", () => {
             expect({uuid,length:rulesArray.length, rulesArray}).toEqual({uuid,length:1,rulesArray})
         });
         expect(_.every(groupByUUID,(rules,uuid) => rules.length == 1)).toBeTruthy();
-    })
+    });
+
+    test("Each rule has a groupName", () => {
+
+        _.forEach(rules,(rule,ruleName) => {
+            expect(rule.groupName).toBeTruthy();
+        })
+    });
 });
