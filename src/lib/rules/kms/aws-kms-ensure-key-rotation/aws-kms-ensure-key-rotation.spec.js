@@ -5,7 +5,7 @@ let instance = {
     description: 'KMS key 1',
     enable_key_rotation: true,
     is_enabled: true
-}
+};
 
 describe("aws-kms-ensure-key-rotation", () => {
     it("Recognizes an instance with key rotation enabled", function () {

@@ -16,7 +16,7 @@ IAMAccountPasswordPolicy.docs = {
     recommended: false
 };
 
-IAMAccountPasswordPolicy.schema = {type: 'boolean'}
+IAMAccountPasswordPolicy.schema = {type: 'boolean'};
 
 IAMAccountPasswordPolicy.paths = {
     awsIAMAccountPasswordPolicy: 'aws_iam_account_password_policy'
