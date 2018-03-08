@@ -1,5 +1,35 @@
 [
   {
+    "name": "aws-cloudtrail-ensure-log-file-validation",
+    "uuid": "87dfba99-8a5e-4a7b-b408-1b41d8088a8a",
+    "groupName": "Cloudtrail",
+    "docs": {
+      "description": "Ensures LogFileValidationEnabled is enabled on each Cloudtrail",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    },
+    "paths": {
+      "CloudtrailLogFileValidation": "aws_cloudtrail"
+    }
+  },
+  {
+    "name": "aws-cloudtrail-logs-are-encrypted",
+    "uuid": "686cbf59-c41a-4b7f-ae4a-7f50bf91d354",
+    "groupName": "Cloudtrail",
+    "docs": {
+      "description": "Ensures a KMS key is provided for all cloudtrail resources.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    },
+    "paths": {
+      "CloudtrailLogFileValidation": "aws_cloudtrail"
+    }
+  },
+  {
     "name": "aws-ebs-volume-encryption",
     "uuid": "28afa62a-c539-4d9e-bc61-9f5b611017f8",
     "groupName": "EBS",
@@ -86,6 +116,8 @@
   },
   {
     "name": "aws-ec2-instance-tag-format",
+    "uuid": "d2065bd9-4ece-4cb7-a4dc-3ad161415e15",
+    "groupName": "EC2",
     "docs": {
       "description": "Tag values must match provided format",
       "recommended": false
@@ -165,6 +197,8 @@
   },
   {
     "name": "aws-iam-account-password-policy",
+    "uuid": "8acddea0-73b7-474a-9f65-5db172c5aefb",
+    "groupName": "IAM",
     "docs": {
       "description": "The IAM Account Password Policy must comply to CIS standards.",
       "recommended": false
@@ -177,7 +211,24 @@
     }
   },
   {
+    "name": "aws-iam-does-not-allow-full-access-policies",
+    "uuid": "345b6958-9966-4cb7-814b-4daea7857c79",
+    "groupName": "IAM",
+    "docs": {
+      "description": "No IAM policies can allow Action:* on Resource: *",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    },
+    "paths": {
+      "IAMDoesNotAllowFullAccessPolicies": "aws_iam_policy"
+    }
+  },
+  {
     "name": "aws-iam-user-policy-does-not-exist",
+    "uuid": "1d00c52d-ad5b-40a7-bcaf-3a3ba5f86873",
+    "groupName": "IAM",
     "docs": {
       "description": "No IAM policies can be attached directly to a user.",
       "recommended": false
@@ -187,6 +238,21 @@
     },
     "paths": {
       "awsIAMUserPolicyDoesNotExist": "aws_iam_user_policy_attachment"
+    }
+  },
+  {
+    "name": "aws-kms-ensure-key-rotation",
+    "uuid": "07d3c190-37f7-4699-8498-ef1175033516",
+    "groupName": "KMS",
+    "docs": {
+      "description": "Ensures KMS keys are rotated.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    },
+    "paths": {
+      "awsIAMUserPolicyDoesNotExist": "aws_kms_key"
     }
   },
   {

@@ -1,4 +1,4 @@
-let rules = require('../lib/rules/index.js');
+let rules = require('../src/lib/rules/index.js');
 let fs = require('fs');
 let _ = require('lodash');
 

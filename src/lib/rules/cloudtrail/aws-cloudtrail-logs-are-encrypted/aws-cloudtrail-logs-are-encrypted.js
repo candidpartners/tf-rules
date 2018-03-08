@@ -12,7 +12,7 @@ CloudtrailLogsAreEncrypted.uuid = "686cbf59-c41a-4b7f-ae4a-7f50bf91d354";
 CloudtrailLogsAreEncrypted.groupName = "Cloudtrail";
 
 CloudtrailLogsAreEncrypted.docs = {
-    description: "Ensures the s3 bucket used for Cloudtrail logs has a configured ACL type. This will only work if the s3 bucket is included as part of the tf-plan, and will not fail if the s3 bucket is not included in the plan.",
+    description: "Ensures a KMS key is provided for all cloudtrail resources.",
     recommended: false
 };
 

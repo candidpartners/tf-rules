@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
 import rules from './lib/rules.json'
-import {Segment, Menu} from 'semantic-ui-react';
+import {Segment, Menu, Label} from 'semantic-ui-react';
 
 class RulePage extends React.Component {
 
@@ -31,9 +31,10 @@ class RulePage extends React.Component {
                             <h1 style={{marginBottom: "0"}}>{rule.name}</h1>
                             <p style={{color: "#aaaaaa"}}>{rule.uuid}</p>
 
-                            <p>{rule.docs.recommended && "This rule is recommended"}</p>
+                            {rule.docs.recommended && (
+                                <Label color={"yellow"} content={"Recommended"} style={{marginLeft:0, marginBottom: 20}}/>
+                            )}
 
-                            <h3>Description</h3>
                             <p>{rule.docs.description}</p>
                         </Segment>
 
