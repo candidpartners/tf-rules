@@ -23,7 +23,7 @@ const SideMenu = ({}) => (
 
                 <Menu.Menu>
                     {_.map(value,rule => (
-                        <Link to={`/rules/${rule.name}`}>
+                        <Link key={rule.name} to={`/rules/${rule.name}`}>
                             <Menu.Item>{rule.name}</Menu.Item>
                         </Link>
                     ))}
