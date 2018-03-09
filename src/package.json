@@ -1,6 +1,6 @@
 {
   "name": "@candidpartners/tf-rules",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
