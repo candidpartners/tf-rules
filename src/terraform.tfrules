@@ -7,12 +7,7 @@ rules :
 - aws-iam-does-not-allow-full-access-policies: true
 - aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
-- aws-ebs-volume-encryption :
-  - true
-  - exclude :
-    - Name
-  - include :
-    - Name
+- aws-ebs-volume-encryption : true
 - aws-rds-encryption-key-exists : true
 - aws-ec2-instance-tag-exists :
   - Name
@@ -26,7 +21,7 @@ rules :
   - name : Environment
     format : ^(DEV|QA|TEST|STAGING|PROD)$
 - aws-ec2-key-pair-exists : true
-- aws-ec2-uses-key-pair : true
+- aws-ec2-has-key-pair : true
 - aws-ec2-ami-includes-sql-server : false
 - aws-security-group-exists : true
 - aws-ec2-uses-security-group :
