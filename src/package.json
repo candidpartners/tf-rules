@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
-    "cli": "node bin/tfrules.js --plan"
+    "cli": "node bin/tfrules.js --plan",
+    "livecheck": "node bin/tfrules --livecheck"
   },
   "repository": {
     "type": "git",
