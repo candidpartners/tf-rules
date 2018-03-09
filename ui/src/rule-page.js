@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
+import _ from 'lodash';
 import rules from './lib/rules.json'
 import {Segment, Menu, Label} from 'semantic-ui-react';
 import Form from 'react-jsonschema-form';
@@ -8,7 +9,7 @@ const YAML = require('json2yaml');
 class RulePage extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             activeItem: "Schema",
@@ -21,9 +22,15 @@ class RulePage extends React.Component {
     }
 
     generateYaml(rule, data) {
-        console.log(data)
         this.setState({generatedYaml: `${rule.name} : 
   ${YAML.stringify(data)}`})
+    }
+
+    checkForAnyOf(rule) {
+        console.log(_.flattenDeep(rule.schema.any))
+        if (_.hasIn(_.flatMapDeep(rule.schema), 'anyOf')) {
+            return true
+        }
     }
 
     render() {
@@ -77,18 +84,15 @@ class RulePage extends React.Component {
 
                         {this.state.activeItem == "Generate Config" && (
                             <Segment>
-                                {rule.schema.anyOf && (
-                                    rule.schema.anyOf.map(x => (
-                                        <Form
-                                            schema={x}
-                                            onSubmit={(result) => this.generateYaml(rule, result.formData)}
-                                        />
-                                    ))
+                                {JSON.stringify(rule.schema).includes('anyOf') && (
+                                    <h4>This rule does not support generated config.</h4>
                                 )}
-                                <Form
-                                    schema={rule.schema}
-                                    onSubmit={(result) => this.generateYaml(rule, result.formData)}
-                                />
+                                {!JSON.stringify(rule.schema).includes('anyOf') && (
+                                    <Form
+                                        schema={rule.schema}
+                                        onSubmit={(result) => this.generateYaml(rule, result.formData)}
+                                    />
+                                )}
                             </Segment>
                         )}
 
