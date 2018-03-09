@@ -33,6 +33,16 @@ class RulePage extends React.Component {
         }
     }
 
+    getTagColor(tag){
+        let ColorMap = {
+            Terraform: "blue",
+            Recommended: "yellow",
+            Livecheck: "teal"
+        };
+
+        return ColorMap[tag] || "grey";
+    }
+
     render() {
         let {ruleName} = this.props.match.params;
         let rule = this.getRule(ruleName);
@@ -47,10 +57,12 @@ class RulePage extends React.Component {
                             <h1 style={{marginBottom: "0"}}>{rule.name}</h1>
                             <p style={{color: "#aaaaaa"}}>{rule.uuid}</p>
 
-                            {rule.docs.recommended && (
-                                <Label color={"yellow"} content={"Recommended"}
-                                       style={{marginLeft: 0, marginBottom: 20}}/>
-                            )}
+                            {rule.tags.map(tag => (
+                                <Label
+                                    color={this.getTagColor(tag)}
+                                    content={tag}
+                                    style={{marginLeft: 0, marginBottom: 20}}/>
+                            ))}
 
                             <p>{rule.docs.description}</p>
                         </Segment>

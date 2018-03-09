@@ -18,7 +18,9 @@ class App extends Component {
     render() {
         return (
             <div style={{display:"flex"}}>
-                <SideMenu style={{width: '25vw'}}/>
+                <div style={{width: '25vw'}}>
+                    <SideMenu />
+                </div>
                 <div style={{width:'75vw'}}>
                     <Switch>
                         <Route exact path={"/"} component={HomePage}/>
