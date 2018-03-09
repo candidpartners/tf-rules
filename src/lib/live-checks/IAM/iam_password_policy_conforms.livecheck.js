@@ -1,6 +1,5 @@
 const co = require('co');
 const _ = require('lodash');
-const Rx = require('rxjs');
 
 //------------------------------------------------------------------------------
 // Rule Definition

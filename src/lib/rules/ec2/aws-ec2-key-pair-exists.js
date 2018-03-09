@@ -1,9 +1,7 @@
-'use strict';
 const AWS = require('aws-sdk');
 const debug = require('debug')('tfrules/ec2-key-pair-exists');
 const co = require('co');
 const _ = require('lodash');
-const Rx = require('rxjs');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -31,22 +29,24 @@ EC2KeyPairExists.livecheck = co.wrap(function* (context) {
     let ec2 = new context.provider.EC2();
 
     function getEC2s(params) {
-        return ec2.describeInstances(params).promise()
+        return ec2.describeInstances(params).promise();
     }
 
-    return Rx.Observable.fromPromise(getEC2s({}))
-        .expand(result => result.NextToken ? getEC2s({NextToken: result.NextToken}) : Rx.Observable.empty())
-        .flatMap(x => x.Reservations)
-        .flatMap(x => x.Instances)
-        .filter(x => !x.KeyName)
-        .toArray()
-        .map(array => {
-            if (array.length > 0)
-                return { valid: 'fail', message: "One or more of your EC2 instances do not have a Key Pair." };
-            else
-                return {valid: 'success'}
-        })
-        .toPromise();
+    let result = yield getEC2s({});
+    let Reservations = result.Reservations;
+
+    while(result.NextToken){
+        result = yield getEC2s({NextToken: result.NextToken});
+        Reservations.push(result.Reservations);
+    }
+
+    let Instances = _.flatMap(Reservations,res => res.Instances);
+    let NoKeyInstances = Instances.filter(x => !x.KeyName);
+
+    if(NoKeyInstances.length > 0)
+        return { valid: 'fail', message: "One or more of your EC2 instances do not have a Key Pair." };
+    else
+        return {valid: 'success'};
 });
 
 EC2KeyPairExists.validate = function* (context) {
