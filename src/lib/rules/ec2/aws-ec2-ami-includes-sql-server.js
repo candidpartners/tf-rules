@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/rule/ec2-ami-includes-sql-server');
+const debug = require('debug')('snitch/rule/ec2-ami-includes-sql-server');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------

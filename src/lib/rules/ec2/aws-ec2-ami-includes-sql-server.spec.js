@@ -2,7 +2,7 @@
 const AWS = require('aws-stub');
 const rule = require('./aws-ec2-ami-includes-sql-server');
 const co = require('co');
-const debug = require('debug')('tfrules/test/aws-ec2-ami-includes-sql-server');
+const debug = require('debug')('snitch/test/aws-ec2-ami-includes-sql-server');
 
 const TemplateImages = [
   {

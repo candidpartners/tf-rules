@@ -2,7 +2,7 @@
 const AWS = require('aws-stub');
 const rule = require('./aws-security-group-allows-outbound');
 const co = require('co');
-const debug = require('debug')('tfrules/aws-security-group-allows-outbound.spec');
+const debug = require('debug')('snitch/aws-security-group-allows-outbound.spec');
 
 let instance = { "egress" : [{"cidr_blocks":["10.0.0.0/16","204.4.6.0/16"],"from_port":9025,"to_port":9050}],"name" : 'test-server'}
 

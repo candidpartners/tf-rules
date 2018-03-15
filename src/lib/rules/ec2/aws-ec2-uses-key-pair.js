@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/ec2-uses-key-pair');
+const debug = require('debug')('snitch/ec2-uses-key-pair');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------

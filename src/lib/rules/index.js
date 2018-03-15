@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const debug = require('debug')('tfrules/rule-loader');
+const debug = require('debug')('snitch/rule-loader');
 
 const rules = {};
 

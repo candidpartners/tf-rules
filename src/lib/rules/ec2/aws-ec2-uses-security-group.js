@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/aws-ec2-uses-security-group');
+const debug = require('debug')('snitch/aws-ec2-uses-security-group');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------

@@ -1,31 +1,31 @@
 {
-  "name": "@candidpartners/tf-rules",
+  "name": "@candidpartners/snitch",
   "version": "1.1.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
-    "cli": "node bin/tfrules.js --plan",
-    "livecheck": "node bin/tfrules --livecheck"
+    "cli": "node bin/snitch.js --plan",
+    "livecheck": "node bin/snitch --livecheck"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/clearly/tf-rules.git"
+    "url": "git+https://github.com/clearly/snitch.git"
   },
   "keywords": [
     "terraform",
     "error"
   ],
   "bin": {
-    "tfrules": "./bin/tfrules.js"
+    "snitch": "./bin/snitch.js"
   },
   "author": "Aaron Bawcom <abawcom@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/clearly/tf-rules/issues"
+    "url": "https://github.com/clearly/snitch/issues"
   },
-  "homepage": "https://github.com/clearly/tf-rules#readme",
+  "homepage": "https://github.com/clearly/snitch#readme",
   "dependencies": {
     "@candidpartners/tf-parse": "^1.0.0",
     "ajv": "^4.10.1",

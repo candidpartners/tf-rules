@@ -1,7 +1,7 @@
 'use strict';
 const AWS = require('aws-stub');
 const rule = require('./aws-ec2-uses-security-group');
-const debug = require('debug')('tfrules/aws-ec2-uses-security-group.spec');
+const debug = require('debug')('snitch/aws-ec2-uses-security-group.spec');
 const co = require('co');
 
 const instance = {

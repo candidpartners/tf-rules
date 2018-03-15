@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/lib');
+const debug = require('debug')('snitch/lib');
 const _ = require('lodash');
 const Ajv = require('ajv');
 const colors = require('colors');

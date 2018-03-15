@@ -1,6 +1,6 @@
 const AWS = require('aws-stub');
 const rule = require('./aws-cloudtrail-ensure-log-file-validation');
-const debug = require('debug')('tfrules/aws-security-group-does-not-allow-outbound.spec');
+const debug = require('debug')('snitch/aws-security-group-does-not-allow-outbound.spec');
 
 let provider = {};
 

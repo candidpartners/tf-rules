@@ -1,7 +1,7 @@
 'use strict';
 const ip = require('ip')
 const _ = require('lodash');
-const debug = require('debug')('tfrules/modules/cidr-comparison');
+const debug = require('debug')('snitch/modules/cidr-comparison');
 const portComparison = require('./port-comparison')
 
 // const cidr = {}

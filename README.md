@@ -1,13 +1,13 @@
-# TF-RULES
+# Snitch
 
 ## Installation
 
-`npm i -g @candidpartners/tf-rules`
+`npm i -g @candidpartners/snitch`
 
 ## Usage
-`tfrules --plan <planfile.txt>`
+`snitch --plan <planfile.txt>`
 
 ## Commands
-`tfrules` - Runs tf-rules over piped in input, or a plan file supplied to --plan.
+`snitch` - Runs Snitch over piped in input, or a plan file supplied to --plan.
 
-`tfrules --v`,`tfrules --version` - Prints out the version of tf rules installed.
+`snitch --v`,`snitch --version` - Prints out the version of snitch installed.

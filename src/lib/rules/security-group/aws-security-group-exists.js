@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/aws-security-group-exists');
+const debug = require('debug')('snitch/aws-security-group-exists');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------

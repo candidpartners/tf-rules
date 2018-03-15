@@ -2,7 +2,7 @@
 const AWS = require('aws-stub');
 const co = require('co');
 const rule = require('./aws-security-group-does-not-allow-outbound');
-const debug = require('debug')('tfrules/aws-security-group-does-not-allow-outbound.spec');
+const debug = require('debug')('snitch/aws-security-group-does-not-allow-outbound.spec');
 
 const instance = { "egress" :
   [{

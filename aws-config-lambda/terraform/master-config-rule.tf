@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "assume" {
   }
 }
 resource "aws_iam_role" "role" {
-  name = "tf-rules-${var.env}-MasterConfigRole"
+  name = "snitch-${var.env}-MasterConfigRole"
   assume_role_policy = "${data.aws_iam_policy_document.assume.json}"
 }
 

@@ -2,7 +2,7 @@
 const cli = require('./cli');
 const co = require('co');
 const _ = require('lodash');
-const debug = require('debug')('tfrules/bin/test/cli');
+const debug = require('debug')('snitch/bin/test/cli');
 
 describe('CLI', function() {
   beforeAll(co.wrap(function *() {

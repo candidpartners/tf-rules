@@ -3,7 +3,7 @@ const AWS = require('aws-stub');
 const rule = require('./aws-ec2-key-pair-exists');
 const co = require('co');
 const _ = require('lodash');
-const debug = require('debug')('tfrules/aws-ec2-key-pair-exists');
+const debug = require('debug')('snitch/aws-ec2-key-pair-exists');
 
 const KeyPairs = [
     {

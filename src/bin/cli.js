@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/bin/cli');
+const debug = require('debug')('snitch/bin/cli');
 const fs = require('fs');
 const url = require('url');
 const _ = require('lodash');
@@ -34,7 +34,7 @@ const packageJSON = require('../package.json');
 function loadConfig() {
 
     if (!nconf.get('rules')) {
-        console.log(colors.red('ERR!'), ` Could not load configuration from terraform.tfrules file in the ${process.cwd()}. Specify the location of the file using --config`);
+        console.log(colors.red('ERR!'), ` Could not load configuration from terraform.snitch file in the ${process.cwd()}. Specify the location of the file using --config`);
         process.exit(1);
     }
 
@@ -51,8 +51,8 @@ function loadConfig() {
     const files = fs.readdirSync('.');
 
     for (let file of files) {
-        if (file.endsWith('.tfrules') && !file.startsWith('terraform') && !file.startsWith('credentials')) {
-            debug('Loading .tfrules %s', file);
+        if (file.endsWith('.snitch') && !file.startsWith('terraform') && !file.startsWith('credentials')) {
+            debug('Loading .snitch %s', file);
             const yamlFile = loadYaml.safeLoad(fs.readFileSync(file, 'utf8'));
             if (_.isArray(yamlFile.rules)) {
                 config = config.concat(yamlFile.rules);
@@ -78,9 +78,9 @@ module.exports.main = function* main(testVars) {
     }
 
     // Set up nconf
-    nconf.argv().env().file({file: 'terraform.tfrules', format: yaml}).defaults(testVars);
+    nconf.argv().env().file({file: 'terraform.snitch', format: yaml}).defaults(testVars);
 
-    nconf.add('provider', {type: 'file', file: 'credentials.tfrules', format: yaml});
+    nconf.add('provider', {type: 'file', file: 'credentials.snitch', format: yaml});
 
     const provider = yield getProvider(_.defaults(nconf.get('provider'), {}));
 

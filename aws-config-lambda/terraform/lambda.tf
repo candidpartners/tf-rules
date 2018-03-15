@@ -13,7 +13,7 @@ resource "aws_lambda_permission" "permission" {
 }
 
 resource "aws_lambda_function" "function" {
-  function_name = "tf-rules-${var.env}-lambda"
+  function_name = "snitch-${var.env}-lambda"
   handler = "index.handler"
   role = "${aws_iam_role.role.arn}"
   runtime = "nodejs6.10"
@@ -23,7 +23,7 @@ resource "aws_lambda_function" "function" {
 }
 
 resource "aws_config_config_rule" "rule" {
-  name = "tf-rules-${var.env}-config-rule"
+  name = "snitch-${var.env}-config-rule"
 
   source {
     owner = "CUSTOM_LAMBDA"

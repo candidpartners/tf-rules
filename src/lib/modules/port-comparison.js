@@ -1,6 +1,6 @@
 'use strict';
 const _ = require('lodash');
-const debug = require('debug')('tfrules/modules/port-comparison');
+const debug = require('debug')('snitch/modules/port-comparison');
 const inRange = require('in-range');
 
 let port = function (config, instance, allow){

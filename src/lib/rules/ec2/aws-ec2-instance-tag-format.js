@@ -1,6 +1,6 @@
 'use strict';
 const _  = require('lodash');
-const debug = require('debug')('tfrules/tag-format');
+const debug = require('debug')('snitch/tag-format');
 
 //------------------------------------------------------------------------------
 // Rule Definition

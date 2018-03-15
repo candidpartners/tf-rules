@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('tfrules/rds-encryption-exists');
+const debug = require('debug')('snitch/rds-encryption-exists');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------

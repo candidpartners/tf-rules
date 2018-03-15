@@ -1,6 +1,6 @@
 'use strict';
 const co = require('co')
-const debug = require('debug')('tfrules/aws-security-group-allow-inbound');
+const debug = require('debug')('snitch/aws-security-group-allow-inbound');
 const _ = require('lodash');
 const cidrComparison = require('../../modules/cidr-comparison');
 const portComparison = require('../../modules/port-comparison');

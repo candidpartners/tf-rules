@@ -2,7 +2,7 @@
 const rule = require('./aws-ec2-has-key-pair');
 const co = require('co');
 const _ = require('lodash');
-const debug = require('debug')('tfrules/aws-ec2-has-key-pair');
+const debug = require('debug')('snitch/aws-ec2-has-key-pair');
 
 describe('aws-ec2-has-key-pair', function () {
     it("should return a valid = 'success'", co.wrap(function* () {

@@ -1,7 +1,7 @@
 'use strict';
 const AWS = require('aws-stub');
 const rule = require('./aws-security-group-allows-inbound');
-const debug = require('debug')('tfrules/aws-security-group-allows-inbound.spec');
+const debug = require('debug')('snitch/aws-security-group-allows-inbound.spec');
 const co = require('co');
 
 let instance = { "ingress" : [{"cidr_blocks":["10.0.0.0/16","204.4.6.0/16"],"from_port":9025,"to_port":9050}],"name" : 'test-server'}

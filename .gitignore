@@ -3,7 +3,7 @@
 
 # Logs
 .terraform
-credentials.tfrules
+credentials.snitch
 logs
 *.log
 npm-debug.log*

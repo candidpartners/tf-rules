@@ -2,7 +2,7 @@
 const AWS = require('aws-stub');
 const rule = require('./aws-security-group-exists');
 const co = require('co');
-const debug = require('debug')('tfrules/aws-security-group-exists.spec');
+const debug = require('debug')('snitch/aws-security-group-exists.spec');
 
 const SecurityGroups = {
   'SecurityGroups' : [
