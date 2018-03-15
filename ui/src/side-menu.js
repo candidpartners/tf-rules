@@ -14,7 +14,7 @@ const SideMenu = ({}) => (
     <Menu vertical style={{height:"100vh",overflowY:"scroll", minWidth:"300px"}}>
         <Menu.Item>
             <Link to={`/`}>
-                <h2>TF Rules</h2>
+                <h2>Snitch</h2>
             </Link>
         </Menu.Item>
         {_.map(rulesByGroup, (value, key) => (

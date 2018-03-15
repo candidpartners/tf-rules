@@ -9,7 +9,7 @@ let downloadTxtFile = () => {
 rules :
 - aws-rds-encryption-key-exists : true`
     ));
-    element.setAttribute('download', "terraform.tfrules");
+    element.setAttribute('download', "terraform.snitch");
 
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -21,22 +21,22 @@ rules :
 
 const HomePage = ({}) => (
     <div style={{padding: '20px', height: "100vh", right:"0px", overflowY: "auto"}}>
-        <h1>TF Rules</h1>
-        TF-Rules is a library to ensure your organization's infrastructure conforms to your standards.
+        <h1>Snitch</h1>
+        Snitch is a library to ensure your organization's infrastructure conforms to your standards.
 
         <Header as='h2' dividing>
             Features
         </Header>
         <h4>Terraform Standards in CI/CD Pipelines</h4>
         <ul>
-            <li>TF-Rules can read in a Terraform Plan output, making sure resources are only provisioned if they conform
+            <li>Snitch can read in a Terraform Plan output, making sure resources are only provisioned if they conform
                 to your standards.
             </li>
         </ul>
 
         <h4>Livecheck Standards Anywhere</h4>
         <ul>
-            <li>TF-Rules can perform livechecks to make sure provisioned infrastructure is up to date.</li>
+            <li>Snitch can perform livechecks to make sure provisioned infrastructure is up to date.</li>
         </ul>
 
         <h4>One Config File</h4>
@@ -55,29 +55,29 @@ const HomePage = ({}) => (
         </ul>
 
         <h4>Installation</h4>
-        <pre>npm i -g @candidpartners/tf-rules</pre>
+        <pre>npm i -g @candidpartners/snitch</pre>
 
-        <h4>Create a terraform.tfrules file in your directory</h4>
+        <h4>Create a terraform.snitch file in your directory</h4>
 
         <Button primary onClick={() => downloadTxtFile()}>Download</Button>
 
         <h4>Usage</h4>
         Pipe Terraform Output
-        <pre>terraform plan | tfrules</pre>
+        <pre>terraform plan | snitch</pre>
 
         Use the Terraform -no-color option for better formatted terraform output
-        <pre>terraform plan -no-color | tfrules</pre>
+        <pre>terraform plan -no-color | snitch</pre>
 
         Or pipe the terraform output to a file, and use the file as input.
         <pre>
             terraform plan -no-color > plan.txt
             <br/>
-            tfrules --plan plan.txt
+            snitch --plan plan.txt
         </pre>
 
         To use the livechecks
         <pre>
-            tfrules --livecheck
+            snitch --livecheck
         </pre>
     </div>
 );
