@@ -59,6 +59,7 @@ class RulePage extends React.Component {
 
                             {rule.tags.map(tag => (
                                 <Label
+                                    key={tag}
                                     color={this.getTagColor(tag)}
                                     content={tag}
                                     style={{marginLeft: 0, marginBottom: 20}}/>
