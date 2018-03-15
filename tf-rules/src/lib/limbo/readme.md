@@ -1,0 +1,1 @@
+The current rules in this directory are impossible to fully implement using the current tf-parse library, as they need to check dependencies between resources which tf-parse does not provide.
