@@ -78,7 +78,7 @@ module.exports.main = function* main(testVars) {
     }
 
     // Set up nconf
-    nconf.argv().env().file({file: 'terraform.snitch', format: yaml}).defaults(testVars);
+    nconf.argv().env().file({file: 'snitch.config.yml', format: yaml}).defaults(testVars);
 
     nconf.add('provider', {type: 'file', file: 'credentials.snitch', format: yaml});
 
