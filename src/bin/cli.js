@@ -31,6 +31,7 @@ const packageJSON = require('../package.json');
 //     };
 // });
 
+module.exports.loadConfig = loadConfig;
 function loadConfig() {
 
     if (!nconf.get('rules')) {
@@ -100,7 +101,7 @@ module.exports.main = function* main(testVars) {
 
     //For livechecks
     if(nconf.get('livecheck')){
-        yield snitch.livecheck({rules, config, provider});
+        yield snitch.livecheck({rules, config, provider, report: true});
         process.exit(0);
     }
     else{
