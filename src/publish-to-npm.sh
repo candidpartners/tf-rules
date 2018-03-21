@@ -4,11 +4,13 @@
 git diff --quiet --exit-code HEAD
 
 if [ "$?" = "0" ]; then
+    set -e
     git ls-files --modified --deleted
     version=$(cat ./package.json | jq '.version')
 
     echo Publishing @CandidPartners/snitch ${version}
     npm publish --access public
+
 
     echo Tagging Git Repo with version $version
     git tag -a ${version} -m ${version}
