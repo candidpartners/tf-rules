@@ -113,28 +113,9 @@ function* livecheck(params) {
             results.push(result);
             report(result, "", rule);
         }
-
-        // let paths = rule.paths;
-        // let searchResults = _.keys(paths).map(path => ({
-        //     rule: ruleId,
-        //     path: {
-        //         name: path,
-        //         query: paths[path]
-        //     },
-        //     search: jp.search(plan, paths[path])
-        // }));
-        // for (let searchResult of searchResults) {
-        //     if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
-        //         for (let instanceName of _.keys(searchResult.search)) {
-        //             let instance = searchResult.search[instanceName];
-        //
-        //         }
-        //     }
-        // }
     }
     return results;
 }
-
 
 module.exports = {
     validateConfig,
