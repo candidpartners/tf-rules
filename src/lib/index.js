@@ -1,6 +1,7 @@
 'use strict';
 const debug = require('debug')('snitch/lib');
 const _ = require('lodash');
+const co = require('co');
 const Ajv = require('ajv');
 const colors = require('colors');
 const jp = require('jmespath');
@@ -98,7 +99,7 @@ function* validatePlan(params) {
     return results;
 }
 
-function* livecheck(params) {
+let livecheck = co.wrap(function * (params) {
     const provider = params.provider;
     debug('allConfig: %j', params.config);
     let results = [];
@@ -115,7 +116,7 @@ function* livecheck(params) {
         }
     }
     return results;
-}
+});
 
 module.exports = {
     validateConfig,

@@ -1,14 +1,15 @@
 require('dotenv').config();
-const aws = require('aws-sdk');
-const config = new aws.ConfigService();
-const Snitch = require('@candidpartners/snitch').Snitch;
+const AWS = require('aws-sdk');
+const config = new AWS.ConfigService();
+const {Snitch,Rules} = require('@candidpartners/snitch');
 
 // Receives the event and context from AWS Lambda.
 exports.handler = (event, context, callback) => {
     console.log(event);
     let {resultToken,accountId} = event;
 
-    Snitch.livecheck({provider,})
+    let results = Snitch.livecheck({provider: AWS, rules: Rules,});
+    console.log({results});
     let params = {
         ResultToken: resultToken,
         Evaluations: [
