@@ -54,7 +54,9 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
     });
 
     if (InstancesWithoutTags.length > 0) {
-        return {valid: "fail", message: "Not all EC2 instances have required tags"}
+        let missingTags = _.difference(reqTags, InstancesWithoutTags[0].Tags.map(x => x.Key));
+        let {InstanceId} = InstancesWithoutTags[0];
+        return {valid: "fail", message: `Not all EC2 instances have required tags. ${InstanceId} is missing tags ${missingTags}`}
     }
     else {
         return {valid: "success"}
