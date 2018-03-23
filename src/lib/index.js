@@ -109,7 +109,8 @@ function* validatePlan(params) {
 let livecheck = co.wrap(function* (params) {
     const provider = params.provider;
     debug('allConfig: %j', params.config);
-    let results = [];
+
+    let promises = [];
     for (let ruleInstance of params.config) {
         debug('ruleInstance: %j', ruleInstance);
         let ruleId = getKey(ruleInstance);
@@ -117,13 +118,15 @@ let livecheck = co.wrap(function* (params) {
         let config = ruleInstance[ruleId];
 
         if (_.isFunction(rule.livecheck)) {
-            let result = yield rule.livecheck({config, provider});
-            results.push(result);
-            if (params.report)
-                report(result, "", rule);
+            promises.push(rule.livecheck({config, provider})
+                .then(result => {
+                    if (params.report)
+                        report(result, "", rule);
+                    return result;
+                }));
         }
     }
-    return results;
+    return Promise.all(promises);
 });
 
 module.exports = {
