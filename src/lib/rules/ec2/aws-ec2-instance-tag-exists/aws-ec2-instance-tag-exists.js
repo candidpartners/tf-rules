@@ -28,6 +28,8 @@ EC2TagExists.paths = {
     awsInstance: 'aws_instance'
 };
 
+EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
+
 EC2TagExists.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
 
@@ -54,9 +56,19 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
     });
 
     if (InstancesWithoutTags.length > 0) {
-        let missingTags = _.difference(reqTags, InstancesWithoutTags[0].Tags.map(x => x.Key));
-        let {InstanceId} = InstancesWithoutTags[0];
-        return {valid: "fail", message: `Not all EC2 instances have required tags. ${InstanceId} is missing tags ${missingTags}`}
+        let noncompliant_resources = InstancesWithoutTags.map(inst => {
+            let {Tags, InstanceId} = inst;
+            let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
+            return {
+                id: InstanceId,
+                message: `Missing tags ${missingTags}`
+            }
+        });
+        return {
+            valid: "fail",
+            message: "One or more EC2 instances are missing required tags.",
+            noncompliant_resources
+        }
     }
     else {
         return {valid: "success"}
@@ -75,9 +87,9 @@ EC2TagExists.validate = function (context) {
     let message = missingTags.map(tag => `${tag} tag is missing`);
 
     if (missingTags.length === 0) {
-        return { valid: 'success', };
+        return {valid: 'success',};
     } else {
-        return { valid: 'fail', message };
+        return {valid: 'fail', message};
     }
 };
 

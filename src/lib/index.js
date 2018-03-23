@@ -53,12 +53,19 @@ function report(result, instanceName, rule) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
         } else if (result.valid == 'fail') {
+            //Print out message
             if (_.isArray(result.message)) {
                 for (let error of result.message) {
                     console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(error || rule.docs.description), instanceName && colors.gray(':'), instanceName);
                 }
             } else {
                 console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(result.message || rule.docs.description), instanceName && colors.gray(':'), instanceName);
+            }
+            //Print out non-compliant resources
+            if (result.noncompliant_resources) {
+                result.noncompliant_resources.forEach(x => {
+                    console.log('\t', colors.red(x.id), colors.gray(x.message))
+                })
             }
         }
     }

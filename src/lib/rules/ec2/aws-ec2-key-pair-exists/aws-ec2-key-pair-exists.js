@@ -15,7 +15,7 @@ EC2KeyPairExists.groupName = "EC2";
 EC2KeyPairExists.docs = {
     description: 'EC2 Keypair must exist in the account and region',
     recommended: true,
-    tags: [ "Live Check"]
+    tags: ["Live Check"]
 };
 
 EC2KeyPairExists.schema = {type: 'boolean'};
@@ -24,7 +24,7 @@ EC2KeyPairExists.paths = {
     rdsInstance: 'aws_instance'
 };
 
-
+EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
 EC2KeyPairExists.livecheck = co.wrap(function* (context) {
     let ec2 = new context.provider.EC2();
 
@@ -35,16 +35,23 @@ EC2KeyPairExists.livecheck = co.wrap(function* (context) {
     let result = yield getEC2s({});
     let Reservations = result.Reservations;
 
-    while(result.NextToken){
+    while (result.NextToken) {
         result = yield getEC2s({NextToken: result.NextToken});
         Reservations.push(result.Reservations);
     }
 
-    let Instances = _.flatMap(Reservations,res => res.Instances);
+    let Instances = _.flatMap(Reservations, res => res.Instances);
     let NoKeyInstances = Instances.filter(x => !x.KeyName);
 
-    if(NoKeyInstances.length > 0)
-        return { valid: 'fail', message: "One or more of your EC2 instances do not have a Key Pair." };
+    if (NoKeyInstances.length > 0)
+        return {
+            valid: 'fail',
+            message: "One or more of your EC2 instances do not have a Key Pair.",
+            noncompliant_resources: NoKeyInstances.map(inst => ({
+                id: inst.InstanceId,
+                message: "Missing Keypair"
+            }))
+        };
     else
         return {valid: 'success'};
 });
