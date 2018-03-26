@@ -1,5 +1,7 @@
 *.env
 .idea
+aws-config-lambda/bin
+*.zip
 
 # Logs
 .terraform
