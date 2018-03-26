@@ -1,5 +1,6 @@
 'use strict';
 const debug = require('debug')('snitch/rds-encryption-exists');
+const co = require('co');
 const _ = require('lodash');
 
 //------------------------------------------------------------------------------
@@ -16,9 +17,46 @@ RDSEncryptionKeyExists.docs = {
   recommended: true
 };
 
-RDSEncryptionKeyExists.liveCheck = true;
-
 RDSEncryptionKeyExists.schema = { type : 'boolean' };
+
+RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
+    let {config, provider} = context;
+
+    let rds = new provider.RDS();
+    let reqTags = config;
+
+    // Get all RDS instances
+    let result = yield rds.describeDBInstances().promise();
+    let DBInstances = result.DBInstances;
+
+    while (result.NextToken) {
+        let result = yield rds.describeDBInstances({NextToken: result.NextToken}).promise();
+        DBInstances = [...DBInstances, ...result.DBInstances];
+    }
+
+    let Instances = _.flatMap(DBInstances);
+
+
+    // Find unencrypted instances
+    let UnencryptedInstances = Instances.filter(instance => instance.kms_key_id === undefined);
+
+    if (UnencryptedInstances.length > 0) {
+        let noncompliant_resources = UnencryptedInstances.map(inst => {
+            return {
+                id: inst.DBInstanceIdentifier,
+                message: `${inst.DBInstanceIdentifier} instance unencrypted`
+            }
+        });
+        return {
+            valid: "fail",
+            message: "One or more RDS instances are not encrypted.",
+            noncompliant_resources
+        }
+    }
+    else {
+        return {valid: "success"}
+    }
+});
 
 RDSEncryptionKeyExists.paths = {
   rdsInstance : 'aws_db_instance'
