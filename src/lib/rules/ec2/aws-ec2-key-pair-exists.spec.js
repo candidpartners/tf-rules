@@ -40,13 +40,6 @@ describe('aws-ec2-key-pair-exists', function () {
 
 describe('aws-ec2-key-pair-exists-livecheck', function () {
 
-    // return ec2.describeInstances(params).promise()
-
-// .flatMap(x => x.Reservations)
-//         .flatMap(x => x.Instances)
-//         .filter(x => !x.KeyName)
-//         .toArray()
-
     function getProvider(instances){
         return {
             EC2: class EC2 {
