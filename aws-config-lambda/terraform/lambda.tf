@@ -28,9 +28,11 @@ resource "aws_config_config_rule" "rule" {
   source {
     owner = "CUSTOM_LAMBDA"
     source_identifier = "${aws_lambda_function.function.arn}"
+
     source_detail {
       event_source = "aws.config"
-      message_type = "ConfigurationItemChangeNotification"
+      maximum_execution_frequency = "One_Hour"
+      message_type = "ScheduledNotification"
     }
   }
   depends_on = ["aws_lambda_permission.permission"]

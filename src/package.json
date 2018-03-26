@@ -1,6 +1,6 @@
 {
-  "name": "snitch",
-  "version": "1.1.0",
+  "name": "@candidpartners/snitch",
+  "version": "2.3.4",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
@@ -44,7 +44,8 @@
     "nconf-yaml": "^1.0.2",
     "papaparse": "^4.3.7",
     "proxy-agent": "^2.0.0",
-    "rxjs": "^5.5.6"
+    "rxjs": "^5.5.6",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "aws-sdk-mock": "^1.6.1",

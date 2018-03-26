@@ -3,7 +3,7 @@ const debug = require('debug')('snitch/bin/cli');
 const fs = require('fs');
 const url = require('url');
 const _ = require('lodash');
-const tfRules = require('../lib');
+const snitch = require('../lib');
 const getStdin = require('get-stdin');
 const nconf = require('nconf');
 const Plan = require('@candidpartners/tf-parse').Plan;
@@ -31,6 +31,7 @@ const packageJSON = require('../package.json');
 //     };
 // });
 
+module.exports.loadConfig = loadConfig;
 function loadConfig() {
 
     if (!nconf.get('rules')) {
@@ -78,7 +79,7 @@ module.exports.main = function* main(testVars) {
     }
 
     // Set up nconf
-    nconf.argv().env().file({file: 'terraform.snitch', format: yaml}).defaults(testVars);
+    nconf.argv().env().file({file: 'snitch.config.yml', format: yaml}).defaults(testVars);
 
     nconf.add('provider', {type: 'file', file: 'credentials.snitch', format: yaml});
 
@@ -91,7 +92,7 @@ module.exports.main = function* main(testVars) {
 
     debug('Validating config...');
 
-    const errors = tfRules.validateConfig(rules, config);
+    const errors = snitch.validateConfig(rules, config);
 
     if (errors.length > 0) throw {message: 'Configuration errors', errors};
 
@@ -100,7 +101,7 @@ module.exports.main = function* main(testVars) {
 
     //For livechecks
     if(nconf.get('livecheck')){
-        yield tfRules.livecheck({rules, config, provider});
+        yield snitch.livecheck({rules, config, provider, report: true});
         process.exit(0);
     }
     else{
@@ -126,9 +127,9 @@ module.exports.main = function* main(testVars) {
 
         if (nconf.get('dryRun') != true) {
             debug('Calling validatePlan');
-            results = results.concat(yield tfRules.validatePlan({rules, config, plan: target.add, provider}));
-            results = results.concat(yield tfRules.validatePlan({rules, config, plan: target.rep.next, provider}));
-            results = results.concat(yield tfRules.validatePlan({rules, config, plan: target.mod.next, provider}));
+            results = results.concat(yield snitch.validatePlan({rules, config, plan: target.add, provider}));
+            results = results.concat(yield snitch.validatePlan({rules, config, plan: target.rep.next, provider}));
+            results = results.concat(yield snitch.validatePlan({rules, config, plan: target.mod.next, provider}));
         }
         return results;
     }

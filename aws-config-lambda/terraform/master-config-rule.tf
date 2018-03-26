@@ -57,6 +57,7 @@ data "aws_iam_policy_document" "master_config" {
     ]
   }
 }
+
 resource "aws_iam_role_policy" "master_config" {
   policy = "${data.aws_iam_policy_document.master_config.json}"
   role = "${aws_iam_role.role.id}"

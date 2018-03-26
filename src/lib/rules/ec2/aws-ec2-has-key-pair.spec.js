@@ -2,9 +2,9 @@
 const rule = require('./aws-ec2-has-key-pair');
 const co = require('co');
 const _ = require('lodash');
-const debug = require('debug')('snitch/aws-ec2-has-key-pair');
+const debug = require('debug')('snitch/aws-ec2-key-pair-exists');
 
-describe('aws-ec2-has-key-pair', function () {
+describe('aws-ec2-key-pair-exists', function () {
     it("should return a valid = 'success'", co.wrap(function* () {
         const instance = {
             key_name: 'real-key-name',

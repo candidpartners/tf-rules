@@ -1,6 +1,7 @@
 'use strict';
 const debug = require('debug')('snitch/lib');
 const _ = require('lodash');
+const co = require('co');
 const Ajv = require('ajv');
 const colors = require('colors');
 const jp = require('jmespath');
@@ -52,12 +53,19 @@ function report(result, instanceName, rule) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
         } else if (result.valid == 'fail') {
+            //Print out message
             if (_.isArray(result.message)) {
                 for (let error of result.message) {
                     console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(error || rule.docs.description), instanceName && colors.gray(':'), instanceName);
                 }
             } else {
                 console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(result.message || rule.docs.description), instanceName && colors.gray(':'), instanceName);
+            }
+            //Print out non-compliant resources
+            if (result.noncompliant_resources) {
+                result.noncompliant_resources.forEach(x => {
+                    console.log('\t', colors.red(x.id), colors.gray(x.message))
+                })
             }
         }
     }
@@ -98,43 +106,39 @@ function* validatePlan(params) {
     return results;
 }
 
-function* livecheck(params) {
+let livecheck = co.wrap(function* (params) {
     const provider = params.provider;
+    let config_triggers = params.config_triggers || [];
+
     debug('allConfig: %j', params.config);
-    let results = [];
+
+    let promises = [];
     for (let ruleInstance of params.config) {
         debug('ruleInstance: %j', ruleInstance);
         let ruleId = getKey(ruleInstance);
         let rule = params.rules[ruleId];
         let config = ruleInstance[ruleId];
 
-        if(_.isFunction(rule.livecheck)){
-            let result = yield rule.livecheck({config, provider});
-            results.push(result);
-            report(result, "", rule);
+        //If config_triggers, skip over if not in the triggers
+        if(config_triggers.length){
+            let rule_triggers = ruleInstance.config_triggers || [];
+            let isTrigger = _.intersection(config_triggers,rule_triggers).length > 0;
+            if(!isTrigger)
+                continue;
         }
 
-        // let paths = rule.paths;
-        // let searchResults = _.keys(paths).map(path => ({
-        //     rule: ruleId,
-        //     path: {
-        //         name: path,
-        //         query: paths[path]
-        //     },
-        //     search: jp.search(plan, paths[path])
-        // }));
-        // for (let searchResult of searchResults) {
-        //     if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
-        //         for (let instanceName of _.keys(searchResult.search)) {
-        //             let instance = searchResult.search[instanceName];
-        //
-        //         }
-        //     }
-        // }
+        // If the rule has a livecheck, call it and add it to the promise array
+        if (_.isFunction(rule.livecheck)) {
+            promises.push(rule.livecheck({config, provider})
+                .then(result => {
+                    if (params.report)
+                        report(result, "", rule);
+                    return result;
+                }));
+        }
     }
-    return results;
-}
-
+    return Promise.all(promises);
+});
 
 module.exports = {
     validateConfig,
