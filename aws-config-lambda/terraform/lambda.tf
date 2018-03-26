@@ -34,6 +34,21 @@ resource "aws_config_config_rule" "rule" {
       maximum_execution_frequency = "One_Hour"
       message_type = "ScheduledNotification"
     }
+
+    source_detail {
+      event_source = "aws.config"
+      message_type = "ConfigurationItemChangeNotification"
+    }
+
+    source_detail {
+      event_source = "aws.config"
+      message_type = "OversizedConfigurationItemChangeNotification"
+    }
   }
+
+  scope {
+    compliance_resource_types = ["AWS::EC2::Instance"]
+  }
+
   depends_on = ["aws_lambda_permission.permission"]
 }
