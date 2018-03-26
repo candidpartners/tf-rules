@@ -24,9 +24,7 @@ EC2TagExists.schema = {
     }
 };
 
-EC2TagExists.paths = {
-    awsInstance: 'aws_instance'
-};
+
 
 EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
 
@@ -75,6 +73,10 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
     }
 });
 
+
+EC2TagExists.paths = {
+    awsInstance: 'aws_instance'
+};
 
 EC2TagExists.validate = function (context) {
     let reqTags = context.config;

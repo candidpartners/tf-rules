@@ -11,7 +11,7 @@ exports.handler = co.wrap(function * (event, context, callback){
 
     try{
         let config = Snitch.LoadConfigFromFile(__dirname + "/snitch.config.yml");
-        let result = yield Snitch.Livecheck({provider: AWS,config});
+        let result = yield Snitch.Livecheck({provider: AWS, config});
         let failedResults = result.filter(x => x.valid == 'fail');
 
         let isCompliant = failedResults.length == 0;

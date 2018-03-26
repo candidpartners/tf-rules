@@ -108,6 +108,8 @@ function* validatePlan(params) {
 
 let livecheck = co.wrap(function* (params) {
     const provider = params.provider;
+    let config_triggers = params.config_triggers || [];
+
     debug('allConfig: %j', params.config);
 
     let promises = [];
@@ -117,6 +119,15 @@ let livecheck = co.wrap(function* (params) {
         let rule = params.rules[ruleId];
         let config = ruleInstance[ruleId];
 
+        //If config_triggers, skip over if not in the triggers
+        if(config_triggers.length){
+            let rule_triggers = ruleInstance.config_triggers || [];
+            let isTrigger = _.intersection(config_triggers,rule_triggers).length > 0;
+            if(!isTrigger)
+                continue;
+        }
+
+        // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
             promises.push(rule.livecheck({config, provider})
                 .then(result => {
