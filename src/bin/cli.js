@@ -52,7 +52,7 @@ function loadConfig() {
     const files = fs.readdirSync('.');
 
     for (let file of files) {
-        if (file.endsWith('.snitch') && !file.startsWith('terraform') && !file.startsWith('credentials')) {
+        if (file.endsWith('.snitch') && !file.startsWith('modules') && !file.startsWith('credentials')) {
             debug('Loading .snitch %s', file);
             const yamlFile = loadYaml.safeLoad(fs.readFileSync(file, 'utf8'));
             if (_.isArray(yamlFile.rules)) {
@@ -117,7 +117,7 @@ module.exports.main = function* main(testVars) {
         inputPlan = inputPlan || '';
 
         if (inputPlan.length == 0) {
-            console.log(colors.red('ERR!'), " terraform plan input must be specified as a file using --plan or come from stdin");
+            console.log(colors.red('ERR!'), " modules plan input must be specified as a file using --plan or come from stdin");
             process.exit(1);
         }
 

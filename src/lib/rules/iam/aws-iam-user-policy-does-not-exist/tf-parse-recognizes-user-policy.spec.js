@@ -2,7 +2,7 @@ const Plan      = require('@candidpartners/tf-parse').Plan;
 const path = require('path');
 const fs = require('fs');
 
-let terraformOutput = fs.readFileSync(__dirname + '/aws-iam-user-policy-does-not-exist-terraform-output.txt').toString();
+let terraformOutput = fs.readFileSync(__dirname + '/aws-iam-user-policy-does-not-exist-modules-output.txt').toString();
 let goodOutput = fs.readFileSync(__dirname + "/../aws-iam-account-password-policy/aws-iam-account-password-policy-sample.txt").toString();
 
 let plan = new Plan();

@@ -9,7 +9,7 @@ let downloadTxtFile = () => {
 rules :
 - aws-rds-encryption-key-exists : true`
     ));
-    element.setAttribute('download', "terraform.snitch");
+    element.setAttribute('download', "modules.snitch");
 
     element.style.display = 'none';
     document.body.appendChild(element);
