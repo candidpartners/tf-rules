@@ -58,7 +58,7 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
         let noncompliant_resources = UnencryptedInstances.map(inst => {
             return {
                 id: inst.TableName,
-                message: `${inst.TableName} is unencrypted`
+                message: `is unencrypted`
             }
         });
         return {
@@ -89,7 +89,7 @@ DynamoDBEncryption.validate = function* (context) {
         else {
             result = {
                 valid: 'fail',
-                message: `${dynamo.tableName} not encrypted`
+                message: `${dynamo.TableName} not encrypted`
             }
         }
     }
