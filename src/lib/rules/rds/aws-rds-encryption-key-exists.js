@@ -17,10 +17,21 @@ RDSEncryptionKeyExists.docs = {
   recommended: true
 };
 
-RDSEncryptionKeyExists.schema = { type : 'boolean' };
+RDSEncryptionKeyExists.schema = {
+    type : 'object',
+    properties: {
+        exclude: {
+            type: "array",
+            items: {
+                type: "string"
+            }
+        }
+    }
+};
 
 RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
+    let exclude = config.exclude || [];
 
     let rds = new provider.RDS();
     let reqTags = config;
@@ -34,7 +45,7 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
         DBInstances = [...DBInstances, ...result.DBInstances];
     }
 
-    let Instances = _.flatMap(DBInstances);
+    let Instances = _.flatMap(DBInstances).filter(x => exclude.includes(x.DBInstanceIdentifier) === false);
 
 
     // Find unencrypted instances
