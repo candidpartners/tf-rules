@@ -8,7 +8,12 @@ rules :
 - aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
-- aws-rds-encryption-key-exists : true
+- aws-dynamoDB-encryption :
+    exclude:
+      - volker-dev-accounts
+- aws-rds-encryption-key-exists :
+    exclude:
+      - vra
 - aws-ec2-instance-tag-exists :
   - Name
   - ApplicationId

@@ -48,11 +48,32 @@ describe('rds-encryption-key-exists', function () {
             }
         );
 
-        let result = await rule.livecheck({config: true, provider: goodProvider});
+        let result = await rule.livecheck({config: {}, provider: goodProvider});
         expect(result.valid).toBe("success");
 
-        let failResult = await rule.livecheck({config: true, provider: badProvider});
+        let failResult = await rule.livecheck({config: {}, provider: badProvider});
         expect(failResult.valid).toBe('fail');
         expect(failResult.message).toBe("One or more RDS instances are not encrypted.");
+    });
+
+    it("It can exclude instances", async () => {
+        let goodProvider = AWS("RDS", "describeDBInstances",
+            {
+                DBInstances: [
+                    {
+                        // Other instance data just omitted
+                        DBInstanceIdentifier: "MyName",
+                        kms_key_id: undefined
+                    },
+                    {
+                        // Other instance data just omitted
+                        DBInstanceIdentifier: "Instance 2",
+                        kms_key_id: "kms_key"
+                    }
+                ]
+            }
+        );
+        let result = await rule.livecheck({config: { exclude: "MyName"}, provider: goodProvider});
+        expect(result.valid).toBe("success");
     })
 });
