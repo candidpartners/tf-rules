@@ -3,10 +3,10 @@ const AWS = require('aws-stub');
 const AWSPromiseMock = require('../../../aws-promise-mock');
 const _ = require('lodash');
 const RealAWS = require('aws-sdk');
-const rule = require('./aws-dynamoDB-encryption');
+const rule = require('./aws-dynamodb-encryption');
 const co = require('co');
 
-describe('dynamoDB-encryption', function () {
+describe('dynamodb-encryption', function () {
     it("should return a valid = 'success'", co.wrap(function* () {
         const instance = {TableName: 'MyDynamoDB', SSEDescription: {status: "ENABLED"}};
         const provider = AWS('DynamoDB', 'MyDynamoDB');

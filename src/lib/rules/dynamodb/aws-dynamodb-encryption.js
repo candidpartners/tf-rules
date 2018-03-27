@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('snitch/dynamoDB-encryption');
+const debug = require('debug')('snitch/dynamodb-encryption');
 const co = require('co');
 const _ = require('lodash');
 
@@ -13,7 +13,7 @@ DynamoDBEncryption.uuid = "e391e00a-ddce-4064-80ad-6b0ef351ccc6";
 DynamoDBEncryption.groupName = "DynamoDB";
 
 DynamoDBEncryption.docs = {
-    description: 'Encrypted DynamoDB table must exist in the region.',
+    description: 'DynamoDB tables must be encrypted.',
     recommended: true
 };
 
@@ -73,28 +73,20 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
 });
 
 DynamoDBEncryption.paths = {
-    DynamoDB: 'aws_dynamodb_instance'
+    DynamoDB: 'aws_dynamodb_table'
 };
 
-DynamoDBEncryption.validate = function* (context) {
+DynamoDBEncryption.validate = co.wrap(function* (context) {
     // debug( '%O', context );
-    const dynamo = new context.provider.DynamoDB();
-    let result = null;
-    if (context.config === true) {
-        if (context.instance.SSEDescription) {
-            result = {
-                valid: 'success'
-            }
-        }
-        else {
-            result = {
-                valid: 'fail',
-                message: `${dynamo.TableName} not encrypted`
-            }
-        }
+    let {config,provider,instance} = context;
+
+    if(instance.SSEDescription){
+        return {valid: 'success'}
     }
-    return result;
-};
+    else {
+        return {valid: 'fail', message: "A dynamodb instance is not encrypted"}
+    }
+});
 
 module.exports = DynamoDBEncryption;
 

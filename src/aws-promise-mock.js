@@ -10,6 +10,17 @@ class MockAWS{
             }
         }
     }
+
+    ServiceError(service, method, error){
+        if(!this[service]){
+            this[service] = function(){}
+        }
+        this[service].prototype[method] = function (){
+            return {
+                promise: () => Promise.reject(error)
+            }
+        }
+    }
 }
 
 module.exports = MockAWS;

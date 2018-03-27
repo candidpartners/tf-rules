@@ -43,29 +43,19 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
 });
 
 DefaultVPC.paths = {
-    EC2: 'aws_ec2_instance'
+    EC2: 'aws_default_vpc'
 };
 
-DefaultVPC.validate = function* (context) {
-    // debug( '%O', context );
-    const ec2 = new context.provider.ec2();
-    let result = null;
-    if (context.config === true) {
-        let attributes = context.instance.AccountAttributes.map(x => x.AttributeName);
-        if (!attributes.includes("default-vpc")) {
-            result = {
-                valid: 'success'
-            }
-        }
-        else if (attributes.includes("default-vpc")) {
-            result = {
-                valid: 'fail',
-                message: `${ec2} contains a default VPC`
-            }
-        }
+DefaultVPC.validate = co.wrap(function* (context) {
+    let {config,provider,instance} = context;
+
+    if(!instance){
+        return {valid: 'success'}
     }
-    return result;
-};
+    else {
+        return {valid: 'fail', message: "A default VPC exists"}
+    }
+});
 
 module.exports = DefaultVPC;
 

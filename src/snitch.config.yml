@@ -9,7 +9,10 @@ rules :
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
 - aws-no-default-vpc : true
-- aws-dynamoDB-encryption :
+- aws-s3-encryption:
+    exclude:
+      - volker-dev-accounts
+- aws-dynamodb-encryption :
     exclude:
       - volker-dev-accounts
 - aws-rds-encryption-key-exists :

@@ -91,6 +91,7 @@ function* validatePlan(params) {
                 },
                 search: jp.search(plan, paths[path])
             }));
+
             for (let searchResult of searchResults) {
                 if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
                     for (let instanceName of _.keys(searchResult.search)) {
