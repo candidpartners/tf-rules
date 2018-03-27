@@ -77,7 +77,7 @@ describe('aws-cloudtrail-ensure-s3-bucket-acl-type', () => {
         expect(result.message).toBe(`The cloudtrail log bucket does not have a acl type of one of the following : [\"public\"]`);
     });
 
-    it("Will succeed if the s3 bucket is not being checked in terraform", function(){
+    it("Will succeed if the s3 bucket is not being checked in modules", function(){
         const noS3context = Object.assign({},context);
         noS3context.plan = Object.assign({},context.plan,{
             aws_s3_bucket: {}

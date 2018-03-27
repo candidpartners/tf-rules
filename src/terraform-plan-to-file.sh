@@ -13,4 +13,4 @@ terraform plan -no-color > ${basename}-output.txt
 rm -rf .terraform
 popd
 
-echo "Output terraform plan to " ${basename}-output.txt
+echo "Output modules plan to " ${basename}-output.txt
