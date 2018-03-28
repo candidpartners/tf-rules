@@ -22,8 +22,15 @@ exports.handler = co.wrap(function * (event, context, callback){
         });
         let failedResults = result.filter(x => x.valid == 'fail');
 
-        let isCompliant = failedResults.length == 0;
+        let isAccountCompliant = failedResults.length == 0;
         let Annotation = JSON.stringify(failedResults.map(x => x.message),null,2);
+
+        // let nonCompliantResources = _.flatMap(failedResults, x => )
+        // let resourceEvaluations = failedResults.map(result => {
+        //     return {
+        //         ComplianceResourceId: result.resource_id,
+        //     }
+        // });
 
         let params = {
             ResultToken: resultToken,
@@ -31,7 +38,7 @@ exports.handler = co.wrap(function * (event, context, callback){
                 {
                     ComplianceResourceId: accountId, //'STRING_VALUE', /* required */
                     ComplianceResourceType: "AWS::::Account", //'STRING_VALUE', /* required */
-                    ComplianceType: (isCompliant) ? "COMPLIANT" : "NON_COMPLIANT", //"NON_COMPLIANT", //COMPLIANT | NON_COMPLIANT | NOT_APPLICABLE | INSUFFICIENT_DATA, /* required */
+                    ComplianceType: (isAccountCompliant) ? "COMPLIANT" : "NON_COMPLIANT", //"NON_COMPLIANT", //COMPLIANT | NON_COMPLIANT | NOT_APPLICABLE | INSUFFICIENT_DATA, /* required */
                     OrderingTimestamp: new Date(), //|| 'Wed Dec 31 1969 16:00:00 GMT-0800 (PST)' || 123456789, /* required */
                     Annotation
                 },
