@@ -6,7 +6,7 @@ class RuleResult{
             throw "valid must be success or fail!"
         this.valid = valid;
         this.message = message;
-        this.noncompliant_resources = [];
+        this.noncompliant_resources = noncompliant_resources;
     }
 }
 

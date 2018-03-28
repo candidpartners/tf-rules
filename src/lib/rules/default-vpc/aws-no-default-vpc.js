@@ -34,7 +34,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
     if (attributeNames.includes("default-vpc")) {
         let vpcId = attributes.AccountAttributes.find(x => x.AttributeName === "default-vpc");
         let noncompliant_resources = Object.values(vpcId.AttributeValues[0]).map(inst => {
-            return  new NonCompliantResource({
+            return new NonCompliantResource({
                 resource_id: inst,
                 resource_type: "AWS::EC2::Instance",
                 message: `exists`
@@ -42,7 +42,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
         });
         return new RuleResult({
             valid: "fail",
-            message: `Default VPC ${vpcId.AttributeValues[0]} exists.`,
+            message: `Default VPC exists.`,
             noncompliant_resources
         })
     }
@@ -56,9 +56,9 @@ DefaultVPC.paths = {
 };
 
 DefaultVPC.validate = co.wrap(function* (context) {
-    let {config,provider,instance} = context;
+    let {config,instance,provider} = context;
 
-    if(!instance){
+    if(instance.AccountAttributes.length === 0){
         return {valid: 'success'}
     }
     else {

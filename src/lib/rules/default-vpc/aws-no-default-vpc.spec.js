@@ -63,6 +63,6 @@ describe('no-default-vpc', function () {
 
         let failResult = await rule.livecheck({config: {}, provider: BadAWSMock});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("Default VPC vpc-c385cba4 exists.");
+        expect(failResult.message).toBe("Default VPC exists.");
     });
 });
