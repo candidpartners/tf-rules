@@ -4,7 +4,7 @@ pipelines:
     label_template: "${snitch[:8]}"
     materials:
       snitch:
-        git: https://clearly:d56d91b33e65b7aca2a1a05afd714980fc6b567d@github.com/candidpartners/snitch.git
+        git: https://clearly:d56d91b33e65b7aca2a1a05afd714980fc6b567d@github.com/candidpartners/snitch
         branch: master
         destination: snitch
         whitelist:
