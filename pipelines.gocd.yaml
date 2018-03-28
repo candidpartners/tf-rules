@@ -9,7 +9,7 @@ pipelines:
         destination: snitch
         whitelist:
         - pipelines.gocd.yaml
-        - src
+        - src/**/*
     stages: &uiStages
       - unit-test:
           clean_workspace: true
