@@ -21,5 +21,5 @@ pipelines:
               - script: |
                   cd snitch/src
                   npm i
-                  npm test
-                  ./deploy.sh prod
+                  cd ../
+                  node pipelines/unit-test.js
