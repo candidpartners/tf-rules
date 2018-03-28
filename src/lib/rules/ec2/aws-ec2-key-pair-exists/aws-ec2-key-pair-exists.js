@@ -2,6 +2,7 @@ const AWS = require('aws-sdk');
 const debug = require('debug')('snitch/ec2-key-pair-exists');
 const co = require('co');
 const _ = require('lodash');
+const {RuleResult,NonCompliantResource} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -17,8 +18,6 @@ EC2KeyPairExists.docs = {
     recommended: true,
     tags: ["Live Check"]
 };
-
-EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
 
 EC2KeyPairExists.schema = {type: 'boolean'};
 
@@ -46,17 +45,17 @@ EC2KeyPairExists.livecheck = co.wrap(function* (context) {
     let NoKeyInstances = Instances.filter(x => !x.KeyName);
 
     if (NoKeyInstances.length > 0)
-        return {
+        return new RuleResult({
             valid: 'fail',
             message: "One or more of your EC2 instances do not have a Key Pair.",
-            noncompliant_resources: NoKeyInstances.map(inst => ({
+            noncompliant_resources: NoKeyInstances.map(inst => new NonCompliantResource({
                 resource_id: inst.InstanceId,
                 resource_type: "AWS::EC2::Instance",
                 message: "Missing Keypair"
             }))
-        };
+        });
     else
-        return {valid: 'success'};
+        return new RuleResult({valid: 'success'});
 });
 
 EC2KeyPairExists.validate = function* (context) {

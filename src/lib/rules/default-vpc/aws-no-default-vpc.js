@@ -42,7 +42,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
         });
         return new RuleResult({
             valid: "fail",
-            message: `Default VPC ${noncompliant_resources} exists.`,
+            message: `Default VPC ${vpcId.AttributeValues[0]} exists.`,
             noncompliant_resources
         })
     }
