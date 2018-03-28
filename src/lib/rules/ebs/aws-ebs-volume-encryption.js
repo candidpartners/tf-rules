@@ -72,7 +72,7 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: "One or more EBS volumes are not encrypted.",
-            noncompliant_resources: noncompliant_resources
+            noncompliant_resources
         })
     }
     else {
@@ -81,7 +81,8 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
 });
 
 EBSVolumeEncryption.validate = co.wrap(function* (context) {
-    let {config,provider,instance} = context;
+    let {config,instance,provider} = context;
+    console.log(instance)
 
     if(instance.encrypted === true){
         return {valid: 'success'}
