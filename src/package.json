@@ -1,6 +1,6 @@
 {
   "name": "@candidpartners/snitch",
-  "version": "2.3.11",
+  "version": "2.3.12",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
