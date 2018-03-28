@@ -17,6 +17,8 @@ DynamoDBEncryption.docs = {
     recommended: true
 };
 
+DynamoDBEncryption.config_triggers = ["AWS::DynamoDB::Table"];
+
 DynamoDBEncryption.schema = {
     type: 'object',
     properties: {
@@ -57,8 +59,9 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
     if (UnencryptedInstances.length > 0) {
         let noncompliant_resources = UnencryptedInstances.map(inst => {
             return {
-                id: inst.TableName,
-                message: `is unencrypted`
+                resource_id: inst.TableName,
+                resource_type: "AWS::DynamoDB::Table",
+                message: `is unencrypted`,
             }
         });
         return {
@@ -84,7 +87,11 @@ DynamoDBEncryption.validate = co.wrap(function* (context) {
         return {valid: 'success'}
     }
     else {
-        return {valid: 'fail', message: "A dynamodb instance is not encrypted"}
+        return {
+            valid: 'fail',
+            resource_type: "AWS::DynamoDB::Table",
+            message: "A dynamodb instance is not encrypted"
+        }
     }
 });
 

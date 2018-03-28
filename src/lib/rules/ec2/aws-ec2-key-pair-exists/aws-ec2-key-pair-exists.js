@@ -18,6 +18,8 @@ EC2KeyPairExists.docs = {
     tags: ["Live Check"]
 };
 
+EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
+
 EC2KeyPairExists.schema = {type: 'boolean'};
 
 EC2KeyPairExists.paths = {
@@ -48,7 +50,8 @@ EC2KeyPairExists.livecheck = co.wrap(function* (context) {
             valid: 'fail',
             message: "One or more of your EC2 instances do not have a Key Pair.",
             noncompliant_resources: NoKeyInstances.map(inst => ({
-                id: inst.InstanceId,
+                resource_id: inst.InstanceId,
+                resource_type: "AWS::EC2::Instance",
                 message: "Missing Keypair"
             }))
         };
@@ -81,6 +84,7 @@ EC2KeyPairExists.validate = function* (context) {
             } else {
                 result = {
                     valid: 'fail',
+                    resource_type: "AWS::EC2::Instance",
                     message: `Key [${context.instance.key_name}] not found`
                 };
             }

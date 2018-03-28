@@ -1,4 +1,7 @@
 'use strict';
+const debug = require('debug')('snitch/ebs-encryption');
+const co = require('co');
+const _ = require('lodash');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -6,7 +9,7 @@
 
 const EBSVolumeEncryption = {};
 
-EBSVolumeEncryption.uuid = "28afa62a-c539-4d9e-bc61-9f5b611017f8";
+EBSVolumeEncryption.uuid = "d8a29e45-d30a-4492-8380-fe1da3ed0cba";
 EBSVolumeEncryption.groupName = "EBS";
 
 EBSVolumeEncryption.docs = {
@@ -15,6 +18,8 @@ EBSVolumeEncryption.docs = {
 };
 
 EBSVolumeEncryption.liveCheck = true;
+
+EBSVolumeEncryption.config_triggers = ["AWS::EC2::Volume"];
 
 EBSVolumeEncryption.schema = {
   anyOf: [
@@ -43,32 +48,50 @@ EBSVolumeEncryption.paths = {
   ebsVolume : 'aws_ebs_volume'
 };
 
-EBSVolumeEncryption.validate = function *( context ) {
-  let result = null;
-  if( context.config == true ) {
-    if( context.instance.encrypted != true ) {
-      result = {
-        valid : 'fail',
-        message : 'EBS Volumes must be configured as true'
-      };
-    } else if ( context.instance.encrypted == true ) {
-      result = {
-        valid : 'success'
-      };
+EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
+    let {config, provider} = context;
+    let exclude = config.exclude || [];
+
+    let ec2 = new provider.EC2();
+    let reqTags = config;
+
+    let volumes = yield ec2.describeVolumes().promise();
+
+    let UnencryptedVolumes = volumes.Volumes.filter(x => !exclude.includes(x.VolumeId) && x.Encrypted === false);
+
+    if (UnencryptedVolumes.length > 0) {
+        let noncompliant_resources = UnencryptedVolumes.map(vol => {
+            return {
+                resource_id: vol.VolumeId,
+                resource_type: "AWS::EC2::Volume",
+                message: 'is unencrypted'
+            }
+        });
+        return {
+            valid: "fail",
+            message: "One or more EBS volumes are not encrypted.",
+            noncompliant_resources
+        }
     }
-  } else if ( context.config == false ) {
-    if( context.instance.encrypted == false ) {
-      result = {
-        valid : 'success'
-      };
-    } else {
-      result = {
-        valid : 'fail'
-      };
+    else {
+        return {valid: "success"}
     }
-  }
-  return result;
-};
+});
+
+EBSVolumeEncryption.validate = co.wrap(function* (context) {
+    let {config,provider,instance} = context;
+
+    if(instance.encrypted === true){
+        return {valid: 'success'}
+    }
+    else {
+        return {
+            valid: 'fail',
+            resource_type: "AWS::EC2::Volume",
+            message: "A dynamodb instance is not encrypted"
+        }
+    }
+});
 
 module.exports = EBSVolumeEncryption;
 

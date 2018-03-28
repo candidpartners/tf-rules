@@ -13,12 +13,14 @@ RDSEncryptionKeyExists.uuid = "196beb21-bb42-4a58-9ea0-0478c5f1042a";
 RDSEncryptionKeyExists.groupName = "RDS";
 
 RDSEncryptionKeyExists.docs = {
-  description: 'RDS using a KMS key must exist in the account and region',
-  recommended: true
+    description: 'RDS using a KMS key must exist in the account and region',
+    recommended: true
 };
 
+RDSEncryptionKeyExists.config_triggers = ["AWS::RDS::DBInstance"];
+
 RDSEncryptionKeyExists.schema = {
-    type : 'object',
+    type: 'object',
     properties: {
         exclude: {
             type: "array",
@@ -54,7 +56,8 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
     if (UnencryptedInstances.length > 0) {
         let noncompliant_resources = UnencryptedInstances.map(inst => {
             return {
-                id: inst.DBInstanceIdentifier,
+                resource_id: inst.DBInstanceIdentifier,
+                resource_type: "AWS::RDS::DBInstance",
                 message: `${inst.DBInstanceIdentifier} instance unencrypted`
             }
         });
@@ -70,31 +73,32 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
 });
 
 RDSEncryptionKeyExists.paths = {
-  rdsInstance : 'aws_db_instance'
+    rdsInstance: 'aws_db_instance'
 };
 
-RDSEncryptionKeyExists.validate = function *( context ) {
-  // debug( '%O', context );
-  const kms = new context.provider.KMS();
-  let result = null;
-  if( context.config == true ) {
-    if( context.instance.kms_key_id ) {
-      const queryResult = yield kms.listKeys( {} ).promise();
-      debug( '%O', queryResult );
-      debug( '%O', context.instance.kms_key_id );
-      if( _.find( queryResult.Keys, { KeyArn : context.instance.kms_key_id } ) ) {
-        result = {
-          valid : 'success'
-        };
-      } else {
-        result = {
-          valid : 'fail',
-          message : `Key [${context.instance.kms_key_id}] not found`
-        };
-      }
+RDSEncryptionKeyExists.validate = function* (context) {
+    // debug( '%O', context );
+    const kms = new context.provider.KMS();
+    let result = null;
+    if (context.config == true) {
+        if (context.instance.kms_key_id) {
+            const queryResult = yield kms.listKeys({}).promise();
+            debug('%O', queryResult);
+            debug('%O', context.instance.kms_key_id);
+            if (_.find(queryResult.Keys, {KeyArn: context.instance.kms_key_id})) {
+                result = {
+                    valid: 'success'
+                };
+            } else {
+                result = {
+                    valid: 'fail',
+                    resource_type: "AWS::RDS::DBInstance",
+                    message: `Key [${context.instance.kms_key_id}] not found`
+                };
+            }
+        }
     }
-  }
-  return result;
+    return result;
 };
 
 module.exports = RDSEncryptionKeyExists;
