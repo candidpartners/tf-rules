@@ -22,4 +22,4 @@ pipelines:
                   cd snitch/src
                   npm i
                   npm test
-                ./deploy.sh prod
+                  ./deploy.sh prod
