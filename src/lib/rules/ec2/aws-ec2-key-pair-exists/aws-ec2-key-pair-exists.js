@@ -18,7 +18,7 @@ EC2KeyPairExists.docs = {
     tags: ["Live Check"]
 };
 
-EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
+EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
 
 EC2KeyPairExists.schema = {type: 'boolean'};
 
