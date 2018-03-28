@@ -8,14 +8,14 @@ const co = require('co');
 
 describe('ebs-encryption', function () {
     it("should return a valid = 'success'", co.wrap(function* () {
-        const instance = {VolumeId: 'MyEBSVolume', Encrypted: true};
+        const instance = {VolumeId: 'MyEBSVolume', encrypted: true};
         const provider = AWS('EC2', 'MyEC2Instance');
         const context = {config: true, instance, provider};
         const result = yield rule.validate(context);
         expect(result.valid).toBe('success');
     }));
     it("should return a valid = 'fail'", co.wrap(function* () {
-        const instance = {VolumeId: 'MyOtherEBSVolume', Encrypted: false};
+        const instance = {VolumeId: 'MyOtherEBSVolume', encrypted: false};
         const provider = AWS('EC2', 'MyOtherEC2Instance');
         const context = {config: true, instance, provider};
         const result = yield rule.validate(context);
