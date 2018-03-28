@@ -17,6 +17,8 @@ S3Encryption.docs = {
     recommended: true
 };
 
+S3Encryption.config_triggers = ["AWS::S3::Bucket"];
+
 S3Encryption.schema = {
     type: 'object',
     properties: {
@@ -53,7 +55,8 @@ S3Encryption.livecheck = co.wrap(function* (context) {
     if (UnencryptedBuckets.length > 0) {
         let noncompliant_resources = UnencryptedBuckets.map(bucket => {
             return {
-                id: bucket.bucket,
+                resource_id: bucket.bucket,
+                resource_type: "AWS::S3::Bucket",
                 message: `is unencrypted`
             }
         });
@@ -83,7 +86,11 @@ S3Encryption.validate = function* (context) {
         return {valid: 'success'}
     }
     else {
-        return {valid: 'fail', message: "A S3 bucket is not encrypted"}
+        return {
+            valid: 'fail',
+            resource_type: "AWS::S3::Bucket",
+            message: "A S3 bucket is not encrypted"
+        }
     }
 };
 

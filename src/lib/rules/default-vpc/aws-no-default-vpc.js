@@ -19,6 +19,8 @@ DefaultVPC.docs = {
 
 DefaultVPC.schema = {type: 'boolean'};
 
+DefaultVPC.config_triggers = ["AWS::EC2::Instance"];
+
 DefaultVPC.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
 
@@ -30,11 +32,17 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
 
     if (attributeNames.includes("default-vpc")) {
         let vpcId = attributes.AccountAttributes.find(x => x.AttributeName === "default-vpc");
-        let noncompliant_resource = Object.values(vpcId.AttributeValues[0]);
-
+        let noncompliant_resources = Object.values(vpcId.AttributeValues[0]).map(inst => {
+            return {
+                resource_id: inst,
+                resource_type: "AWS::EC2::Instance",
+                message: `exists`
+            }
+        });
         return {
             valid: "fail",
-            message: `Default VPC ${noncompliant_resource} exists.`,
+            message: `Default VPC ${noncompliant_resources} exists.`,
+            noncompliant_resources
         }
     }
     else {
@@ -53,7 +61,11 @@ DefaultVPC.validate = co.wrap(function* (context) {
         return {valid: 'success'}
     }
     else {
-        return {valid: 'fail', message: "A default VPC exists"}
+        return {
+            valid: 'fail',
+            resource_type: "AWS::EC2::Instance",
+            message: "A default VPC exists"
+        }
     }
 });
 

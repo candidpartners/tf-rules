@@ -58,7 +58,8 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
             let {Tags, InstanceId} = inst;
             let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
             return {
-                id: InstanceId,
+                resource_id: InstanceId,
+                resource_type: "AWS::EC2::Instance",
                 message: `Missing tags ${missingTags}`
             }
         });
@@ -91,7 +92,11 @@ EC2TagExists.validate = function (context) {
     if (missingTags.length === 0) {
         return {valid: 'success',};
     } else {
-        return {valid: 'fail', message};
+        return {
+            valid: 'fail',
+            resource_type:"AWS::EC2::Instance",
+            message
+        };
     }
 };
 
