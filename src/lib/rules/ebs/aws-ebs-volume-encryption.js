@@ -68,10 +68,11 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
                 message: 'is unencrypted'
             })
         });
+        // console.log(noncompliant_resources);
         return new RuleResult({
             valid: "fail",
             message: "One or more EBS volumes are not encrypted.",
-            noncompliant_resources
+            noncompliant_resources: noncompliant_resources
         })
     }
     else {

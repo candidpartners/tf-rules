@@ -64,7 +64,7 @@ function report(result, instanceName, rule) {
             //Print out non-compliant resources
             if (result.noncompliant_resources) {
                 result.noncompliant_resources.forEach(x => {
-                    console.log('\t', colors.red(x.id), colors.gray(x.message))
+                    console.log('\t', colors.red(x.resource_id), colors.gray(x.message))
                 })
             }
         }
