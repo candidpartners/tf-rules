@@ -81,7 +81,6 @@ S3Encryption.validate = function* (context) {
 
     let server_side_encryption_array = _.get(instance,'server_side_encryption_configuration',[]);
     let isEncrypted = server_side_encryption_array.find(x => x.rule);
-    console.log(isEncrypted)
 
     if(isEncrypted){
         return {valid: 'success'}
