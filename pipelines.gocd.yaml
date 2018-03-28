@@ -35,4 +35,4 @@ pipelines:
                   cd snitch/src
                   npm i --production
                   cd ../
-                  node ./pipeline/unit-test.js
+                  ./pipeline/publish-to-npm.sh
