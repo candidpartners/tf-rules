@@ -7,8 +7,7 @@ git commit -a -m "Bumped version"
 version=$(cat ./package.json | jq '.version')
 git tag -a ${version} -m ${version}
 git push
-
-#npm publish --access private
+npm publish --access private
 
 
 # Check if any changes are pending
