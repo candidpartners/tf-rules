@@ -23,3 +23,16 @@ pipelines:
                   npm i
                   cd ../
                   node ./pipeline/unit-test.js
+    stages: &uiStages
+      - deploy-to-npm:
+          clean_workspace: true
+          jobs:
+            Unit-Test:
+              resources:
+                - terraform
+              tasks:
+              - script: |
+                  cd snitch/src
+                  npm i --production
+                  cd ../
+                  node ./pipeline/unit-test.js
