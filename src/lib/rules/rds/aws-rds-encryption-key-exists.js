@@ -2,6 +2,7 @@
 const debug = require('debug')('snitch/rds-encryption-exists');
 const co = require('co');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -55,17 +56,17 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
 
     if (UnencryptedInstances.length > 0) {
         let noncompliant_resources = UnencryptedInstances.map(inst => {
-            return {
+            return new NonCompliantResource({
                 resource_id: inst.DBInstanceIdentifier,
                 resource_type: "AWS::RDS::DBInstance",
                 message: `${inst.DBInstanceIdentifier} instance unencrypted`
-            }
+            })
         });
-        return {
+        return new RuleResult({
             valid: "fail",
             message: "One or more RDS instances are not encrypted.",
             noncompliant_resources
-        }
+        })
     }
     else {
         return {valid: "success"}

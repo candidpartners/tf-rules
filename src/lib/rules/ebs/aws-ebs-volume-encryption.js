@@ -2,6 +2,7 @@
 const debug = require('debug')('snitch/ebs-encryption');
 const co = require('co');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -61,17 +62,17 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
 
     if (UnencryptedVolumes.length > 0) {
         let noncompliant_resources = UnencryptedVolumes.map(vol => {
-            return {
+            return new NonCompliantResource({
                 resource_id: vol.VolumeId,
                 resource_type: "AWS::EC2::Volume",
                 message: 'is unencrypted'
-            }
+            })
         });
-        return {
+        return new RuleResult({
             valid: "fail",
             message: "One or more EBS volumes are not encrypted.",
             noncompliant_resources
-        }
+        })
     }
     else {
         return {valid: "success"}
