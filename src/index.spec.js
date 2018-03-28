@@ -32,6 +32,5 @@ describe("Snitch", () => {
         });
 
         expect(result2.length).toBe(0);
-
     })
 });

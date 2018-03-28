@@ -19,13 +19,6 @@ EC2TagFormat.docs = {
 EC2TagFormat.schema = {
   type : 'array',
   items : {
-    type : 'string'
-  }
-};
-
-EC2TagFormat.schema = {
-  type : 'array',
-  items : {
     type : 'object',
     properties : {
       name : {
