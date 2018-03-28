@@ -1,0 +1,25 @@
+pipelines:
+  snitch:
+    group: snitch
+    label_template: "${volker[:8]}"
+    materials:
+      snitch:
+        git: https://clearly:d56d91b33e65b7aca2a1a05afd714980fc6b567d@github.com/candidpartners/snitch
+        branch: master
+        destination: snitch
+        whitelist:
+        - pipelines.gocd.yaml
+        - src
+    stages: &uiStages
+      - unit-test:
+          clean_workspace: true
+          jobs:
+            Unit-Test:
+              resources:
+                - terraform
+              tasks:
+              - script: |
+                  cd snitch/src
+                  npm i
+                  npm test
+                ./deploy.sh prod
