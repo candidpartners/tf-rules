@@ -2,6 +2,7 @@
 const debug = require('debug')('snitch/default-vpc');
 const co = require('co');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -33,17 +34,17 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
     if (attributeNames.includes("default-vpc")) {
         let vpcId = attributes.AccountAttributes.find(x => x.AttributeName === "default-vpc");
         let noncompliant_resources = Object.values(vpcId.AttributeValues[0]).map(inst => {
-            return {
+            return  new NonCompliantResource({
                 resource_id: inst,
                 resource_type: "AWS::EC2::Instance",
                 message: `exists`
-            }
+            })
         });
-        return {
+        return new RuleResult({
             valid: "fail",
             message: `Default VPC ${noncompliant_resources} exists.`,
             noncompliant_resources
-        }
+        })
     }
     else {
         return {valid: "success"}

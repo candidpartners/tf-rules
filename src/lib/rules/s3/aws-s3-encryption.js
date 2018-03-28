@@ -2,6 +2,7 @@
 const debug = require('debug')('snitch/s3-encryption');
 const co = require('co');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -54,17 +55,17 @@ S3Encryption.livecheck = co.wrap(function* (context) {
 
     if (UnencryptedBuckets.length > 0) {
         let noncompliant_resources = UnencryptedBuckets.map(bucket => {
-            return {
+            return new NonCompliantResource({
                 resource_id: bucket.bucket,
                 resource_type: "AWS::S3::Bucket",
                 message: `is unencrypted`
-            }
+            })
         });
-        return {
+        return new RuleResult({
             valid: "fail",
             message: "One or more S3 buckets are not encrypted.",
             noncompliant_resources
-        }
+        })
     }
     else {
         return {valid: "success"}

@@ -2,6 +2,7 @@
 const debug = require('debug')('snitch/dynamodb-encryption');
 const co = require('co');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -58,17 +59,17 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
 
     if (UnencryptedInstances.length > 0) {
         let noncompliant_resources = UnencryptedInstances.map(inst => {
-            return {
+            return new NonCompliantResource({
                 resource_id: inst.TableName,
                 resource_type: "AWS::DynamoDB::Table",
                 message: `is unencrypted`,
-            }
+            })
         });
-        return {
+        return new RuleResult({
             valid: "fail",
             message: "One or more DynamoDB tables are not encrypted.",
             noncompliant_resources
-        }
+        })
     }
     else {
         return {valid: "success"}
