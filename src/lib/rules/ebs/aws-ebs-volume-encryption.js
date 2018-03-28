@@ -82,7 +82,6 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
 
 EBSVolumeEncryption.validate = co.wrap(function* (context) {
     let {config,instance,provider} = context;
-    console.log(instance)
 
     if(instance.encrypted === true){
         return {valid: 'success'}
