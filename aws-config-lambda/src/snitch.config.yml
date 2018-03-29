@@ -8,15 +8,15 @@ rules :
 - aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
+- aws-no-default-vpc : true
 - aws-rds-encryption-key-exists :
     exclude:
     - none
+- aws-dynamodb-encryption :
+    exclude:
+      - volker-dev-accounts
 - aws-ec2-instance-tag-exists :
   - Name
-  - ApplicationId
-  - ApplicationCode
-  - Environment
-  - CostCenter
 - aws-ec2-instance-tag-format :
   - name : ApplicationCode
     format : '^[A-Z]{3}$'

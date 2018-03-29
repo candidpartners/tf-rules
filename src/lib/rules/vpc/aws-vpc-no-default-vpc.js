@@ -1,5 +1,5 @@
 'use strict';
-const debug = require('debug')('snitch/default-vpc');
+const debug = require('debug')('snitch/vpc');
 const co = require('co');
 const _ = require('lodash');
 const {NonCompliantResource, RuleResult} = require('../../rule-result');
@@ -20,7 +20,7 @@ DefaultVPC.docs = {
 
 DefaultVPC.schema = {type: 'boolean'};
 
-DefaultVPC.config_triggers = ["AWS::EC2::Instance"];
+DefaultVPC.config_triggers = ["AWS::EC2::VPC"];
 
 DefaultVPC.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
@@ -29,14 +29,13 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
     let reqTags = config;
 
     let attributes = yield ec2.describeAccountAttributes().promise();
-    let attributeNames = attributes.AccountAttributes.map(x => x.AttributeName);
 
-    if (attributeNames.includes("default-vpc")) {
-        let vpcId = attributes.AccountAttributes.find(x => x.AttributeName === "default-vpc");
+    let defaultVPC = attributes.AccountAttributes.find(x => x.AttributeName == 'default-vpc');
+    if (defaultVPC) {
         let noncompliant_resources = [
             new NonCompliantResource({
-                resource_id: JSON.stringify(vpcId.AttributeValues[0].AttributeValue),
-                resource_type: "AWS::EC2::Instance",
+                resource_id: JSON.stringify(defaultVPC.AttributeValues[0].AttributeValue),
+                resource_type: "AWS::EC2::VPC",
                 message: `exists`
             })
         ];

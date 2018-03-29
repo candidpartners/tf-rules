@@ -12,7 +12,7 @@ resource "aws_lambda_function" "function" {
   runtime = "nodejs6.10"
   filename = "${var.zip_path}"
   source_code_hash = "${var.source_code_hash}"
-  timeout = 10
+  timeout = 300
 }
 
 resource "aws_config_config_rule" "rule" {

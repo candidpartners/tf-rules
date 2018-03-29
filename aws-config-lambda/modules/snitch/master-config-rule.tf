@@ -33,15 +33,15 @@ resource "aws_iam_role" "role" {
 //  role = "${aws_iam_role.role.id}"
 //}
 //
-//resource "aws_iam_role_policy_attachment" "AWSConfigRulesExecutionRole" {
-//  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRulesExecutionRole"
-//  role = "${aws_iam_role.role.id}"
-//}
-//
-//resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
-//  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-//  role = "${aws_iam_role.role.id}"
-//}
+resource "aws_iam_role_policy_attachment" "AWSConfigRulesExecutionRole" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRulesExecutionRole"
+  role = "${aws_iam_role.role.id}"
+}
+
+resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  role = "${aws_iam_role.role.id}"
+}
 
 resource "aws_iam_role_policy_attachment" "ReadOnlyAccess" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
