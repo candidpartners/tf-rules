@@ -22,10 +22,19 @@ exports.handler = co.wrap(function * (event, context, callback){
         });
         let failedResults = result.filter(x => x.valid == 'fail');
 
-        let isAccountCompliant = failedResults.length == 0;
-        let Annotation = JSON.stringify(failedResults.map(x => x.message),null,2);
+        // let isAccountCompliant = failedResults.length == 0;
+        // let Annotation = JSON.stringify(failedResults.map(x => x.message),null,2);
 
-        // let nonCompliantResources = _.flatMap(failedResults, x => )
+        console.log(JSON.stringify(failedResults,null,2));
+        let nonCompliantResources = _.flatMap(failedResults, x => x.noncompliant_resources);
+        let resourceEvaluations = nonCompliantResources.map(x => ({
+            ComplianceResourceId: x.resource_id,
+            ComplianceResourceType: "x.resource_type",
+            ComplianceType: "NON_COMPLIANT",
+            OrderingTimestamp: new Date(),
+            Annotation: x.message
+        }))
+
         // let resourceEvaluations = failedResults.map(result => {
         //     return {
         //         ComplianceResourceId: result.resource_id,
@@ -34,18 +43,19 @@ exports.handler = co.wrap(function * (event, context, callback){
 
         let params = {
             ResultToken: resultToken,
-            Evaluations: [
-                {
-                    ComplianceResourceId: accountId, //'STRING_VALUE', /* required */
-                    ComplianceResourceType: "AWS::::Account", //'STRING_VALUE', /* required */
-                    ComplianceType: (isAccountCompliant) ? "COMPLIANT" : "NON_COMPLIANT", //"NON_COMPLIANT", //COMPLIANT | NON_COMPLIANT | NOT_APPLICABLE | INSUFFICIENT_DATA, /* required */
-                    OrderingTimestamp: new Date(), //|| 'Wed Dec 31 1969 16:00:00 GMT-0800 (PST)' || 123456789, /* required */
-                    Annotation
-                },
-            ],
+            Evaluations: resourceEvaluations
+            // Evaluations: [
+            //     {
+            //         ComplianceResourceId: accountId, //'STRING_VALUE', /* required */
+            //         ComplianceResourceType: "AWS::::Account", //'STRING_VALUE', /* required */
+            //         ComplianceType: (isAccountCompliant) ? "COMPLIANT" : "NON_COMPLIANT", //"NON_COMPLIANT", //COMPLIANT | NON_COMPLIANT | NOT_APPLICABLE | INSUFFICIENT_DATA, /* required */
+            //         OrderingTimestamp: new Date(), //|| 'Wed Dec 31 1969 16:00:00 GMT-0800 (PST)' || 123456789, /* required */
+            //         Annotation
+            //     },
+            // ],
         };
-
-        console.log(params);
+        //
+        // console.log(params);
         let putEvaluationsResult = yield AWSConfig.putEvaluations(params).promise();
         callback(null,{params,putEvaluationsResult});
     } catch (err) {

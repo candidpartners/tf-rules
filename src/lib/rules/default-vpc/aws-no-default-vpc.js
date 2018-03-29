@@ -33,13 +33,13 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
 
     if (attributeNames.includes("default-vpc")) {
         let vpcId = attributes.AccountAttributes.find(x => x.AttributeName === "default-vpc");
-        let noncompliant_resources = Object.values(vpcId.AttributeValues[0]).map(inst => {
-            return new NonCompliantResource({
-                resource_id: inst,
+        let noncompliant_resources = [
+            new NonCompliantResource({
+                resource_id: JSON.stringify(vpcId.AttributeValues[0].AttributeValue),
                 resource_type: "AWS::EC2::Instance",
                 message: `exists`
             })
-        });
+        ];
         return new RuleResult({
             valid: "fail",
             message: `Default VPC exists.`,

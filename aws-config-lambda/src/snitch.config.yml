@@ -8,7 +8,9 @@ rules :
 - aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
-- aws-rds-encryption-key-exists : true
+- aws-rds-encryption-key-exists :
+    exclude:
+    - none
 - aws-ec2-instance-tag-exists :
   - Name
   - ApplicationId
