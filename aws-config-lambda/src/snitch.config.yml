@@ -8,7 +8,10 @@ rules :
 - aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
-- aws-no-default-vpc : true
+- aws-vpc-no-default-vpc : true
+- aws-s3-encryption:
+    exclude:
+      - volker-dev-accounts
 - aws-rds-encryption-key-exists :
     exclude:
     - none
