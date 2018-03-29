@@ -44,7 +44,6 @@
     "nconf-yaml": "^1.0.2",
     "papaparse": "^4.3.7",
     "proxy-agent": "^2.0.0",
-    "rxjs": "^5.5.6",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

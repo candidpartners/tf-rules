@@ -4,20 +4,14 @@ rules :
 
 - aws-cloudtrail-ensure-log-file-validation : true
 - aws-cloudtrail-logs-are-encrypted : true
-
+- aws-iam-mfa-is-enabled-for-iam-users-with-console-password: true
 - aws-dynamodb-encryption :
     exclude :
       - volker-dev-accounts
-
 - aws-ebs-volume-encryption : true
-
 - aws-ec2-ami-includes-sql-server : false
 - aws-ec2-instance-tag-exists :
   - Name
-  - ApplicationId
-  - ApplicationCode
-  - Environment
-  - CostCenter
 - aws-ec2-instance-tag-format :
   - name : ApplicationCode
     format : '^[A-Z]{3}$'
@@ -26,7 +20,6 @@ rules :
 - aws-ec2-key-pair-exists : true
 - aws-ec2-uses-security-group :
   - sg-24b9b85d
-
 - aws-iam-account-password-policy : true
 - aws-iam-avoid-use-of-root-account : true
 - aws-iam-does-not-allow-full-access-policies: true
