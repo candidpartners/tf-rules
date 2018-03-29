@@ -12,22 +12,16 @@ const EC2KeyPairExists = {};
 
 EC2KeyPairExists.uuid = "25c51c51-c2c5-4f5d-bfe4-bf900dc86f3a";
 EC2KeyPairExists.groupName = "EC2";
-
+EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
+EC2KeyPairExists.paths = {EC2KeyPairExists: 'aws_instance'};
 EC2KeyPairExists.docs = {
-    description: 'EC2 Keypair must exist in the account and region',
+    description: 'An EC2 key pair exists in the account and region.',
     recommended: true,
     tags: ["Live Check"]
 };
-
-EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
-
 EC2KeyPairExists.schema = {type: 'boolean'};
 
-EC2KeyPairExists.paths = {
-    rdsInstance: 'aws_instance'
-};
 
-EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
 EC2KeyPairExists.livecheck = co.wrap(function* (context) {
     let ec2 = new context.provider.EC2();
 

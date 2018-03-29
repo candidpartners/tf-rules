@@ -5,20 +5,20 @@ const Papa = require('papaparse');
 // Rule Definition
 //------------------------------------------------------------------------------
 
-const IAM_AVOID_USE_OF_ROOT_ACCOUNT = {};
+const IAMAvoidUseOfRootAccount = {};
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.docs = {
-    description: 'Checks that the root user has not logged in during the past X days.',
+IAMAvoidUseOfRootAccount.uuid = "5f11d82f-4435-4973-91e8-1175698f84b6";
+IAMAvoidUseOfRootAccount.groupName = "IAM";
+IAMAvoidUseOfRootAccount.config_triggers = ["AWS::IAM::User"];
+IAMAvoidUseOfRootAccount.paths = {IAMAvoidUseOfRootAccount: "aws_iam_user"};
+IAMAvoidUseOfRootAccount.docs = {
+    description: 'The root account has not logged in in the required number of days.',
     recommended: false
 };
+IAMAvoidUseOfRootAccount.schema = {type: 'boolean'};
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.config_triggers = ["AWS::IAM::User"];
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.tags = ["CIS"];
-
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.schema = {type: 'boolean'};
-
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.livecheck = co.wrap(function* (context, RequiredDaysSinceLastUsed) {
+IAMAvoidUseOfRootAccount.livecheck = co.wrap(function* (context, RequiredDaysSinceLastUsed) {
     const IAM = new context.provider.IAM();
 
     // Get credential report
@@ -53,5 +53,5 @@ IAM_AVOID_USE_OF_ROOT_ACCOUNT.livecheck = co.wrap(function* (context, RequiredDa
     }
 });
 
-module.exports = IAM_AVOID_USE_OF_ROOT_ACCOUNT;
+module.exports = IAMAvoidUseOfRootAccount;
 

@@ -13,12 +13,12 @@ const AWSSecurityGroupAllowInbound = {};
 
 AWSSecurityGroupAllowInbound.uuid = "176c1d55-0e98-4da1-9ede-e57287339fa4";
 AWSSecurityGroupAllowInbound.groupName = "Security Group";
-
+AWSSecurityGroupAllowInbound.config_triggers = ["AWS::::Account"];
+AWSSecurityGroupAllowInbound.paths = {AWSSecurityGroupAllowInbound : 'aws_security_group'};
 AWSSecurityGroupAllowInbound.docs = {
-  description: 'Security Group allows inbound traffic through specified ports',
+  description: 'Security Group allows inbound traffic through specified ports.',
   recommended: true
 };
-
 AWSSecurityGroupAllowInbound.schema = {
   type : 'object',
   properties : {
@@ -41,9 +41,6 @@ AWSSecurityGroupAllowInbound.schema = {
   }
 };
 
-AWSSecurityGroupAllowInbound.paths = {
-  awsSecurityGroup : 'aws_security_group'
-};
 
 AWSSecurityGroupAllowInbound.validate = function *( context ) {
   // debug( '%O', context );

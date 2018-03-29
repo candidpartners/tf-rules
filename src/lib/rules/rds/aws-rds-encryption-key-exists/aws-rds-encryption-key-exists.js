@@ -12,14 +12,12 @@ const RDSEncryptionKeyExists = {};
 
 RDSEncryptionKeyExists.uuid = "196beb21-bb42-4a58-9ea0-0478c5f1042a";
 RDSEncryptionKeyExists.groupName = "RDS";
-
+RDSEncryptionKeyExists.config_triggers = ["AWS::RDS::DBInstance"];
+RDSEncryptionKeyExists.paths = {RDSEncryptionKeyExists: "aws_db_instance"};
 RDSEncryptionKeyExists.docs = {
-    description: 'RDS using a KMS key must exist in the account and region',
+    description: 'A RDS using a KMS key exists in the account and region.',
     recommended: true
 };
-
-RDSEncryptionKeyExists.config_triggers = ["AWS::RDS::DBInstance"];
-
 RDSEncryptionKeyExists.schema = {
     type: 'object',
     properties: {

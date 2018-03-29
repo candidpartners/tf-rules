@@ -9,14 +9,16 @@ const Rx = require('rxjs');
 
 const MFAIsEnabledForIAMUsersWithConsolePassword = {};
 
+MFAIsEnabledForIAMUsersWithConsolePassword.uuid = "0435cc47-21dc-45e3-a942-45dbef1cfb1b";
+MFAIsEnabledForIAMUsersWithConsolePassword.groupName = "IAM";
+MFAIsEnabledForIAMUsersWithConsolePassword.config_triggers = ["AWS::IAM::User"];
+MFAIsEnabledForIAMUsersWithConsolePassword.paths = {MFAIsEnabledForIAMUsersWithConsolePassword: "aws_iam_user"};
 MFAIsEnabledForIAMUsersWithConsolePassword.docs = {
-    description: 'Checks that all IAM users with a console password have MFA enabled',
+    description: 'All IAM users with a console password have MFA enabled.',
     recommended: false
 };
-
-MFAIsEnabledForIAMUsersWithConsolePassword.tags = ["CIS"];
-
 MFAIsEnabledForIAMUsersWithConsolePassword.schema = { type : 'boolean' };
+
 
 MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( context ) {
     const IAM = new context.provider.IAM();

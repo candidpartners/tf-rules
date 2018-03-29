@@ -10,17 +10,15 @@ const AWSSecurityGroupExists = {};
 
 AWSSecurityGroupExists.uuid = "9a17f69d-9b52-4e6c-b612-02ab80ba8eab";
 AWSSecurityGroupExists.groupName = "Security Group";
-
+AWSSecurityGroupExists.config_triggers = ["AWS::Account"];
+AWSSecurityGroupExists.paths = {AWSSecurityGroupAllowInbound: 'aws_instance'};
 AWSSecurityGroupExists.docs = {
-    description: 'Security Groups must exist',
+    description: 'Security Groups exist.',
     recommended: true
 };
 
 AWSSecurityGroupExists.schema = {type: 'boolean'};
 
-AWSSecurityGroupExists.paths = {
-    rdsInstance: 'aws_instance'
-};
 
 AWSSecurityGroupExists.validate = function* (context) {
     // debug( '%O', context );

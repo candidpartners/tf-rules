@@ -10,17 +10,14 @@ const IAMDoesNotAllowFullAccessPolicies = {};
 
 IAMDoesNotAllowFullAccessPolicies.uuid = "345b6958-9966-4cb7-814b-4daea7857c79";
 IAMDoesNotAllowFullAccessPolicies.groupName = "IAM";
-
+IAMDoesNotAllowFullAccessPolicies.config_triggers = ["AWS::IAM::Policy"];
+IAMDoesNotAllowFullAccessPolicies.paths = {IAMDoesNotAllowFullAccessPolicies: 'aws_iam_policy'};
 IAMDoesNotAllowFullAccessPolicies.docs = {
-    description: "No IAM policies can allow Action:* on Resource: *",
+    description: "No IAM policies allow Action:* on Resource: *",
     recommended: false
 };
-
 IAMDoesNotAllowFullAccessPolicies.schema = {type: 'boolean'};
 
-IAMDoesNotAllowFullAccessPolicies.paths = {
-    IAMDoesNotAllowFullAccessPolicies: 'aws_iam_policy'
-};
 
 IAMDoesNotAllowFullAccessPolicies.validate = function (context) {
     let instance = context.instance;

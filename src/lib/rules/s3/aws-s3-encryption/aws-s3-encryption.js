@@ -12,14 +12,12 @@ const S3Encryption = {};
 
 S3Encryption.uuid = "25f03a5c-7db0-4428-a8ff-efb9f7003064";
 S3Encryption.groupName = "S3";
-
+S3Encryption.config_triggers = ["AWS::S3::Bucket"];
+S3Encryption.paths = {S3Encryption: "aws_s3_bucket"};
 S3Encryption.docs = {
-    description: 'All non-excluded S3 buckets must be encrypted.',
+    description: 'All non-excluded S3 buckets are encrypted.',
     recommended: true
 };
-
-S3Encryption.config_triggers = ["AWS::S3::Bucket"];
-
 S3Encryption.schema = {
     type: 'object',
     properties: {

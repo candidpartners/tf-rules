@@ -12,14 +12,12 @@ const DynamoDBEncryption = {};
 
 DynamoDBEncryption.uuid = "e391e00a-ddce-4064-80ad-6b0ef351ccc6";
 DynamoDBEncryption.groupName = "DynamoDB";
-
+DynamoDBEncryption.config_triggers = ["AWS::DynamoDB::Table"];
+DynamoDBEncryption.paths = {DynamoDBEncryption: "aws_dynamodb_table"};
 DynamoDBEncryption.docs = {
-    description: 'DynamoDB tables must be encrypted.',
+    description: 'All DynamoDB tables are encrypted.',
     recommended: true
 };
-
-DynamoDBEncryption.config_triggers = ["AWS::DynamoDB::Table"];
-
 DynamoDBEncryption.schema = {
     type: 'object',
     properties: {

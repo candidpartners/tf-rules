@@ -6,18 +6,20 @@ const _ = require('lodash');
 // Rule Definition
 //------------------------------------------------------------------------------
 
-const IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED = {};
+const IAMEnsureUnusedCredentialsAreDisabled = {};
 
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.docs = {
-    description: 'Checks that the root user has not logged in during the past X days.',
+IAMEnsureUnusedCredentialsAreDisabled.uuid = "944996af-32cd-4af6-9bb2-03819a631b44";
+IAMEnsureUnusedCredentialsAreDisabled.groupName = "IAM";
+IAMEnsureUnusedCredentialsAreDisabled.config_triggers = ["AWS::IAM::User"];
+IAMEnsureUnusedCredentialsAreDisabled.paths = {IAMEnsureUnusedCredentialsAreDisabled: "aws_iam_user"};
+IAMEnsureUnusedCredentialsAreDisabled.docs = {
+    description: 'Credentials unused in X days are disabled.',
     recommended: false
 };
+IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'boolean'};
 
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.tags = ["CIS"];
 
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.schema = {type: 'boolean'};
-
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (context, days) {
+IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context, days) {
     const IAM = new context.provider.IAM();
 
     // Get credential report
@@ -73,4 +75,4 @@ IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (contex
     }
 });
 
-module.exports = IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED;
+module.exports = IAMEnsureUnusedCredentialsAreDisabled;

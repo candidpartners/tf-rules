@@ -10,17 +10,14 @@ const IAMUserPolicyDoesNotExist = {};
 
 IAMUserPolicyDoesNotExist.uuid = "1d00c52d-ad5b-40a7-bcaf-3a3ba5f86873";
 IAMUserPolicyDoesNotExist.groupName = "IAM";
-
+IAMUserPolicyDoesNotExist.config_triggers = ["AWS::IAM:User"];
+IAMUserPolicyDoesNotExist.paths = {awsIAMUserPolicyDoesNotExist: 'aws_iam_user_policy_attachment'};
 IAMUserPolicyDoesNotExist.docs = {
-    description: "No IAM policies can be attached directly to a user.",
+    description: "No IAM policies are attached directly to a user.",
     recommended: false
 };
+IAMUserPolicyDoesNotExist.schema = {type: 'boolean'};
 
-IAMUserPolicyDoesNotExist.schema = {type: 'boolean'}
-
-IAMUserPolicyDoesNotExist.paths = {
-    awsIAMUserPolicyDoesNotExist: 'aws_iam_user_policy_attachment'
-};
 
 IAMUserPolicyDoesNotExist.validate = function (context) {
     let instance = context.instance;

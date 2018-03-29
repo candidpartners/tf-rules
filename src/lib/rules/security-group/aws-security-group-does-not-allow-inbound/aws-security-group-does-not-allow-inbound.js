@@ -13,12 +13,12 @@ const AWSSecurityGroupDoesNotAllowInbound = {};
 
 AWSSecurityGroupDoesNotAllowInbound.uuid = "67477475-5d35-4444-bcb4-0c9053aa357e";
 AWSSecurityGroupDoesNotAllowInbound.groupName = "Security Group";
-
+AWSSecurityGroupDoesNotAllowInbound.config_triggers = ["AWS::::Account"];
+AWSSecurityGroupDoesNotAllowInbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupDoesNotAllowInbound.docs = {
-  description: 'Security Group does not allow specified inbound traffic',
+  description: 'Security Group does not allow specified inbound traffic.',
   recommended: true
 };
-
 AWSSecurityGroupDoesNotAllowInbound.schema = {
   type : 'object',
   properties : {
@@ -44,9 +44,6 @@ AWSSecurityGroupDoesNotAllowInbound.schema = {
   }
 };
 
-AWSSecurityGroupDoesNotAllowInbound.paths = {
-  awsSecurityGroup : 'aws_security_group'
-};
 
 AWSSecurityGroupDoesNotAllowInbound.validate = function *( context ) {
   // debug( '%O', context );

@@ -9,18 +9,15 @@ const debug = require('debug')('snitch/tag-format');
 const CloudtrailLogsAreEncrypted = {};
 
 CloudtrailLogsAreEncrypted.uuid = "686cbf59-c41a-4b7f-ae4a-7f50bf91d354";
-CloudtrailLogsAreEncrypted.groupName = "Cloudtrail";
-
+CloudtrailLogsAreEncrypted.groupName = "CloudTrail";
+CloudtrailLogsAreEncrypted.config_triggers = ["AWS::CloudTrail::Trail"];
+CloudtrailLogsAreEncrypted.paths = {CloudtrailLogFileValidation: 'aws_cloudtrail'};
 CloudtrailLogsAreEncrypted.docs = {
-    description: "Ensures a KMS key is provided for all cloudtrail resources.",
+    description: "A KMS key is provided for all CloudTrail resources.",
     recommended: false
 };
-
 CloudtrailLogsAreEncrypted.schema = { type: 'boolean' };
 
-CloudtrailLogsAreEncrypted.paths = {
-    CloudtrailLogFileValidation: 'aws_cloudtrail'
-};
 
 CloudtrailLogsAreEncrypted.validate = function (context) {
     let {config, instance, plan} = context;
