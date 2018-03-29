@@ -8,7 +8,7 @@ const Snitch = require('@candidpartners/snitch');
 // Receives the event and context from AWS Lambda.
 exports.handler = co.wrap(function * (event, context, callback){
     console.log(event);
-    let {resultToken,accountId,invokingEvent} = event;
+    let {resultToken,accountId,invokingEvent, configRuleName} = event;
 
     // Check if it is a triggered event
     let config_trigger =_.get(invokingEvent,'configurationItem.resourceType',undefined);
