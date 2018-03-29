@@ -1,23 +1,17 @@
 provider :
   region : us-west-2
 rules :
-- aws-kms-ensure-key-rotation: true
-- aws-cloudtrail-logs-are-encrypted: true
-- aws-cloudtrail-ensure-log-file-validation: true
-- aws-iam-does-not-allow-full-access-policies: true
-- aws-iam-account-password-policy : true
-- aws-iam-user-policy-does-not-exist : true
-- aws-ebs-volume-encryption : true
-- aws-vpc-no-default-vpc : true
-- aws-s3-encryption:
-    exclude:
-      - volker-dev-accounts
+
+- aws-cloudtrail-ensure-log-file-validation : true
+- aws-cloudtrail-logs-are-encrypted : true
+
 - aws-dynamodb-encryption :
-    exclude:
+    exclude :
       - volker-dev-accounts
-- aws-rds-encryption-key-exists :
-    exclude:
-      - vra
+
+- aws-ebs-volume-encryption : true
+
+- aws-ec2-ami-includes-sql-server : false
 - aws-ec2-instance-tag-exists :
   - Name
   - ApplicationId
@@ -30,20 +24,48 @@ rules :
   - name : Environment
     format : ^(DEV|QA|TEST|STAGING|PROD)$
 - aws-ec2-key-pair-exists : true
-- aws-ec2-has-key-pair : true
-- aws-ec2-ami-includes-sql-server : false
-- aws-security-group-exists : true
 - aws-ec2-uses-security-group :
   - sg-24b9b85d
-- aws-security-group-does-not-allow-inbound :
-    cidr : '204.4.6.2/32'
-    port : '9032-9034'
-- aws-security-group-does-not-allow-outbound :
-    cidr : '204.4.6.2/32'
-    port : '9032-9034'
+
+- aws-iam-account-password-policy : true
+- aws-iam-avoid-use-of-root-account : true
+- aws-iam-does-not-allow-full-access-policies: true
+- aws-iam-ensure-access-keys-are-rotated : true
+- aws-iam-ensure-unused-credentials-are-disabled : true
+- aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
+- aws-iam-password-policy-conforms :
+  - MinimumPasswordLength
+  - RequireSymbols
+  - RequireNumbers
+  - RequireUppercaseCharacters
+  - RequireLowercaseCharacters
+  - AllowUsersToChangePassword
+  - ExpirePasswords
+  - HardExpiry
+- aws-iam-user-policy-does-not-exist : true
+
+- aws-kms-ensure-key-rotation: true
+
+- aws-rds-encryption-key-exists :
+    exclude :
+      - vra
+
+- aws-s3-encryption:
+    exclude:
+      - volker-dev-accounts
+
 - aws-security-group-allows-inbound :
     cidr : '127.0.0.1/32'
     port : '80'
 - aws-security-group-allows-outbound :
     cidr : '127.0.0.2/32'
     port : '22'
+- aws-security-group-does-not-allow-inbound :
+    cidr : '204.4.6.2/32'
+    port : '9032-9034'
+- aws-security-group-does-not-allow-outbound :
+    cidr : '204.4.6.2/32'
+    port : '9032-9034'
+- aws-security-group-exists : true
+
+- aws-vpc-no-default-vpc : true
