@@ -10,6 +10,7 @@ const EC2AMIIncludesSQL = {};
 
 EC2AMIIncludesSQL.uuid = "22bce450-2452-485f-ae3b-e244f47792ce";
 EC2AMIIncludesSQL.groupName = "EC2";
+EC2AMIIncludesSQL.tags = [];
 EC2AMIIncludesSQL.config_triggers = ["AWS::EC2::Instance"];
 EC2AMIIncludesSQL.paths = {EC2AMIIncludesSQL: 'aws_instance'};
 EC2AMIIncludesSQL.docs = {

@@ -10,6 +10,7 @@ const AWSSecurityGroupExists = {};
 
 AWSSecurityGroupExists.uuid = "9a17f69d-9b52-4e6c-b612-02ab80ba8eab";
 AWSSecurityGroupExists.groupName = "Security Group";
+AWSSecurityGroupExists.tags = [];
 AWSSecurityGroupExists.config_triggers = ["AWS::Account"];
 AWSSecurityGroupExists.paths = {AWSSecurityGroupAllowInbound: 'aws_instance'};
 AWSSecurityGroupExists.docs = {

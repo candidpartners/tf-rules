@@ -12,6 +12,7 @@ const DefaultVPC = {};
 
 DefaultVPC.uuid = "58c480c4-3f22-4560-983c-ae45ca1d5383";
 DefaultVPC.groupName = "Default VPC";
+DefaultVPC.tags = [];
 DefaultVPC.config_triggers = ["AWS::EC2::VPC"];
 DefaultVPC.paths = {DefaultVPC: "aws_default_vpc"};
 DefaultVPC.docs = {
@@ -40,7 +41,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
         ];
         return new RuleResult({
             valid: "fail",
-            message: `Default VPC exists.`,
+            message: `A default VPC exists.`,
             noncompliant_resources
         })
     }

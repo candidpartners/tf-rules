@@ -10,17 +10,19 @@ const IAMEnsureUnusedCredentialsAreDisabled = {};
 
 IAMEnsureUnusedCredentialsAreDisabled.uuid = "944996af-32cd-4af6-9bb2-03819a631b44";
 IAMEnsureUnusedCredentialsAreDisabled.groupName = "IAM";
+IAMEnsureUnusedCredentialsAreDisabled.tags = ["CIS | 1.1.0 | 1.3"];
 IAMEnsureUnusedCredentialsAreDisabled.config_triggers = ["AWS::IAM::User"];
 IAMEnsureUnusedCredentialsAreDisabled.paths = {IAMEnsureUnusedCredentialsAreDisabled: "aws_iam_user"};
 IAMEnsureUnusedCredentialsAreDisabled.docs = {
-    description: 'Credentials unused in X days are disabled.',
+    description: 'Credentials unused for at least 90 days are disabled.',
     recommended: false
 };
-IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'boolean'};
+IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number'};
 
 
-IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context, days) {
+IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
     const IAM = new context.provider.IAM();
+    let {config, provider} = context;
 
     // Get credential report
     yield IAM.generateCredentialReport().promise();
@@ -30,7 +32,7 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context, da
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
-    let dateRange = days;
+    let dateRange = config;
 
     function getDaysAgo(date) {
         let currentDate = new Date();
