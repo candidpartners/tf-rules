@@ -3,10 +3,10 @@ const AWS = require('aws-stub');
 const AWSPromiseMock = require('../../../aws-promise-mock');
 const _ = require('lodash');
 const RealAWS = require('aws-sdk');
-const rule = require('./aws-no-default-vpc');
+const rule = require('./aws-vpc-no-default-vpc');
 const co = require('co');
 
-describe('no-default-vpc', function () {
+describe('no-vpc', function () {
     it("should return a valid = 'success'", co.wrap(function* () {
         const instance = {AccountAttributes: []};
         const provider = AWS('ec2', 'MyEC2');
@@ -18,7 +18,7 @@ describe('no-default-vpc', function () {
         const instance = {
             AccountAttributes: [
                 {
-                    AttributeName: "default-vpc",
+                    AttributeName: "vpc",
                     AttributeValues: [
                         {
                             AttributeValue: "vpc-c385cba4"

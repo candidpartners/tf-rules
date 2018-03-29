@@ -28,7 +28,7 @@ pipelines:
             type: manual # Require someone in the UI to manually approve the execution of this stage
           clean_workspace: true
           jobs:
-            Unit-Test:
+            publish-to-npm:
               resources:
                 - terraform
               tasks:
