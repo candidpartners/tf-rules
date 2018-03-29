@@ -12,9 +12,22 @@ IAM_PASSWORD_POLICY_CONFORMS.docs = {
     recommended: false
 };
 
+
 IAM_PASSWORD_POLICY_CONFORMS.tags = ["CIS"];
 
-IAM_PASSWORD_POLICY_CONFORMS.schema = {type: 'boolean'};
+IAM_PASSWORD_POLICY_CONFORMS.schema = {
+    type: 'array',
+    entries: [
+        {type: 'number'},
+        {type: 'bool'},
+        {type: 'bool'},
+        {type: 'bool'},
+        {type: 'bool'},
+        {type: 'bool'},
+        {type: 'bool'},
+        {type: 'bool'}
+    ]
+};
 
 IAM_PASSWORD_POLICY_CONFORMS.livecheck = co.wrap(function* (context) {
     const IAM = new context.provider.IAM();
@@ -27,7 +40,7 @@ IAM_PASSWORD_POLICY_CONFORMS.livecheck = co.wrap(function* (context) {
         AllowUsersToChangePassword,
         ExpirePasswords,
         HardExpiry
-    } = context.params;
+    } = context.config;
 
 
     try {

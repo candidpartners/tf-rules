@@ -2,7 +2,7 @@
 const debug = require('debug')('snitch/vpc');
 const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../rule-result');
+const {NonCompliantResource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
