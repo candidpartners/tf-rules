@@ -41,6 +41,7 @@ rules :
 - aws-iam-does-not-allow-full-access-policies : true
 - aws-iam-ensure-access-keys-are-rotated : 90
 - aws-iam-ensure-unused-credentials-are-disabled : 90
+- aws-iam-hardware-mfa-is-enabled-for-root-account: true
 - aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
 - aws-iam-mfa-is-enabled-for-root-account : true
 - aws-iam-no-root-account-access-key-exists : true

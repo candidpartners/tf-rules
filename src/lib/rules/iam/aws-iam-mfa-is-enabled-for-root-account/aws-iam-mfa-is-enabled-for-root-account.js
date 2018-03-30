@@ -37,11 +37,11 @@ MFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have MFA enabled.",
-            noncompliant_resources: new NonCompliantResource({
+            noncompliant_resources: [new NonCompliantResource({
                 resource_id: rootUser.arn,
                 resource_type: "AWS::IAM::User",
-                message: "Root account does not have MFA enabled."
-            })
+                message: "does not have MFA enabled."
+            })]
         })
     }
     else {
