@@ -59,6 +59,7 @@ rules :
 - aws-s3-encryption :
     exclude:
       - volker-dev-accounts
+- aws-s3-cloudtrail-bucket-access-logging-enabled : true
 
 #Security Group
 - aws-security-group-allows-inbound :
