@@ -11,7 +11,7 @@ const {NonCompliantResource, RuleResult} = require('../../../rule-result');
 const DefaultVPC = {};
 
 DefaultVPC.uuid = "58c480c4-3f22-4560-983c-ae45ca1d5383";
-DefaultVPC.groupName = "Default VPC";
+DefaultVPC.groupName = "VPC";
 
 DefaultVPC.docs = {
     description: 'Default VPC must not exist in the region.',
