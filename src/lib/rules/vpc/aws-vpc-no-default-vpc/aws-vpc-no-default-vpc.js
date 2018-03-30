@@ -13,14 +13,15 @@ const DefaultVPC = {};
 DefaultVPC.uuid = "58c480c4-3f22-4560-983c-ae45ca1d5383";
 DefaultVPC.groupName = "VPC";
 
+DefaultVPC.tags = [];
+DefaultVPC.config_triggers = ["AWS::EC2::VPC"];
+DefaultVPC.paths = {DefaultVPC: "aws_default_vpc"};
 DefaultVPC.docs = {
-    description: 'Default VPC must not exist in the region.',
+    description: 'A default VPC does not exist in the region.',
     recommended: true
 };
-
 DefaultVPC.schema = {type: 'boolean'};
 
-DefaultVPC.config_triggers = ["AWS::EC2::VPC"];
 
 DefaultVPC.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
@@ -30,7 +31,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
 
     let attributes = yield ec2.describeAccountAttributes().promise();
 
-    let defaultVPC = attributes.AccountAttributes.find(x => x.AttributeName == 'default-vpc');
+    let defaultVPC = attributes.AccountAttributes.find(x => x.AttributeName === 'default-vpc');
     if (defaultVPC) {
         let noncompliant_resources = [
             new NonCompliantResource({
@@ -41,7 +42,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
         ];
         return new RuleResult({
             valid: "fail",
-            message: `Default VPC exists.`,
+            message: `A default VPC exists.`,
             noncompliant_resources
         })
     }

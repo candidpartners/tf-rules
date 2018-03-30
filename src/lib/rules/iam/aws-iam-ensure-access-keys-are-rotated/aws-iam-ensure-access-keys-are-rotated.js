@@ -5,19 +5,22 @@ const Papa = require('papaparse');
 // Rule Definition
 //------------------------------------------------------------------------------
 
-const IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED = {};
+const IAMEnsureAccessKeysAreRotated = {};
 
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.docs = {
-    description: 'Checks that the root user has not logged in during the past X days.',
+IAMEnsureAccessKeysAreRotated.uuid = "b5dfcf10-f6a4-4eb0-acd6-439dfb813c1c";
+IAMEnsureAccessKeysAreRotated.groupName = "IAM";
+IAMEnsureAccessKeysAreRotated.tags = ["CIS | 1.1.0 | 1.4"];
+IAMEnsureAccessKeysAreRotated.config_triggers = ["AWS::IAM::Group"];
+IAMEnsureAccessKeysAreRotated.paths = {IAMEnsureAccessKeysAreRotated: "aws_iam_group"};
+IAMEnsureAccessKeysAreRotated.docs = {
+    description: 'All IAM access keys have been rotated in the last 90 days.',
     recommended: false
 };
+IAMEnsureAccessKeysAreRotated.schema = {type: 'number'};
 
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.tags = ["CIS"];
-
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.schema = {type: 'boolean'};
-
-IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (context, days) {
+IAMEnsureAccessKeysAreRotated.livecheck = co.wrap(function* (context) {
     const IAM = new context.provider.IAM();
+    let {config, provider} = context;
 
     // Get credential report
     yield IAM.generateCredentialReport().promise();
@@ -27,7 +30,7 @@ IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (contex
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
-    let dateRange = days;
+    let dateRange = config;
 
     function getDaysSince(date, dateSince = new Date()) {
         let XDaysAgoInMS = 86400000; //1 Day == 86,400,000 ms
@@ -63,13 +66,10 @@ IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (contex
 
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
-    // console.log(invalidAccessKeyUsers);
-    // console.log(invalidAccessKeyUsers.length);
-
     if (invalidAccessKeyUsers.length > 0) {
         return {
             valid: 'fail',
-            message: `${invalidAccessKeyUsers.length} users have an access key that has not been rotated in ${dateRange} days, or not used since it was rotated.`
+            message: `${invalidAccessKeyUsers.length} users have an access key that has not been rotated in ${dateRange} days, or has not been used since it was rotated.`
         }
     }
     else {
@@ -77,4 +77,4 @@ IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED.livecheck = co.wrap(function* (contex
     }
 });
 
-module.exports = IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED;
+module.exports = IAMEnsureAccessKeysAreRotated;

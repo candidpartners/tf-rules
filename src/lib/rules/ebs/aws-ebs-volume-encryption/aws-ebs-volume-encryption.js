@@ -12,16 +12,13 @@ const EBSVolumeEncryption = {};
 
 EBSVolumeEncryption.uuid = "d8a29e45-d30a-4492-8380-fe1da3ed0cba";
 EBSVolumeEncryption.groupName = "EBS";
-
+EBSVolumeEncryption.tags = [];
+EBSVolumeEncryption.config_triggers = ["AWS::EC2::Volume"];
+EBSVolumeEncryption.paths = {EBSVolumeEncryption: 'aws_ebs_volume'};
 EBSVolumeEncryption.docs = {
-  description: "EBS volume must have encryption enabled",
+  description: "All EBS volumes have encryption enabled.",
   recommended: false
 };
-
-EBSVolumeEncryption.liveCheck = true;
-
-EBSVolumeEncryption.config_triggers = ["AWS::EC2::Volume"];
-
 EBSVolumeEncryption.schema = {
   anyOf: [
     { type : 'boolean' },
@@ -45,9 +42,6 @@ EBSVolumeEncryption.schema = {
   ]
 };
 
-EBSVolumeEncryption.paths = {
-  ebsVolume : 'aws_ebs_volume'
-};
 
 EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;

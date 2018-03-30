@@ -5,21 +5,23 @@ const Papa = require('papaparse');
 // Rule Definition
 //------------------------------------------------------------------------------
 
-const IAM_AVOID_USE_OF_ROOT_ACCOUNT = {};
+const IAMAvoidUseOfRootAccount = {};
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.docs = {
-    description: 'Checks that the root user has not logged in during the past X days.',
+IAMAvoidUseOfRootAccount.uuid = "5f11d82f-4435-4973-91e8-1175698f84b6";
+IAMAvoidUseOfRootAccount.groupName = "IAM";
+IAMAvoidUseOfRootAccount.tags = ["CIS | 1.1.0 | 1.1"];
+IAMAvoidUseOfRootAccount.config_triggers = ["AWS::IAM::User"];
+IAMAvoidUseOfRootAccount.paths = {IAMAvoidUseOfRootAccount: "aws_iam_user"};
+IAMAvoidUseOfRootAccount.docs = {
+    description: 'The root account has not logged in in the required number of days.',
     recommended: false
 };
+IAMAvoidUseOfRootAccount.schema = {type: 'number'};
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.config_triggers = ["AWS::IAM::User"];
 
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.tags = ["CIS"];
-
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.schema = {type: 'boolean'};
-
-IAM_AVOID_USE_OF_ROOT_ACCOUNT.livecheck = co.wrap(function* (context, RequiredDaysSinceLastUsed) {
+IAMAvoidUseOfRootAccount.livecheck = co.wrap(function* (context) {
     const IAM = new context.provider.IAM();
+    let {config, provider} = context;
 
     // Get credential report
     yield IAM.generateCredentialReport().promise();
@@ -39,6 +41,7 @@ IAM_AVOID_USE_OF_ROOT_ACCOUNT.livecheck = co.wrap(function* (context, RequiredDa
 
     let loginDate = new Date(password_last_used);
     let daysSinceLastUsed = getNumberOfDaysSince(loginDate);
+    let RequiredDaysSinceLastUsed = config;
 
     if (daysSinceLastUsed >= RequiredDaysSinceLastUsed) {
         return {
@@ -48,10 +51,10 @@ IAM_AVOID_USE_OF_ROOT_ACCOUNT.livecheck = co.wrap(function* (context, RequiredDa
     else {
         return {
             valid: 'fail',
-            message: `Requires <root_account> to not have logged in during the past ${RequiredDaysSinceLastUsed} days. <root_account> logged in ${daysSinceLastUsed.toFixed(2)} days ago.`
+            message: `<root_account> logged in ${daysSinceLastUsed.toFixed(0)} days ago.`
         }
     }
 });
 
-module.exports = IAM_AVOID_USE_OF_ROOT_ACCOUNT;
+module.exports = IAMAvoidUseOfRootAccount;
 

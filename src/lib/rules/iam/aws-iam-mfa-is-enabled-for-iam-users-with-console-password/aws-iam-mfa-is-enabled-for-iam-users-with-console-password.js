@@ -8,16 +8,17 @@ const {NonCompliantResource,RuleResult} = require('../../../rule-result');
 
 const MFAIsEnabledForIAMUsersWithConsolePassword = {};
 
+MFAIsEnabledForIAMUsersWithConsolePassword.uuid = "0435cc47-21dc-45e3-a942-45dbef1cfb1b";
+MFAIsEnabledForIAMUsersWithConsolePassword.groupName = "IAM";
+MFAIsEnabledForIAMUsersWithConsolePassword.tags = ["CIS | 1.1.0 | 1.2"];
+MFAIsEnabledForIAMUsersWithConsolePassword.config_triggers = ["AWS::IAM::User"];
+MFAIsEnabledForIAMUsersWithConsolePassword.paths = {MFAIsEnabledForIAMUsersWithConsolePassword: "aws_iam_user"};
 MFAIsEnabledForIAMUsersWithConsolePassword.docs = {
-    description: 'Checks that all IAM users with a console password have MFA enabled',
+    description: 'All IAM users with a console password have MFA enabled.',
     recommended: false
 };
-
-MFAIsEnabledForIAMUsersWithConsolePassword.tags = ["CIS | 1.1.0 | 1.2"];
-
 MFAIsEnabledForIAMUsersWithConsolePassword.schema = { type : 'boolean' };
 
-MFAIsEnabledForIAMUsersWithConsolePassword.config_triggers = ["AWS::IAM::User"];
 
 MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( context ) {
 

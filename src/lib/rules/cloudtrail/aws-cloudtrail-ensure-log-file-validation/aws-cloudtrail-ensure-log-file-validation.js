@@ -9,18 +9,16 @@ const debug = require('debug')('snitch/tag-format');
 const CloudtrailLogFileValidation = {};
 
 CloudtrailLogFileValidation.uuid = "87dfba99-8a5e-4a7b-b408-1b41d8088a8a";
-CloudtrailLogFileValidation.groupName = "Cloudtrail";
-
+CloudtrailLogFileValidation.groupName = "CloudTrail";
+CloudtrailLogFileValidation.tags= ["CIS | 1.1.0 | 2.2"];
+CloudtrailLogFileValidation.config_triggers = ["AWS::CloudTrail::Trail"];
+CloudtrailLogFileValidation.paths = {CloudtrailLogFileValidation: 'aws_cloudtrail'};
 CloudtrailLogFileValidation.docs = {
-    description: "Ensures LogFileValidationEnabled is enabled on each Cloudtrail",
+    description: "Log file validation is enabled on each CloudTrail",
     recommended: false
 };
-
 CloudtrailLogFileValidation.schema = {type: 'boolean'};
 
-CloudtrailLogFileValidation.paths = {
-    CloudtrailLogFileValidation: 'aws_cloudtrail'
-};
 
 CloudtrailLogFileValidation.validate = function (context) {
     let instance = context.instance;

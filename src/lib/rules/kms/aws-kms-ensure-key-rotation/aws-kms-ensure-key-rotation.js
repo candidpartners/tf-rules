@@ -10,17 +10,15 @@ const KMSKeyRotation = {};
 
 KMSKeyRotation.uuid = "07d3c190-37f7-4699-8498-ef1175033516";
 KMSKeyRotation.groupName = "KMS";
-
+KMSKeyRotation.tags = [];
+KMSKeyRotation.config_triggers = ["AWS::::Account"];
+KMSKeyRotation.paths = {awsIAMUserPolicyDoesNotExist: 'aws_kms_key'};
 KMSKeyRotation.docs = {
-    description: "Ensures KMS keys are rotated.",
+    description: "All KMS keys are rotated.",
     recommended: false
 };
+KMSKeyRotation.schema = {type: 'boolean'};
 
-KMSKeyRotation.schema = {type: 'boolean'}
-
-KMSKeyRotation.paths = {
-    awsIAMUserPolicyDoesNotExist: 'aws_kms_key'
-};
 
 KMSKeyRotation.validate = function (context) {
     let {config, instance} = context;

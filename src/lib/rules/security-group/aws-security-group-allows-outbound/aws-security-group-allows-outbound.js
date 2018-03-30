@@ -13,12 +13,13 @@ const AWSSecurityGroupAllowOutbound = {};
 
 AWSSecurityGroupAllowOutbound.uuid = "1c995e85-d35f-4410-8cc6-b7dd2c390802";
 AWSSecurityGroupAllowOutbound.groupName = "Security Group";
-
+AWSSecurityGroupAllowOutbound.tags = [];
+AWSSecurityGroupAllowOutbound.config_triggers = ["AWS::::Account"];
+AWSSecurityGroupAllowOutbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupAllowOutbound.docs = {
-  description: 'Security Group allows outbound traffic through specified ports',
+  description: 'Security Group allows outbound traffic through specified ports.',
   recommended: true
 };
-
 AWSSecurityGroupAllowOutbound.schema = {
   type : 'object',
   properties : {
@@ -41,9 +42,6 @@ AWSSecurityGroupAllowOutbound.schema = {
   }
 };
 
-AWSSecurityGroupAllowOutbound.paths = {
-  awsSecurityGroup : 'aws_security_group'
-};
 
 AWSSecurityGroupAllowOutbound.validate = function *( context ) {
   // debug( '%O', context );

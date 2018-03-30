@@ -2,13 +2,19 @@ provider :
   region : us-west-2
 rules :
 
+#CloudTrail
 - aws-cloudtrail-ensure-log-file-validation : true
 - aws-cloudtrail-logs-are-encrypted : true
-- aws-iam-mfa-is-enabled-for-iam-users-with-console-password: true
+
+#DynamoDB
 - aws-dynamodb-encryption :
     exclude :
       - volker-dev-accounts
+
+#EBS
 - aws-ebs-volume-encryption : true
+
+#EC2
 - aws-ec2-ami-includes-sql-server : false
 - aws-ec2-instance-tag-exists :
   - Name
@@ -20,33 +26,38 @@ rules :
 - aws-ec2-key-pair-exists : true
 - aws-ec2-uses-security-group :
   - sg-24b9b85d
-- aws-iam-account-password-policy : true
-- aws-iam-avoid-use-of-root-account : true
-- aws-iam-does-not-allow-full-access-policies: true
-- aws-iam-ensure-access-keys-are-rotated : true
-- aws-iam-ensure-unused-credentials-are-disabled : true
+
+#IAM
+- aws-iam-account-password-policy :
+  - MinimumPasswordLength : 14
+  - RequireSymbols : true
+  - RequireNumbers : true
+  - RequireUppercaseCharacters : true
+  - RequireLowercaseCharacters : true
+  - AllowUsersToChangePassword : true
+  - ExpirePasswords : true
+  - HardExpiry : true
+- aws-iam-avoid-use-of-root-account : 90
+- aws-iam-does-not-allow-full-access-policies : true
+- aws-iam-ensure-access-keys-are-rotated : 90
+- aws-iam-ensure-unused-credentials-are-disabled : 90
 - aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
-- aws-iam-password-policy-conforms :
-  - MinimumPasswordLength
-  - RequireSymbols
-  - RequireNumbers
-  - RequireUppercaseCharacters
-  - RequireLowercaseCharacters
-  - AllowUsersToChangePassword
-  - ExpirePasswords
-  - HardExpiry
 - aws-iam-user-policy-does-not-exist : true
 
-- aws-kms-ensure-key-rotation: true
+#KMS
+- aws-kms-ensure-key-rotation : true
 
+#RDS
 - aws-rds-encryption-key-exists :
     exclude :
       - vra
 
-- aws-s3-encryption:
+#S3
+- aws-s3-encryption :
     exclude:
       - volker-dev-accounts
 
+#Security Group
 - aws-security-group-allows-inbound :
     cidr : '127.0.0.1/32'
     port : '80'
@@ -61,4 +72,5 @@ rules :
     port : '9032-9034'
 - aws-security-group-exists : true
 
+#VPC
 - aws-vpc-no-default-vpc : true
