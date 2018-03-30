@@ -71,13 +71,9 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
         })
     }
     else {
-        return {valid: "success"}
+        return new RuleResult({valid: "success"})
     }
 });
-
-DynamoDBEncryption.paths = {
-    DynamoDB: 'aws_dynamodb_table'
-};
 
 DynamoDBEncryption.validate = co.wrap(function* (context) {
     // debug( '%O', context );
