@@ -16,7 +16,7 @@ let content = {
 _AWS.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
 _AWS.Service("IAM", "getCredentialReport", content);
 
-describe("IAM_AVOID_USE_OF_ROOT_ACCOUNT", () => {
+describe("IAMAvoidUseOfRootAccount", () => {
 
     test("It recognizes when the root account logged in recently", async () => {
         let result = await rule.livecheck({provider: _AWS}, 5);
