@@ -16,7 +16,7 @@ RDSEncryptionKeyExists.tags = [];
 RDSEncryptionKeyExists.config_triggers = ["AWS::RDS::DBInstance"];
 RDSEncryptionKeyExists.paths = {RDSEncryptionKeyExists: "aws_db_instance"};
 RDSEncryptionKeyExists.docs = {
-    description: 'A RDS using a KMS key exists in the account and region.',
+    description: 'All RDS instances are encrypted using KMS keys.',
     recommended: true
 };
 RDSEncryptionKeyExists.schema = {
@@ -58,7 +58,7 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
             return new NonCompliantResource({
                 resource_id: inst.DBInstanceIdentifier,
                 resource_type: "AWS::RDS::DBInstance",
-                message: `${inst.DBInstanceIdentifier} instance unencrypted`
+                message: `is unencrypted.`
             })
         });
         return new RuleResult({
@@ -71,10 +71,6 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
         return {valid: "success"}
     }
 });
-
-RDSEncryptionKeyExists.paths = {
-    rdsInstance: 'aws_db_instance'
-};
 
 RDSEncryptionKeyExists.validate = function* (context) {
     // debug( '%O', context );

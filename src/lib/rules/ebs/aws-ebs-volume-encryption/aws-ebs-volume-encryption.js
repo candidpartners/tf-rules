@@ -59,7 +59,7 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
             return new NonCompliantResource({
                 resource_id: vol.VolumeId,
                 resource_type: "AWS::EC2::Volume",
-                message: 'is unencrypted'
+                message: 'is unencrypted.'
             })
         });
         // console.log(noncompliant_resources);

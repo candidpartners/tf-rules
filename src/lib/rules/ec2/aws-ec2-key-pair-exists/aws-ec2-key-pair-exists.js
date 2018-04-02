@@ -48,7 +48,7 @@ EC2KeyPairExists.livecheck = co.wrap(function* (context) {
             noncompliant_resources: NoKeyInstances.map(inst => new NonCompliantResource({
                 resource_id: inst.InstanceId,
                 resource_type: "AWS::EC2::Instance",
-                message: "Missing Keypair"
+                message: "does not have a key pair."
             }))
         });
     else

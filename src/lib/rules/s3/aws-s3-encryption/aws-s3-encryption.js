@@ -57,7 +57,7 @@ S3Encryption.livecheck = co.wrap(function* (context) {
             return new NonCompliantResource({
                 resource_id: bucket.bucket,
                 resource_type: "AWS::S3::Bucket",
-                message: `is unencrypted`
+                message: `is unencrypted.`
             })
         });
         return new RuleResult({
@@ -88,7 +88,7 @@ S3Encryption.validate = function* (context) {
         return {
             valid: 'fail',
             resource_type: "AWS::S3::Bucket",
-            message: "A S3 bucket is not encrypted"
+            message: "A S3 bucket is not encrypted."
         }
     }
 };

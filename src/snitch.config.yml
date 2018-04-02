@@ -39,12 +39,15 @@ rules :
   - HardExpiry : true
 - aws-iam-avoid-use-of-root-account : 90
 - aws-iam-does-not-allow-full-access-policies : true
+- aws-iam-ensure-a-support-role-is-attached : true
 - aws-iam-ensure-access-keys-are-rotated : 90
+- aws-iam-ensure-master-and-manager-roles-are-active : true
 - aws-iam-ensure-unused-credentials-are-disabled : 90
 - aws-iam-hardware-mfa-is-enabled-for-root-account: true
 - aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
 - aws-iam-mfa-is-enabled-for-root-account : true
 - aws-iam-no-root-account-access-key-exists : true
+- aws-iam-policies-are-attached-only-to-groups-or-roles : true
 - aws-iam-user-policy-does-not-exist : true
 
 #KMS

@@ -61,7 +61,7 @@ DynamoDBEncryption.livecheck = co.wrap(function* (context) {
             return new NonCompliantResource({
                 resource_id: inst.TableName,
                 resource_type: "AWS::DynamoDB::Table",
-                message: `is unencrypted`,
+                message: `is unencrypted.`,
             })
         });
         return new RuleResult({

@@ -37,7 +37,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
             new NonCompliantResource({
                 resource_id: JSON.stringify(defaultVPC.AttributeValues[0].AttributeValue),
                 resource_type: "AWS::EC2::VPC",
-                message: `exists`
+                message: `exists.`
             })
         ];
         return new RuleResult({

@@ -35,11 +35,11 @@ MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( conte
     if(usersWithPasswordButNoMFA.length > 0){
         return new RuleResult({
             valid: 'fail',
-            message: "Some console users don't have MFA.",
+            message: "Some console users don't have MFA enabled.",
             noncompliant_resources: usersWithPasswordButNoMFA.map(x => new NonCompliantResource({
                 resource_id: x.arn,
                 resource_type: "AWS::IAM::User",
-                message: "Console user does not have MFA"
+                message: "does not have MFA enabled."
             }))
         })
     }
