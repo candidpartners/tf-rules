@@ -4,6 +4,7 @@ rules :
 
 #CloudTrail
 - aws-cloudtrail-ensure-log-file-validation : true
+- aws-cloudtrail-is-enabled-in-all-regions : true
 - aws-cloudtrail-logs-are-encrypted : true
 
 #DynamoDB
@@ -59,10 +60,11 @@ rules :
       - vra
 
 #S3
+- aws-s3-cloudtrail-bucket-access-logging-enabled : true
+- aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
 - aws-s3-encryption :
     exclude:
       - volker-dev-accounts
-- aws-s3-cloudtrail-bucket-access-logging-enabled : true
 
 #Security Group
 - aws-security-group-allows-inbound :

@@ -1,19 +1,19 @@
 const AWS = require('aws-sdk');
 const AWSPromiseMock = require('../../../../aws-promise-mock');
-const rule = require('./aws-cloudtrail-ensure-log-file-validation');
+const rule = require('./aws-cloudtrail-is-enabled-in-all-regions');
 
 let GoodAWS = new AWSPromiseMock();
-GoodAWS.Service("CloudTrail", "describeTrails", {trailList: [{LogFileValidationEnabled: true}]});
+GoodAWS.Service("CloudTrail", "describeTrails", {trailList: [{IsMultiRegionTrail: true}]});
 
 let BadAWS = new AWSPromiseMock();
-BadAWS.Service("CloudTrail", "describeTrails", {trailList: [{LogFileValidationEnabled: false}]});
+BadAWS.Service("CloudTrail", "describeTrails", {trailList: [{IsMultiRegionTrail: false}]});
 
-describe("All CloudTrail resources should have log file validation enabled.", () => {
+describe("At least one cloudtrail must be enabled in all regions", () => {
 
     test("it fails", async () => {
         let result = await rule.livecheck({provider: BadAWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("One or more CloudTrail resources have log file validation disabled.")
+        expect(result.message).toBe("There are no CloudTrail resources that are enabled in all regions.")
     });
 
     test("it passes", async () => {

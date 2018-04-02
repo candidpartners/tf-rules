@@ -1,6 +1,8 @@
 'use strict';
 const _ = require('lodash');
+const co = require('co');
 const debug = require('debug')('snitch/tag-format');
+const {NonCompliantResource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -14,11 +16,33 @@ CloudtrailLogFileValidation.tags= ["CIS | 1.1.0 | 2.2"];
 CloudtrailLogFileValidation.config_triggers = ["AWS::CloudTrail::Trail"];
 CloudtrailLogFileValidation.paths = {CloudtrailLogFileValidation: 'aws_cloudtrail'};
 CloudtrailLogFileValidation.docs = {
-    description: "Log file validation is enabled on each CloudTrail",
+    description: "Log file validation is enabled on every CloudTrail resource.",
     recommended: false
 };
 CloudtrailLogFileValidation.schema = {type: 'boolean'};
 
+CloudtrailLogFileValidation.livecheck = co.wrap(function* (context) {
+    let {config, provider} = context;
+    let cloud = new provider.CloudTrail();
+
+    let trails = yield cloud.describeTrails().promise();
+    let disabledTrails = trails.trailList.filter(x => x.LogFileValidationEnabled === false);
+
+    if (disabledTrails.length > 0) {
+        return new RuleResult({
+            valid: "fail",
+            message: "One or more CloudTrail resources have log file validation disabled.",
+            noncompliant_resources: disabledTrails.map(x => new NonCompliantResource({
+                resource_id: x.Name,
+                resource_type: "AWS::CloudTrail::Trail",
+                message: "has log file validation disabled."
+            }))
+        })
+    }
+    else return new RuleResult({
+        valid: "success"
+    })
+});
 
 CloudtrailLogFileValidation.validate = function (context) {
     let instance = context.instance;
