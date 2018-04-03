@@ -131,20 +131,20 @@ let livecheck = co.wrap(function* (params) {
 
         // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
-            try {
                 promises.push(rule.livecheck({config, provider})
                     .then(result => {
                         if (params.report)
                             report(result, "", rule);
                         return result;
                     }))
-            }catch(err) {
-                    console.error(err);
-                    throw err;
-                }
         }
     }
-    return Promise.all(promises);
+    try {
+        return yield Promise.all(promises);
+    } catch(err) {
+        console.log(err);
+        throw err;
+    }
 });
 
 module.exports = {
