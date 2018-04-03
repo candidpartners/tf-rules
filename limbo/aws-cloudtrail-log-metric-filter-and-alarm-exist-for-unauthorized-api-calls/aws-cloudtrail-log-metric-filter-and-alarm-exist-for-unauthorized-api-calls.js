@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../rule-result');
+const {NonCompliantResource,RuleResult} = require('../../src/lib/rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition

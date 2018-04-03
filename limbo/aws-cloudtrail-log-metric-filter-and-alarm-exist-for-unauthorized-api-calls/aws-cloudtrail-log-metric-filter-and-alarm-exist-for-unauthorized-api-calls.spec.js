@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const AWSPromiseMock = require('../../../aws-promise-mock');
+const AWSPromiseMock = require('../../src/aws-promise-mock');
 const rule = require('./aws-cloudtrail-log-metric-filter-and-alarm-exist-for-unauthorized-api-calls');
 
 let GoodAWS = new AWSPromiseMock();
