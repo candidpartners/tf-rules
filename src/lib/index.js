@@ -124,7 +124,6 @@ let livecheck = co.wrap(function* (params) {
         if (config_triggers.length) {
             let rule_triggers = rule.config_triggers || [];
             let isTrigger = _.intersection(config_triggers, rule_triggers).length > 0;
-            // console.log({isTrigger,config_triggers,rule_triggers,ruleId});
             if (!isTrigger)
                 continue;
         }

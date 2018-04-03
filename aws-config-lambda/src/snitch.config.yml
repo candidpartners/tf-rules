@@ -1,6 +1,7 @@
 provider :
   region : us-west-2
 rules :
+- aws-kms-ensure-key-rotation : true
 - aws-iam-policies-are-attached-only-to-groups-or-roles : true
 - aws-iam-ensure-master-and-manager-roles-are-active : true
 - aws-iam-ensure-a-support-role-is-attached : true
