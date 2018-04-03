@@ -1,6 +1,10 @@
 provider :
   region : us-west-2
 rules :
+- aws-iam-policies-are-attached-only-to-groups-or-roles : true
+- aws-iam-ensure-master-and-manager-roles-are-active : true
+- aws-iam-ensure-a-support-role-is-attached : true
+- aws-cloudtrail-is-enabled-in-all-regions : true
 - aws-cloudtrail-ensure-log-file-validation : true
 - aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
 - aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true

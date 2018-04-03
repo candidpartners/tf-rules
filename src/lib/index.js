@@ -121,25 +121,30 @@ let livecheck = co.wrap(function* (params) {
         let config = ruleInstance[ruleId];
 
         //If config_triggers, skip over if not in the triggers
-        if(config_triggers.length){
+        if (config_triggers.length) {
             let rule_triggers = rule.config_triggers || [];
-            let isTrigger = _.intersection(config_triggers,rule_triggers).length > 0;
+            let isTrigger = _.intersection(config_triggers, rule_triggers).length > 0;
             // console.log({isTrigger,config_triggers,rule_triggers,ruleId});
-            if(!isTrigger)
+            if (!isTrigger)
                 continue;
         }
 
         // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
-                promises.push(rule.livecheck({config, provider})
-                    .then(result => {
-                        if (params.report)
-                            report(result, "", rule);
-                        return result;
-                    }))
+            let promise = rule.livecheck({config, provider}).then(result => ({
+                rule,
+                result
+            }));
+            promises.push(promise)
         }
     }
-    return Promise.all(promises);
+    // Report back
+    let results = yield Promise.all(promises);
+    results.forEach(({rule, result}) => {
+        if (params.report)
+            report(result, "", rule);
+    });
+    return results.map(x => x.result);
 });
 
 module.exports = {
