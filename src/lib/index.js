@@ -136,7 +136,11 @@ let livecheck = co.wrap(function* (params) {
                     if (params.report)
                         report(result, "", rule);
                     return result;
-                }));
+                }))
+                .catch(error => {
+                    console.error(error);
+                    throw error;
+                })
         }
     }
     return Promise.all(promises);
