@@ -45,7 +45,6 @@ AWSSecurityGroupDoesNotAllowInbound.schema = {
   }
 };
 
-
 AWSSecurityGroupDoesNotAllowInbound.validate = function *( context ) {
   // debug( '%O', context );
   let result = null;
