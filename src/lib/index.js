@@ -139,12 +139,7 @@ let livecheck = co.wrap(function* (params) {
                     }))
         }
     }
-    try {
-        return yield Promise.all(promises);
-    } catch(err) {
-        console.log(err);
-        throw err;
-    }
+    return Promise.all(promises);
 });
 
 module.exports = {

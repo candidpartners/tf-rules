@@ -11,14 +11,38 @@ let csv2 =
 <root_account>,my_arn,true,true`;
 
 describe("mfa-is-enabled-for-root-account", () => {
-    test("Can confirm if valid = fail", async () => {
+    test("It fails becuase a no MFA device exists on the account.", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM","generateCredentialReport",{});
-        provider.Service("IAM","getCredentialReport", {
+        provider.Service("IAM", "generateCredentialReport", {});
+        provider.Service("IAM", "getCredentialReport", {Content: csv});
+        provider.Service("IAM", "listVirtualMFADevices", {});
+
+        let result = await rule.livecheck({provider: provider});
+        expect(result.valid).toBe('fail');
+        expect(result.message).toBe('Root account does not have hardware MFA enabled.');
+    });
+
+    test("It fails becuase a virtual MFA device exists on the root account.", async () => {
+
+        let provider = new AWSMock();
+        provider.Service("IAM", "generateCredentialReport", {});
+        provider.Service("IAM", "getCredentialReport", {
             Content: csv
         });
-        provider.Service("IAM","listMFADevices", {});
+        provider.Service("IAM", "listVirtualMFADevices", {
+            "VirtualMFADevices": [
+                {
+                    SerialNumber: 'arn:aws:iam::421471939647:mfa/root-account-mfa-device',
+                    User:
+                        {
+                            UserName: 'candid-volker',
+                            UserId: '421471939647',
+                            Arn: 'arn:aws:iam::421471939647:root'
+                        }
+                }
+            ]
+        });
 
         let result = await rule.livecheck({provider: provider});
         expect(result.valid).toBe('fail');
@@ -28,19 +52,9 @@ describe("mfa-is-enabled-for-root-account", () => {
     test("Can confirm if valid = success", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM","generateCredentialReport",{});
-        provider.Service("IAM","getCredentialReport", {
-            Content: csv2
-        });
-        provider.Service("IAM","listMFADevices", {
-            "MFADevices": [
-                {
-                    "UserName": "<root_account>",
-                    "SerialNumber": "arn:aws:iam::123456789012:mfa/BobsMFADevice",
-                    "EnableDate": "2015-06-16T22:36:37Z"
-                }
-            ]
-        });
+        provider.Service("IAM", "generateCredentialReport", {});
+        provider.Service("IAM", "getCredentialReport", {Content: csv2});
+        provider.Service("IAM", "listVirtualMFADevices", {});
 
         let result = await rule.livecheck({provider: provider});
         expect(result.valid).toBe('success');

@@ -32,20 +32,33 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
 
     let rootUser1 = data.find(x => x.user === `<root_account>`);
 
-    let report2 = yield IAM.listMFADevices().promise();
-    let rootUser2;
-    if (report2.MFADevices) {
-        rootUser2 = report2.MFADevices.find(x => x.UserName == "<root_account>");
+    let virtualRoot = undefined;
+    if (rootUser1.mfa_active === "true") {
+        let virtualReport = yield IAM.listVirtualMFADevices().promise();
+        if (virtualReport.VirtualMFADevices) {
+            virtualRoot = virtualReport.VirtualMFADevices.find(x => x.SerialNumber.includes("mfa/root-account-mfa-device"));
+        }
     }
 
-    if(!rootUser2){
+    if (virtualRoot !== undefined) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have hardware MFA enabled.",
             noncompliant_resources: [new NonCompliantResource({
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
-                message: "Root account does not have hardware MFA enabled."
+                message: "Root account has Virtual MFA enabled, hardware MFA is required."
+            })]
+        })
+    }
+    else if (rootUser1.mfa_active === "false" && virtualRoot === undefined) {
+        return new RuleResult({
+            valid: 'fail',
+            message: "Root account does not have hardware MFA enabled.",
+            noncompliant_resources: [new NonCompliantResource({
+                resource_id: rootUser1.arn,
+                resource_type: "AWS::IAM::User",
+                message: "Root account does not have virtual or hardware MFA enabled."
             })]
         })
     }

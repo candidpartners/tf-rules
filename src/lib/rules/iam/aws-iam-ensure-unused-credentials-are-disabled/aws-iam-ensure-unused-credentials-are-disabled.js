@@ -1,6 +1,7 @@
 const co = require('co');
 const Papa = require('papaparse');
 const _ = require('lodash');
+const {NonCompliantResource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -38,7 +39,7 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
         let currentDate = new Date();
         let XDaysAgoInMS = 86400000; //1 Day == 86,400,000 ms
         let differenceInMS = Math.abs(date - currentDate);
-        return differenceInMS/XDaysAgoInMS;
+        return differenceInMS / XDaysAgoInMS;
     }
 
     function userIsValid(user) {
@@ -49,7 +50,7 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
             return getDaysAgo(new Date(password_last_used)) < dateRange;
     }
 
-    function userAccessKeysAreValid(user){
+    function userAccessKeysAreValid(user) {
         let {
             access_key_1_active,
             access_key_1_last_used_date,
@@ -57,23 +58,37 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
             access_key_2_last_used_date
         } = user;
 
-        let isAccessKeyValid = (key_active,last_used) => key_active === 'false' || getDaysAgo(last_used) < dateRange;
+        let isAccessKeyValid = (key_active, last_used) => key_active === 'false' || getDaysAgo(last_used) < dateRange;
 
-        return isAccessKeyValid(access_key_1_active,access_key_1_last_used_date) &&
-                isAccessKeyValid(access_key_2_active, access_key_2_last_used_date);
+        return isAccessKeyValid(access_key_1_active, access_key_1_last_used_date) &&
+            isAccessKeyValid(access_key_2_active, access_key_2_last_used_date);
     }
 
     let invalidPasswordUsers = data.filter(x => !userIsValid(x));
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
-    if(invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0){
-        return {
+    let noncompliant_resources = [
+            ...invalidPasswordUsers.map(x => new NonCompliantResource({
+            resource_id: x.user,
+            resource_type: "AWS::IAM::User",
+            message: `has a password they have not used in ${dateRange} days.`
+        })),
+        ...invalidAccessKeyUsers.map(x => new NonCompliantResource({
+            resource_id: x.user,
+            resource_type: "AWS::IAM::User",
+            message: `has an access key they have not used in ${dateRange} days.`
+        }))
+    ];
+
+    if (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0) {
+        return new RuleResult({
             valid: 'fail',
-            message: `${invalidPasswordUsers.length} users have a password they have not used in ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in ${dateRange} days.`
-        }
+            message: `${invalidPasswordUsers.length} users have a password they have not used in ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in ${dateRange} days.`,
+            noncompliant_resources: noncompliant_resources
+        })
     }
-    else{
-        return { valid: 'success' }
+    else {
+        return new RuleResult({valid: 'success'})
     }
 });
 
