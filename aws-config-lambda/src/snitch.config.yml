@@ -1,11 +1,13 @@
 provider :
   region : us-west-2
 rules :
+- aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
+- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
 - aws-kms-ensure-key-rotation: true
 - aws-cloudtrail-logs-are-encrypted: true
 - aws-cloudtrail-ensure-log-file-validation: true
 - aws-iam-does-not-allow-full-access-policies: true
-- aws-iam-account-password-policy : true
+#- aws-iam-account-password-policy : true
 - aws-iam-user-policy-does-not-exist : true
 - aws-ebs-volume-encryption : true
 - aws-vpc-no-default-vpc : true
@@ -26,7 +28,6 @@ rules :
   - name : Environment
     format : ^(DEV|QA|TEST|STAGING|PROD)$
 - aws-ec2-key-pair-exists : true
-- aws-ec2-has-key-pair : true
 - aws-ec2-ami-includes-sql-server : false
 - aws-security-group-exists : true
 - aws-ec2-uses-security-group :

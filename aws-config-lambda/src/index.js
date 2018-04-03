@@ -23,7 +23,7 @@ exports.handler = co.wrap(function * (event, context, callback){
         let failedResults = result.filter(x => x.valid == 'fail');
 
         console.log(JSON.stringify(failedResults,null,2));
-        let nonCompliantResources = _.flatMap(failedResults, x => x.noncompliant_resources);
+        let nonCompliantResources = _.flatMap(failedResults, x => x.noncompliant_resources || []);
         let resourceEvaluations = nonCompliantResources.map(x => ({
             ComplianceResourceId: x.resource_id,
             ComplianceResourceType: x.resource_type,
@@ -40,6 +40,7 @@ exports.handler = co.wrap(function * (event, context, callback){
         let putEvaluationsResult = yield AWSConfig.putEvaluations(params).promise();
         callback(null,{params,putEvaluationsResult});
     } catch (err) {
-        callback(err)
+        callback(err,null)
+
     }
 });
