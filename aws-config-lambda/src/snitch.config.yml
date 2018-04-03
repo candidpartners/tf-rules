@@ -1,6 +1,7 @@
 provider :
   region : us-west-2
 rules :
+- aws-cloudtrail-ensure-log-file-validation : true
 - aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
 - aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
 - aws-kms-ensure-key-rotation: true

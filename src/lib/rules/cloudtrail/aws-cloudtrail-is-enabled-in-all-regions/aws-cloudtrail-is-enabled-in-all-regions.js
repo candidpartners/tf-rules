@@ -28,6 +28,13 @@ CloudTrailIsEnabledInAllRegions.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: "There are no CloudTrail resources that are enabled in all regions.",
+            noncompliant_resources: [
+                new NonCompliantResource({
+                    resource_id: "Cloudtrail",
+                    resource_type: "AWS::::Account",
+                    message: "There isn't a Cloudtrail that is enabled for all regions."
+                })
+            ]
         })
     }
     else return new RuleResult({
