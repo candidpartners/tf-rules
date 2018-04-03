@@ -19,13 +19,13 @@ _AWS.Service("IAM", "getCredentialReport", content);
 describe("IAMAvoidUseOfRootAccount", () => {
 
     test("It recognizes when the root account logged in recently", async () => {
-        let result = await rule.livecheck({provider: _AWS}, 5);
+        let result = await rule.livecheck({config: 5, provider: _AWS});
         expect(result.valid).toBe('fail');
-        expect(result.message.includes(`Requires <root_account> to not have logged in during the past 5 days.`)).toBeTruthy()
+        expect(result.message).toBe(`<root_account> logged in 3 days ago.`)
     });
 
     test("It recognizes when the root account has not logged in recently", async () => {
-        let result = await rule.livecheck({provider: _AWS}, 2);
+        let result = await rule.livecheck({config: 2, provider: _AWS});
         expect(result.valid).toBe('success');
     });
 }, 10000);

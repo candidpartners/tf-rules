@@ -8,7 +8,7 @@ const {NonCompliantResource,RuleResult} = require('../../../rule-result');
 
 const HardwareMFAIsEnabledForRootAccount = {};
 
-HardwareMFAIsEnabledForRootAccount.uuid = "ce94627d-c31b-412b-803b-51de836e0449";
+HardwareMFAIsEnabledForRootAccount.uuid = "32243a91-ff70-4366-83fb-293bcfda46b0";
 HardwareMFAIsEnabledForRootAccount.groupName = "IAM";
 HardwareMFAIsEnabledForRootAccount.tags = ["CIS | 1.1.0 | 1.14"];
 HardwareMFAIsEnabledForRootAccount.config_triggers = ["AWS::IAM::User"];

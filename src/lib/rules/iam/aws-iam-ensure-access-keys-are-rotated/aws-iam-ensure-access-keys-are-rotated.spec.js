@@ -19,12 +19,12 @@ _AWS.Service("IAM", "getCredentialReport", content);
 describe("IAM_ENSURE_ACCESS_KEYS_ARE_ROTATED", () => {
 
     test("It recognizes when the keys are rotated recently enough", async () => {
-        let result = await rule.livecheck({provider: _AWS}, 90);
+        let result = await rule.livecheck({config: 90, provider: _AWS});
         expect(result.valid).toBe('success');
     });
 
     test("It recognizes when the keys are not rotated recently enough", async () => {
-        let result = await rule.livecheck({provider: _AWS}, 60);
+        let result = await rule.livecheck({config: 60, provider: _AWS});
         expect(result.valid).toBe('fail');
         expect(result.message).toBe('1 users have an access key that has not been rotated in 60 days, or has not been used since it was rotated.');
     });

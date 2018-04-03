@@ -6,6 +6,7 @@ rules :
 - aws-cloudtrail-ensure-log-file-validation : true
 - aws-cloudtrail-is-enabled-in-all-regions : true
 - aws-cloudtrail-logs-are-encrypted : true
+- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
 
 #DynamoDB
 - aws-dynamodb-encryption :

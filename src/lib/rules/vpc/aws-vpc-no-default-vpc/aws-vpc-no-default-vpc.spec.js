@@ -1,6 +1,6 @@
 'use strict';
 const AWS = require('aws-stub');
-const AWSPromiseMock = require('../../../aws-promise-mock');
+const AWSPromiseMock = require('../../../../aws-promise-mock');
 const _ = require('lodash');
 const RealAWS = require('aws-sdk');
 const rule = require('./aws-vpc-no-default-vpc');
@@ -63,6 +63,6 @@ describe('no-vpc', function () {
 
         let failResult = await rule.livecheck({config: {}, provider: BadAWSMock});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("Default VPC exists.");
+        expect(failResult.message).toBe("A default VPC exists.");
     });
 });

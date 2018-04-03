@@ -21,8 +21,8 @@ IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number'};
 
 
 IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
-    const IAM = new context.provider.IAM();
     let {config, provider} = context;
+    const IAM = new context.provider.IAM();
 
     // Get credential report
     yield IAM.generateCredentialReport().promise();
