@@ -47,7 +47,7 @@ DefaultVPC.livecheck = co.wrap(function* (context) {
         })
     }
     else {
-        return {valid: "success"}
+        return new RuleResult({valid: "success"})
     }
 });
 
