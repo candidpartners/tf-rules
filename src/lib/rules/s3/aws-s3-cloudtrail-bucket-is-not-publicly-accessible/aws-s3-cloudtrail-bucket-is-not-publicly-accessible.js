@@ -53,7 +53,14 @@ S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = co.wrap(function* (context
         if (err.code === 'AccessDenied') {
             return new RuleResult({
                 valid: "fail",
-                message: "Snitch does not have access to the CloudTrail S3 bucket from this account."
+                message: "Snitch does not have access to the CloudTrail S3 bucket from this account.",
+                noncompliant_resources: [
+                    new NonCompliantResource({
+                        resource_id: "Permission Error",
+                        resource_type: "AWS::::Account",
+                        message: "Snitch does not have access to the CloudTail S3 bucket from this account."
+                    })
+                ]
             })
         }
     }
