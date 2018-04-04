@@ -3,12 +3,12 @@ let fs = require('fs');
 let _ = require('lodash');
 
 let sanitizedRules = _.map(rules, (rule,key) => {
-    let tags = [];
+    let tags = rule.tags || [];
 
     //Make sure recommended is first
-    if(rule.docs.recommended) tags.push("Recommended");
-    if(_.isFunction(rule.validate)) tags.push("Terraform");
-    if(_.isFunction(rule.livecheck)) tags.push("Livecheck");
+    if(rule.docs.recommended) tags.unshift("Recommended");
+    if(_.isFunction(rule.validate)) tags.unshift("Terraform");
+    if(_.isFunction(rule.livecheck)) tags.unshift("Livecheck");
 
     return {
         name: key,

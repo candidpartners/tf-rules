@@ -37,7 +37,11 @@ function validateConfig(rules, config) {
                 if (rule == undefined) {
                     accum.push({severity: 'warning', message: `${ruleId} rule not available in this version`});
                 } else if (!ajv.validate(rule.schema || {}, ruleConfig)) {
-                    accum.push({severity: 'error', message: `${ruleId} configuration invalid`, details: ajv.errors});
+                    accum.push({
+                        severity: 'error',
+                        message: `${ruleId} configuration invalid`,
+                        details: JSON.stringify(ajv.errors, null, 2)
+                    });
                 }
                 return accum;
             }, errors);
@@ -48,7 +52,8 @@ function validateConfig(rules, config) {
     return errors;
 }
 
-function report(result, instanceName, rule) {
+function report(result, instanceName, rule, ruleId) {
+    console.log(colors.white(`\n${ruleId}`));
     if (result) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
@@ -132,6 +137,7 @@ let livecheck = co.wrap(function* (params) {
         if (_.isFunction(rule.livecheck)) {
             let promise = rule.livecheck({config, provider}).then(result => ({
                 rule,
+                ruleId,
                 result
             }));
             promises.push(promise)
@@ -139,9 +145,9 @@ let livecheck = co.wrap(function* (params) {
     }
     // Report back
     let results = yield Promise.all(promises);
-    results.forEach(({rule, result}) => {
+    results.forEach(({rule, ruleId, result}) => {
         if (params.report)
-            report(result, "", rule);
+            report(result, "", rule, ruleId);
     });
     return results.map(x => x.result);
 });

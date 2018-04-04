@@ -16,6 +16,7 @@ const SideMenu = ({}) => (
             <Link to={`/`}>
                 <h2>Snitch</h2>
             </Link>
+            <p>Snitch has {rules.length} rules.</p>
         </Menu.Item>
         {_.map(rulesByGroup, (value, key) => (
             <Menu.Item key={key}>

@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './Main';
 import registerServiceWorker from './registerServiceWorker';
-import {BrowserRouter} from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 
 const AppWrapper = (props) => (
-    <BrowserRouter>
+    <HashRouter>
         <App/>
-    </BrowserRouter>
+    </HashRouter>
 );
 
 ReactDOM.render(<AppWrapper />, document.getElementById('root'));
