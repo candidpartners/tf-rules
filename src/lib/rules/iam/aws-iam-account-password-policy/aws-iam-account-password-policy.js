@@ -2,6 +2,7 @@
 const co = require('co');
 const _ = require('lodash');
 const debug = require('debug')('snitch/tag-format');
+const {RuleResult,NonCompliantResource} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -27,50 +28,115 @@ IAMAccountPasswordPolicy.docs = {
     recommended: false
 };
 IAMAccountPasswordPolicy.schema = {
-    type: 'array',
-    entries: [
-        {type: 'number'},
-        {type: 'bool'},
-        {type: 'bool'},
-        {type: 'bool'},
-        {type: 'bool'},
-        {type: 'bool'},
-        {type: 'bool'},
-        {type: 'bool'}
-    ]
+    type: 'object',
+    required: [
+        "MinimumPasswordLength",
+        "MaxPasswordAge",
+        "RequireSymbols",
+        "RequireNumbers",
+        "RequireUppercaseCharacters",
+        "RequireLowercaseCharacters",
+        "AllowUsersToChangePassword",
+        "ExpirePasswords",
+        "PasswordReusePrevention"
+    ],
+    properties: {
+        MinimumPasswordLength: {type: "number"},
+        MaxPasswordAge: {type: "number"},
+        RequireSymbols: {type: "boolean"},
+        RequireNumbers: {type: "boolean"},
+        RequireUppercaseCharacters: {type: "boolean"},
+        RequireLowercaseCharacters: {type: "boolean"},
+        AllowUsersToChangePassword: {type: "boolean"},
+        ExpirePasswords: {type: "boolean"},
+        PasswordReusePrevention: {type: "number"}
+    },
 };
+
+
+IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
+    const IAM = new context.provider.IAM();
+    let config = context.config;
+
+    try{
+        const result = yield IAM.getAccountPasswordPolicy().promise();
+        const {PasswordPolicy} = result;
+        console.log({PasswordPolicy, config});
+        let errors =_.map(config, (value,key) => {
+            let PasswordPolicyValue = PasswordPolicy[key];
+            if(PasswordPolicyValue !== value)
+                return `Password Policy does not match config for ${key}`
+        }).filter(x => x);
+
+        if(errors.length){
+            return new RuleResult({
+                valid: "fail",
+                message: "The account password policy is not compliant",
+                noncompliant_resources: [
+                    new NonCompliantResource({
+                        resource_id: "Password Policy",
+                        resource_type:"AWS::::Account",
+                        message: "The password policy does not conform to the config. " + errors.join('\n')
+                    })
+                ]})
+        }
+        else{
+            return new RuleResult({
+                valid: "success"
+            })
+        }
+
+    } catch(error){
+        return {valid: 'fail', message: error.message}
+    }
+});
 
 IAMAccountPasswordPolicy.validate = function (context) {
     let instance = context.instance;
+    const {
+        MinimumPasswordLength,
+        MaxPasswordAge,
+        RequireSymbols,
+        RequireNumbers,
+        RequireUppercaseCharacters,
+        RequireLowercaseCharacters,
+        AllowUsersToChangePassword,
+        ExpirePasswords, //Terraform derives from max password age
+        PasswordReusePrevention
+    } = context.config;
 
     let possibleErrors = [
         {
-            error: "CIS 1.5 - Policy should require an uppercase letter.",
-            isValid: (instance) => _.get(instance, 'require_uppercase_characters', false)
+            error: "Password Policy does not match config for RequireUppercaseCharacters",
+            isValid: (instance) => _.get(instance, 'require_uppercase_characters', false) === RequireUppercaseCharacters
         },
         {
-            error: "CIS 1.6 - Policy should require a lowercase letter.",
-            isValid: (instance) => _.get(instance, 'require_lowercase_characters', false)
+            error: "Password Policy does not match config for RequireLowercaseCharacters",
+            isValid: (instance) => _.get(instance, 'require_lowercase_characters', false) === RequireLowercaseCharacters
         },
         {
-            error: "CIS 1.7 - Policy should require a symbol",
-            isValid: (instance) => _.get(instance, 'require_symbols', false)
+            error: "Password Policy does not match config for RequireSymbols",
+            isValid: (instance) => _.get(instance, 'require_symbols', false) === RequireSymbols
         },
         {
-            error: "CIS 1.8 - Policy should require a number",
-            isValid: (instance) => _.get(instance, 'require_numbers', false)
+            error: "Password Policy does not match config for RequireNumbers",
+            isValid: (instance) => _.get(instance, 'require_numbers', false) === RequireNumbers
         },
         {
-            error: "CIS 1.9 - Policy should require a length of 14 or greater.",
-            isValid: (instance) => _.get(instance, 'minimum_password_length', 0) >= 14
+            error: "Password Policy does not match config for MinimumPasswordLength",
+            isValid: (instance) => _.get(instance, 'minimum_password_length', 0) === MinimumPasswordLength
         },
         {
-            error: "CIS 1.10 - Policy should prevent password reuse.",
-            isValid: (instance) => _.get(instance, 'password_reuse_prevention', 0) === 1
+            error: "Password Policy does not match config for PasswordReusePrevention",
+            isValid: (instance) => _.get(instance, 'password_reuse_prevention', 0) === PasswordReusePrevention
         },
         {
-            error: "CIS 1.11 - Policy should expire passwords within 90 days.",
-            isValid: (instance) => _.get(instance, 'max_password_age', 100) <= 90
+            error: "Password Policy does not match config for MaxPasswordAge",
+            isValid: (instance) => _.get(instance, 'max_password_age', undefined) === MaxPasswordAge
+        },
+        {
+            error: "Password Policy does not match config for AllowUsersToChangePassword",
+            isValid: (instance) => _.get(instance, 'allow_users_to_change_password', undefined) === AllowUsersToChangePassword
         },
     ];
 
@@ -84,69 +150,6 @@ IAMAccountPasswordPolicy.validate = function (context) {
     }
 };
 
-IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
-    const IAM = new context.provider.IAM();
-    const {
-        MinimumPasswordLength,
-        RequireSymbols,
-        RequireNumbers,
-        RequireUppercaseCharacters,
-        RequireLowercaseCharacters,
-        AllowUsersToChangePassword,
-        ExpirePasswords,
-        HardExpiry
-    } = context.config;
-
-
-    try {
-        const result = yield IAM.getAccountPasswordPolicy().promise();
-        const {PasswordPolicy} = result;
-
-        let errors = [];
-
-        if (MinimumPasswordLength !== undefined)
-            if (PasswordPolicy.MinimumPasswordLength !== MinimumPasswordLength)
-                errors.push(`Password policy needs MinimumPasswordLength of ${MinimumPasswordLength}`);
-
-        if (RequireSymbols !== undefined)
-            if (PasswordPolicy.RequireSymbols !== RequireSymbols)
-                errors.push(`Password policy needs RequireSymbols = ${RequireSymbols}`);
-
-        if (RequireNumbers !== undefined)
-            if (PasswordPolicy.RequireNumbers !== RequireNumbers)
-                errors.push(`Password policy needs RequireNumbers = ${RequireNumbers}`);
-
-        if (RequireUppercaseCharacters !== undefined)
-            if (PasswordPolicy.RequireUppercaseCharacters !== RequireUppercaseCharacters)
-                errors.push(`Password policy needs RequireUppercaseCharacters = ${RequireUppercaseCharacters}`);
-
-        if (RequireLowercaseCharacters !== undefined)
-            if (PasswordPolicy.RequireLowercaseCharacters !== RequireLowercaseCharacters)
-                errors.push(`Password policy needs RequireLowercaseCharacters = ${RequireLowercaseCharacters}`);
-
-        if (AllowUsersToChangePassword !== undefined)
-            if (PasswordPolicy.AllowUsersToChangePassword !== AllowUsersToChangePassword)
-                errors.push(`Password policy needs AllowUsersToChangePassword = ${AllowUsersToChangePassword}`);
-
-        if (ExpirePasswords !== undefined)
-            if (PasswordPolicy.ExpirePasswords !== ExpirePasswords)
-                errors.push(`Password policy needs ExpirePasswords = ${ExpirePasswords}`);
-
-        if (HardExpiry !== undefined)
-            if (PasswordPolicy.HardExpiry !== HardExpiry)
-                errors.push(`Password policy needs HardExpiry = ${HardExpiry}`);
-
-        if (errors.length) {
-            return {valid: 'fail', message: errors.join('\n')}
-        }
-        else {
-            return {valid: 'success'}
-        }
-
-    } catch (err) {
-        return {valid: 'fail', message: err.message}
-    }
-});
 
 module.exports = IAMAccountPasswordPolicy;
 

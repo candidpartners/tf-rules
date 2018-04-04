@@ -2,48 +2,139 @@
   {
     "name": "aws-cloudtrail-ensure-log-file-validation",
     "uuid": "87dfba99-8a5e-4a7b-b408-1b41d8088a8a",
-    "groupName": "Cloudtrail",
+    "groupName": "CloudTrail",
+    "tags": [
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::CloudTrail::Trail"
+    ],
+    "paths": {
+      "CloudtrailLogFileValidation": "aws_cloudtrail"
+    },
     "docs": {
-      "description": "Ensures LogFileValidationEnabled is enabled on each Cloudtrail",
+      "description": "Log file validation is enabled on every CloudTrail resource.",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "CloudtrailLogFileValidation": "aws_cloudtrail"
-    },
+    }
+  },
+  {
+    "name": "aws-cloudtrail-is-enabled-in-all-regions",
+    "uuid": "a9df5679-8818-457b-baa6-783c62262f2f",
+    "groupName": "CloudTrail",
     "tags": [
-      "Terraform"
-    ]
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::CloudTrail::Trail"
+    ],
+    "paths": {
+      "CloudTrailIsEnabledInAllRegions": "aws_cloudtrail"
+    },
+    "docs": {
+      "description": "At least one CloudTrail resource is enabled in all regions.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
   },
   {
     "name": "aws-cloudtrail-logs-are-encrypted",
     "uuid": "686cbf59-c41a-4b7f-ae4a-7f50bf91d354",
-    "groupName": "Cloudtrail",
+    "groupName": "CloudTrail",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::CloudTrail::Trail"
+    ],
+    "paths": {
+      "CloudtrailLogsAreEncrypted": "aws_cloudtrail"
+    },
     "docs": {
-      "description": "Ensures a KMS key is provided for all cloudtrail resources.",
+      "description": "All CloudTrail logs are encrypted at rest.",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "CloudtrailLogFileValidation": "aws_cloudtrail"
-    },
+    }
+  },
+  {
+    "name": "aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs",
+    "uuid": "f030c67a-48b2-4499-bbec-c14c7798e8a0",
+    "groupName": "CloudTrail",
     "tags": [
-      "Terraform"
-    ]
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::CloudTrail::Trail"
+    ],
+    "paths": {
+      "CloudTrailTrailsAreIntegratedWithCloudWatchLogs": "aws_cloudtrail"
+    },
+    "docs": {
+      "description": "All CloudTrail trails are integrated with CloudWatch logs.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-dynamodb-encryption",
+    "uuid": "e391e00a-ddce-4064-80ad-6b0ef351ccc6",
+    "groupName": "DynamoDB",
+    "tags": [
+      "Recommended",
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::DynamoDB::Table"
+    ],
+    "paths": {
+      "DynamoDBEncryption": "aws_dynamodb_table"
+    },
+    "docs": {
+      "description": "All DynamoDB tables are encrypted.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
   },
   {
     "name": "aws-ebs-volume-encryption",
-    "uuid": "28afa62a-c539-4d9e-bc61-9f5b611017f8",
+    "uuid": "d8a29e45-d30a-4492-8380-fe1da3ed0cba",
     "groupName": "EBS",
+    "tags": [
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Volume"
+    ],
+    "paths": {
+      "EBSVolumeEncryption": "aws_ebs_volume"
+    },
     "docs": {
-      "description": "EBS volume must have encryption enabled",
+      "description": "All EBS volumes have encryption enabled.",
       "recommended": false
     },
-    "liveCheck": true,
     "schema": {
       "anyOf": [
         {
@@ -67,57 +158,45 @@
           }
         }
       ]
-    },
-    "paths": {
-      "ebsVolume": "aws_ebs_volume"
-    },
-    "tags": [
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-ec2-ami-includes-sql-server",
     "uuid": "22bce450-2452-485f-ae3b-e244f47792ce",
     "groupName": "EC2",
+    "tags": [
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "EC2AMIIncludesSQL": "aws_instance"
+    },
     "docs": {
-      "description": "Checks whether the AMI includes MS SQL Server",
+      "description": "The AMI includes a MS SQL Server.",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
-    "tags": [
-      "Terraform"
-    ]
-  },
-  {
-    "name": "aws-ec2-has-key-pair",
-    "uuid": "f5ea0286-0909-463b-8817-cffe0df97f38",
-    "groupName": "EC2",
-    "docs": {
-      "description": "EC2 Instance must have a key defined",
-      "recommended": true
-    },
-    "schema": {
-      "type": "boolean"
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-ec2-instance-tag-exists",
     "uuid": "cb6da3e8-cff5-490c-b200-4d43f8cc0632",
     "groupName": "EC2",
+    "tags": [
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "awsInstance": "aws_instance"
+    },
     "docs": {
-      "description": "Required tagging must exist",
+      "description": "Required EC2 instance tags exist.",
       "recommended": false
     },
     "schema": {
@@ -125,20 +204,23 @@
       "items": {
         "type": "string"
       }
-    },
-    "paths": {
-      "awsInstance": "aws_instance"
-    },
-    "tags": [
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-ec2-instance-tag-format",
     "uuid": "d2065bd9-4ece-4cb7-a4dc-3ad161415e15",
     "groupName": "EC2",
+    "tags": [
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "EC2TagFormat": "aws_instance"
+    },
     "docs": {
-      "description": "Tag values must match provided format",
+      "description": "EC2 instance tag values match provided format.",
       "recommended": false
     },
     "schema": {
@@ -154,20 +236,25 @@
           }
         }
       }
-    },
-    "paths": {
-      "awsInstance": "aws_instance"
-    },
-    "tags": [
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-ec2-key-pair-exists",
     "uuid": "25c51c51-c2c5-4f5d-bfe4-bf900dc86f3a",
     "groupName": "EC2",
+    "tags": [
+      "Recommended",
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "EC2KeyPairExists": "aws_instance"
+    },
     "docs": {
-      "description": "EC2 Keypair must exist in the account and region",
+      "description": "An EC2 key pair exists in the account and region.",
       "recommended": true,
       "tags": [
         "Live Check"
@@ -175,41 +262,24 @@
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform",
-      "Livecheck"
-    ]
-  },
-  {
-    "name": "aws-ec2-uses-key-pair",
-    "uuid": "2812b528-8cfd-4d31-84f8-da61177ddd9c",
-    "groupName": "EC2",
-    "docs": {
-      "description": "EC2 Instance must use the specified key",
-      "recommended": true
-    },
-    "schema": {
-      "type": "string"
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-ec2-uses-security-group",
     "uuid": "fc877cb6-c786-414a-a06d-50dbde92db74",
     "groupName": "EC2",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "EC2UsesSecurityGroup": "aws_instance"
+    },
     "docs": {
-      "description": "EC2 Instance Uses Specified Security Groups",
+      "description": "All EC2 instances use specified security groups",
       "recommended": true
     },
     "schema": {
@@ -224,113 +294,455 @@
           }
         }
       ]
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-iam-account-password-policy",
     "uuid": "8acddea0-73b7-474a-9f65-5db172c5aefb",
     "groupName": "IAM",
+    "tags": [
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "IAMAccountPasswordPolicy": "aws_iam_account_password_policy"
+    },
     "docs": {
-      "description": "The IAM Account Password Policy must comply to CIS standards.",
+      "description": "The IAM account password policy complies to CIS standards.",
       "recommended": false
     },
     "schema": {
-      "type": "boolean"
-    },
-    "paths": {
-      "awsIAMAccountPasswordPolicy": "aws_iam_account_password_policy"
-    },
+      "type": "array",
+      "entries": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        },
+        {
+          "type": "bool"
+        }
+      ]
+    }
+  },
+  {
+    "name": "aws-iam-avoid-use-of-root-account",
+    "uuid": "5f11d82f-4435-4973-91e8-1175698f84b6",
+    "groupName": "IAM",
     "tags": [
-      "Terraform"
-    ]
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "IAMAvoidUseOfRootAccount": "aws_iam_user"
+    },
+    "docs": {
+      "description": "The root account has not logged in in the required number of days.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "number"
+    }
   },
   {
     "name": "aws-iam-does-not-allow-full-access-policies",
     "uuid": "345b6958-9966-4cb7-814b-4daea7857c79",
     "groupName": "IAM",
+    "tags": [
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::IAM::Policy"
+    ],
+    "paths": {
+      "IAMDoesNotAllowFullAccessPolicies": "aws_iam_policy"
+    },
     "docs": {
-      "description": "No IAM policies can allow Action:* on Resource: *",
+      "description": "No IAM policies allow full administrative privileges",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "IAMDoesNotAllowFullAccessPolicies": "aws_iam_policy"
-    },
+    }
+  },
+  {
+    "name": "aws-iam-ensure-a-support-role-is-attached",
+    "uuid": "5302e8ca-c6af-4f11-9389-431b029d15a9",
+    "groupName": "IAM",
     "tags": [
-      "Terraform"
-    ]
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::Role"
+    ],
+    "paths": {
+      "IAMSupportRoleHasBeenCreated": "aws_iam_role"
+    },
+    "docs": {
+      "description": "The AWSSupportAccess IAM role is attached to one or more roles, groups, or users.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-ensure-access-keys-are-rotated",
+    "uuid": "b5dfcf10-f6a4-4eb0-acd6-439dfb813c1c",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::Group"
+    ],
+    "paths": {
+      "IAMEnsureAccessKeysAreRotated": "aws_iam_group"
+    },
+    "docs": {
+      "description": "All IAM access keys have been rotated in the last 90 days.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "number"
+    }
+  },
+  {
+    "name": "aws-iam-ensure-master-and-manager-roles-are-active",
+    "uuid": "69fe01f9-b2d5-47a4-b33f-5b86a98b5722",
+    "groupName": "IAM",
+    "tags": [
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::Role"
+    ],
+    "paths": {
+      "IAMMasterAndManagerRolesAreActive": "aws_iam_role"
+    },
+    "docs": {
+      "description": "Both Master and Manager IAM roles are active.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-ensure-unused-credentials-are-disabled",
+    "uuid": "944996af-32cd-4af6-9bb2-03819a631b44",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "IAMEnsureUnusedCredentialsAreDisabled": "aws_iam_user"
+    },
+    "docs": {
+      "description": "Credentials unused for at least 90 days are disabled.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "number"
+    }
+  },
+  {
+    "name": "aws-iam-hardware-mfa-is-enabled-for-root-account",
+    "uuid": "32243a91-ff70-4366-83fb-293bcfda46b0",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "MFAIsEnabledForIAMUsersWithConsolePassword": "aws_iam_user"
+    },
+    "docs": {
+      "description": "The root account has hardware MFA enabled.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-mfa-is-enabled-for-iam-users-with-console-password",
+    "uuid": "0435cc47-21dc-45e3-a942-45dbef1cfb1b",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "MFAIsEnabledForIAMUsersWithConsolePassword": "aws_iam_user"
+    },
+    "docs": {
+      "description": "All IAM users with a console password have MFA enabled.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-mfa-is-enabled-for-root-account",
+    "uuid": "ce94627d-c31b-412b-803b-51de836e0449",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "MFAIsEnabledForIAMUsersWithConsolePassword": "aws_iam_user"
+    },
+    "docs": {
+      "description": "The root account has MFA enabled.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-no-root-account-access-key-exists",
+    "uuid": "3fea4347-2101-4e89-a83a-143d9a523bfd",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "IAMAvoidUseOfRootAccount": "aws_iam_user"
+    },
+    "docs": {
+      "description": "No root account access key exists.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-iam-policies-are-attached-only-to-groups-or-roles",
+    "uuid": "deea587e-7c7a-4319-b570-32abea518f82",
+    "groupName": "IAM",
+    "tags": [
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::User"
+    ],
+    "paths": {
+      "IAMPoliciesAreAttachedOnlyToGroupsOrRoles": "aws_iam_user"
+    },
+    "docs": {
+      "description": "No IAM Policies are attached directly to a user.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
   },
   {
     "name": "aws-iam-user-policy-does-not-exist",
     "uuid": "1d00c52d-ad5b-40a7-bcaf-3a3ba5f86873",
     "groupName": "IAM",
+    "tags": [
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::IAM:User"
+    ],
+    "paths": {
+      "awsIAMUserPolicyDoesNotExist": "aws_iam_user_policy_attachment"
+    },
     "docs": {
-      "description": "No IAM policies can be attached directly to a user.",
+      "description": "IAM policies are attached only to groups or roles.",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "awsIAMUserPolicyDoesNotExist": "aws_iam_user_policy_attachment"
-    },
-    "tags": [
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-kms-ensure-key-rotation",
     "uuid": "07d3c190-37f7-4699-8498-ef1175033516",
     "groupName": "KMS",
+    "tags": [
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "awsIAMUserPolicyDoesNotExist": "aws_kms_key"
+    },
     "docs": {
-      "description": "Ensures KMS keys are rotated.",
+      "description": "All KMS keys are rotated.",
       "recommended": false
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "awsIAMUserPolicyDoesNotExist": "aws_kms_key"
-    },
-    "tags": [
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-rds-encryption-key-exists",
     "uuid": "196beb21-bb42-4a58-9ea0-0478c5f1042a",
     "groupName": "RDS",
-    "docs": {
-      "description": "RDS using a KMS key must exist in the account and region",
-      "recommended": true
-    },
-    "liveCheck": true,
-    "schema": {
-      "type": "boolean"
-    },
-    "paths": {
-      "rdsInstance": "aws_db_instance"
-    },
     "tags": [
       "Recommended",
-      "Terraform"
-    ]
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::RDS::DBInstance"
+    ],
+    "paths": {
+      "RDSEncryptionKeyExists": "aws_db_instance"
+    },
+    "docs": {
+      "description": "All RDS instances are encrypted using KMS keys.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "aws-s3-cloudtrail-bucket-access-logging-enabled",
+    "uuid": "e6f0f199-1b03-4fe6-8def-ce7c69852c69",
+    "groupName": "S3",
+    "tags": [
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::S3::Bucket"
+    ],
+    "paths": {
+      "S3Encryption": "aws_s3_bucket"
+    },
+    "docs": {
+      "description": "Access logging is enabled on the CloudTrail S3 bucket.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-s3-cloudtrail-bucket-is-not-publicly-accessible",
+    "uuid": "75760d07-6998-4c75-880f-290dc4947e62",
+    "groupName": "S3",
+    "tags": [
+      "Recommended",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::CloudTrail::Trail"
+    ],
+    "paths": {
+      "S3CloudTrailBucketIsNotPubliclyAccessible": "aws_s3_bucket"
+    },
+    "docs": {
+      "description": "The CloudTrail Logging S3 bucket is not publicly accessible.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  {
+    "name": "aws-s3-encryption",
+    "uuid": "25f03a5c-7db0-4428-a8ff-efb9f7003064",
+    "groupName": "S3",
+    "tags": [
+      "Recommended",
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::S3::Bucket"
+    ],
+    "paths": {
+      "S3": "aws_s3_bucket"
+    },
+    "docs": {
+      "description": "All non-excluded S3 buckets are encrypted.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
   },
   {
     "name": "aws-security-group-allows-inbound",
     "uuid": "176c1d55-0e98-4da1-9ede-e57287339fa4",
     "groupName": "Security Group",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "AWSSecurityGroupAllowInbound": "aws_security_group"
+    },
     "docs": {
-      "description": "Security Group allows inbound traffic through specified ports",
+      "description": "Security Group allows inbound traffic through specified ports.",
       "recommended": true
     },
     "schema": {
@@ -353,21 +765,24 @@
           ]
         }
       }
-    },
-    "paths": {
-      "awsSecurityGroup": "aws_security_group"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-security-group-allows-outbound",
     "uuid": "1c995e85-d35f-4410-8cc6-b7dd2c390802",
     "groupName": "Security Group",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "AWSSecurityGroupAllowInbound": "aws_security_group"
+    },
     "docs": {
-      "description": "Security Group allows outbound traffic through specified ports",
+      "description": "Security Group allows outbound traffic through specified ports.",
       "recommended": true
     },
     "schema": {
@@ -390,21 +805,24 @@
           ]
         }
       }
-    },
-    "paths": {
-      "awsSecurityGroup": "aws_security_group"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-security-group-does-not-allow-inbound",
     "uuid": "67477475-5d35-4444-bcb4-0c9053aa357e",
     "groupName": "Security Group",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "AWSSecurityGroupAllowInbound": "aws_security_group"
+    },
     "docs": {
-      "description": "Security Group does not allow specified inbound traffic",
+      "description": "Security Group does not allow specified inbound traffic.",
       "recommended": true
     },
     "schema": {
@@ -430,21 +848,24 @@
           ]
         }
       }
-    },
-    "paths": {
-      "awsSecurityGroup": "aws_security_group"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-security-group-does-not-allow-outbound",
     "uuid": "14065b90-a755-4b78-8ab9-02a19ed7d82f",
     "groupName": "Security Group",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::::Account"
+    ],
+    "paths": {
+      "AWSSecurityGroupAllowInbound": "aws_security_group"
+    },
     "docs": {
-      "description": "Security Group does not allow specified outbound traffic",
+      "description": "Security Group does not allow specified outbound traffic.",
       "recommended": true
     },
     "schema": {
@@ -470,32 +891,51 @@
           ]
         }
       }
-    },
-    "paths": {
-      "awsSecurityGroup": "aws_security_group"
-    },
-    "tags": [
-      "Recommended",
-      "Terraform"
-    ]
+    }
   },
   {
     "name": "aws-security-group-exists",
     "uuid": "9a17f69d-9b52-4e6c-b612-02ab80ba8eab",
     "groupName": "Security Group",
+    "tags": [
+      "Recommended",
+      "Terraform"
+    ],
+    "config_triggers": [
+      "AWS::Account"
+    ],
+    "paths": {
+      "AWSSecurityGroupAllowInbound": "aws_instance"
+    },
     "docs": {
-      "description": "Security Groups must exist",
+      "description": "Security Groups exist.",
       "recommended": true
     },
     "schema": {
       "type": "boolean"
-    },
-    "paths": {
-      "rdsInstance": "aws_instance"
-    },
+    }
+  },
+  {
+    "name": "aws-vpc-no-default-vpc",
+    "uuid": "58c480c4-3f22-4560-983c-ae45ca1d5383",
+    "groupName": "VPC",
     "tags": [
       "Recommended",
-      "Terraform"
-    ]
+      "Terraform",
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::EC2::VPC"
+    ],
+    "paths": {
+      "EC2": "aws_default_vpc"
+    },
+    "docs": {
+      "description": "A default VPC does not exist in the region.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "boolean"
+    }
   }
 ]

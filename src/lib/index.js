@@ -37,7 +37,11 @@ function validateConfig(rules, config) {
                 if (rule == undefined) {
                     accum.push({severity: 'warning', message: `${ruleId} rule not available in this version`});
                 } else if (!ajv.validate(rule.schema || {}, ruleConfig)) {
-                    accum.push({severity: 'error', message: `${ruleId} configuration invalid`, details: ajv.errors});
+                    accum.push({
+                        severity: 'error',
+                        message: `${ruleId} configuration invalid`,
+                        details: JSON.stringify(ajv.errors, null, 2)
+                    });
                 }
                 return accum;
             }, errors);

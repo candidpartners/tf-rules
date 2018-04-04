@@ -31,14 +31,15 @@ rules :
 
 #IAM
 - aws-iam-account-password-policy :
-  - MinimumPasswordLength : 14
-  - RequireSymbols : true
-  - RequireNumbers : true
-  - RequireUppercaseCharacters : true
-  - RequireLowercaseCharacters : true
-  - AllowUsersToChangePassword : true
-  - ExpirePasswords : true
-  - HardExpiry : true
+    MinimumPasswordLength : 14
+    MaxPasswordAge: 90
+    PasswordReusePrevention: 10
+    RequireSymbols : true
+    RequireNumbers : true
+    RequireUppercaseCharacters : true
+    RequireLowercaseCharacters : true
+    AllowUsersToChangePassword : true
+    ExpirePasswords : true
 - aws-iam-avoid-use-of-root-account : 90
 - aws-iam-does-not-allow-full-access-policies : true
 - aws-iam-ensure-a-support-role-is-attached : true

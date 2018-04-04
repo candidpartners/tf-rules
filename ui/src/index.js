@@ -6,7 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter} from 'react-router-dom';
 
 const AppWrapper = (props) => (
-    <BrowserRouter>
+    <BrowserRouter basename={"/snitch"}>
         <App/>
     </BrowserRouter>
 );
