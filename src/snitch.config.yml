@@ -8,6 +8,9 @@ rules :
 - aws-cloudtrail-logs-are-encrypted : true
 - aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
 
+#CloudWatch
+- aws-cloudwatch-log-metric-filter-and-alarm-exist-for-unauthorized-api-calls : true
+
 #DynamoDB
 - aws-dynamodb-encryption :
     exclude :
