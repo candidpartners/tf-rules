@@ -4,8 +4,9 @@
     "uuid": "87dfba99-8a5e-4a7b-b408-1b41d8088a8a",
     "groupName": "CloudTrail",
     "tags": [
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.2"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -26,8 +27,9 @@
     "uuid": "a9df5679-8818-457b-baa6-783c62262f2f",
     "groupName": "CloudTrail",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.1"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -48,7 +50,8 @@
     "uuid": "686cbf59-c41a-4b7f-ae4a-7f50bf91d354",
     "groupName": "CloudTrail",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 2.7"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -69,8 +72,9 @@
     "uuid": "f030c67a-48b2-4499-bbec-c14c7798e8a0",
     "groupName": "CloudTrail",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.4"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -91,9 +95,9 @@
     "uuid": "e391e00a-ddce-4064-80ad-6b0ef351ccc6",
     "groupName": "DynamoDB",
     "tags": [
-      "Recommended",
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::DynamoDB::Table"
@@ -122,8 +126,8 @@
     "uuid": "d8a29e45-d30a-4492-8380-fe1da3ed0cba",
     "groupName": "EBS",
     "tags": [
-      "Terraform",
-      "Livecheck"
+      "Livecheck",
+      "Terraform"
     ],
     "config_triggers": [
       "AWS::EC2::Volume"
@@ -186,8 +190,8 @@
     "uuid": "cb6da3e8-cff5-490c-b200-4d43f8cc0632",
     "groupName": "EC2",
     "tags": [
-      "Terraform",
-      "Livecheck"
+      "Livecheck",
+      "Terraform"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -243,9 +247,9 @@
     "uuid": "25c51c51-c2c5-4f5d-bfe4-bf900dc86f3a",
     "groupName": "EC2",
     "tags": [
-      "Recommended",
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -269,8 +273,8 @@
     "uuid": "fc877cb6-c786-414a-a06d-50dbde92db74",
     "groupName": "EC2",
     "tags": [
-      "Recommended",
-      "Terraform"
+      "Terraform",
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -301,8 +305,15 @@
     "uuid": "8acddea0-73b7-474a-9f65-5db172c5aefb",
     "groupName": "IAM",
     "tags": [
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "CIS | 1.1.0 | 1.5",
+      "CIS | 1.1.0 | 1.6",
+      "CIS | 1.1.0 | 1.7",
+      "CIS | 1.1.0 | 1.8",
+      "CIS | 1.1.0 | 1.9",
+      "CIS | 1.1.0 | 1.10",
+      "CIS | 1.1.0 | 1.11"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -357,7 +368,8 @@
     "uuid": "5f11d82f-4435-4973-91e8-1175698f84b6",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.1"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -378,7 +390,8 @@
     "uuid": "345b6958-9966-4cb7-814b-4daea7857c79",
     "groupName": "IAM",
     "tags": [
-      "Terraform"
+      "Terraform",
+      "CIS | 1.1.0 | 1.24"
     ],
     "config_triggers": [
       "AWS::IAM::Policy"
@@ -399,8 +412,9 @@
     "uuid": "5302e8ca-c6af-4f11-9389-431b029d15a9",
     "groupName": "IAM",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 1.22"
     ],
     "config_triggers": [
       "AWS::IAM::Role"
@@ -421,7 +435,8 @@
     "uuid": "b5dfcf10-f6a4-4eb0-acd6-439dfb813c1c",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.4"
     ],
     "config_triggers": [
       "AWS::IAM::Group"
@@ -442,8 +457,9 @@
     "uuid": "69fe01f9-b2d5-47a4-b33f-5b86a98b5722",
     "groupName": "IAM",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 1.18"
     ],
     "config_triggers": [
       "AWS::IAM::Role"
@@ -464,7 +480,8 @@
     "uuid": "944996af-32cd-4af6-9bb2-03819a631b44",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.3"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -485,7 +502,8 @@
     "uuid": "32243a91-ff70-4366-83fb-293bcfda46b0",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.14"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -506,7 +524,8 @@
     "uuid": "0435cc47-21dc-45e3-a942-45dbef1cfb1b",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.2"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -527,7 +546,8 @@
     "uuid": "ce94627d-c31b-412b-803b-51de836e0449",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.13"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -548,7 +568,8 @@
     "uuid": "3fea4347-2101-4e89-a83a-143d9a523bfd",
     "groupName": "IAM",
     "tags": [
-      "Livecheck"
+      "Livecheck",
+      "CIS | 1.1.0 | 1.12"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -569,8 +590,9 @@
     "uuid": "deea587e-7c7a-4319-b570-32abea518f82",
     "groupName": "IAM",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 1.16"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -591,7 +613,8 @@
     "uuid": "1d00c52d-ad5b-40a7-bcaf-3a3ba5f86873",
     "groupName": "IAM",
     "tags": [
-      "Terraform"
+      "Terraform",
+      "CIS | 1.1.0 | 1.16"
     ],
     "config_triggers": [
       "AWS::IAM:User"
@@ -612,8 +635,9 @@
     "uuid": "07d3c190-37f7-4699-8498-ef1175033516",
     "groupName": "KMS",
     "tags": [
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.8"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -634,9 +658,9 @@
     "uuid": "196beb21-bb42-4a58-9ea0-0478c5f1042a",
     "groupName": "RDS",
     "tags": [
-      "Recommended",
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::RDS::DBInstance"
@@ -665,8 +689,9 @@
     "uuid": "e6f0f199-1b03-4fe6-8def-ce7c69852c69",
     "groupName": "S3",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.6"
     ],
     "config_triggers": [
       "AWS::S3::Bucket"
@@ -687,8 +712,9 @@
     "uuid": "75760d07-6998-4c75-880f-290dc4947e62",
     "groupName": "S3",
     "tags": [
+      "Livecheck",
       "Recommended",
-      "Livecheck"
+      "CIS | 1.1.0 | 2.3"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -709,9 +735,9 @@
     "uuid": "25f03a5c-7db0-4428-a8ff-efb9f7003064",
     "groupName": "S3",
     "tags": [
-      "Recommended",
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::S3::Bucket"
@@ -740,8 +766,8 @@
     "uuid": "176c1d55-0e98-4da1-9ede-e57287339fa4",
     "groupName": "Security Group",
     "tags": [
-      "Recommended",
-      "Terraform"
+      "Terraform",
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -780,8 +806,8 @@
     "uuid": "1c995e85-d35f-4410-8cc6-b7dd2c390802",
     "groupName": "Security Group",
     "tags": [
-      "Recommended",
-      "Terraform"
+      "Terraform",
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -820,8 +846,10 @@
     "uuid": "67477475-5d35-4444-bcb4-0c9053aa357e",
     "groupName": "Security Group",
     "tags": [
+      "Terraform",
       "Recommended",
-      "Terraform"
+      "CIS | 1.1.0 | 4.1",
+      "CIS | 1.1.0 | 4.2"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -863,8 +891,8 @@
     "uuid": "14065b90-a755-4b78-8ab9-02a19ed7d82f",
     "groupName": "Security Group",
     "tags": [
-      "Recommended",
-      "Terraform"
+      "Terraform",
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -906,8 +934,8 @@
     "uuid": "9a17f69d-9b52-4e6c-b612-02ab80ba8eab",
     "groupName": "Security Group",
     "tags": [
-      "Recommended",
-      "Terraform"
+      "Terraform",
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::Account"
@@ -928,9 +956,9 @@
     "uuid": "58c480c4-3f22-4560-983c-ae45ca1d5383",
     "groupName": "VPC",
     "tags": [
-      "Recommended",
+      "Livecheck",
       "Terraform",
-      "Livecheck"
+      "Recommended"
     ],
     "config_triggers": [
       "AWS::EC2::VPC"
