@@ -71,19 +71,19 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
             ...invalidPasswordUsers.map(x => new NonCompliantResource({
             resource_id: x.user,
             resource_type: "AWS::IAM::User",
-            message: `has a password they have not used in ${dateRange} days.`
+            message: `has a password they have not used in over ${dateRange} days.`
         })),
         ...invalidAccessKeyUsers.map(x => new NonCompliantResource({
             resource_id: x.user,
             resource_type: "AWS::IAM::User",
-            message: `has an access key they have not used in ${dateRange} days.`
+            message: `has an access key they have not used in over ${dateRange} days.`
         }))
     ];
 
     if (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0) {
         return new RuleResult({
             valid: 'fail',
-            message: `${invalidPasswordUsers.length} users have a password they have not used in ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in ${dateRange} days.`,
+            message: `${invalidPasswordUsers.length} users have a password they have not used in over ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in over ${dateRange} days.`,
             noncompliant_resources: noncompliant_resources
         })
     }

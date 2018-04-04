@@ -47,7 +47,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
             noncompliant_resources: [new NonCompliantResource({
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
-                message: "Root account has Virtual MFA enabled, hardware MFA is required."
+                message: "has virtual MFA enabled, hardware MFA is required for compliance."
             })]
         })
     }
@@ -58,7 +58,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
             noncompliant_resources: [new NonCompliantResource({
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
-                message: "Root account does not have virtual or hardware MFA enabled."
+                message: "does not have virtual or hardware MFA enabled."
             })]
         })
     }

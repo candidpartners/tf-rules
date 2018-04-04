@@ -32,7 +32,7 @@ CloudTrailIsEnabledInAllRegions.livecheck = co.wrap(function* (context) {
                 new NonCompliantResource({
                     resource_id: "Cloudtrail",
                     resource_type: "AWS::::Account",
-                    message: "There isn't a Cloudtrail that is enabled for all regions."
+                    message: "does not have IsMultiRegionTrail enabled."
                 })
             ]
         })
