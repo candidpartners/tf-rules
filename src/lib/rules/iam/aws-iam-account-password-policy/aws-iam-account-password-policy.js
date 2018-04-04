@@ -32,12 +32,6 @@ IAMAccountPasswordPolicy.schema = {
     required: [
         "MinimumPasswordLength",
         "MaxPasswordAge",
-        "RequireSymbols",
-        "RequireNumbers",
-        "RequireUppercaseCharacters",
-        "RequireLowercaseCharacters",
-        "AllowUsersToChangePassword",
-        "ExpirePasswords",
         "PasswordReusePrevention"
     ],
     properties: {

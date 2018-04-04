@@ -315,33 +315,41 @@
       "recommended": false
     },
     "schema": {
-      "type": "array",
-      "entries": [
-        {
+      "type": "object",
+      "required": [
+        "MinimumPasswordLength",
+        "MaxPasswordAge",
+        "PasswordReusePrevention"
+      ],
+      "properties": {
+        "MinimumPasswordLength": {
           "type": "number"
         },
-        {
-          "type": "bool"
+        "MaxPasswordAge": {
+          "type": "number"
         },
-        {
-          "type": "bool"
+        "RequireSymbols": {
+          "type": "boolean"
         },
-        {
-          "type": "bool"
+        "RequireNumbers": {
+          "type": "boolean"
         },
-        {
-          "type": "bool"
+        "RequireUppercaseCharacters": {
+          "type": "boolean"
         },
-        {
-          "type": "bool"
+        "RequireLowercaseCharacters": {
+          "type": "boolean"
         },
-        {
-          "type": "bool"
+        "AllowUsersToChangePassword": {
+          "type": "boolean"
         },
-        {
-          "type": "bool"
+        "ExpirePasswords": {
+          "type": "boolean"
+        },
+        "PasswordReusePrevention": {
+          "type": "number"
         }
-      ]
+      }
     }
   },
   {
