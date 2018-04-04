@@ -61,7 +61,7 @@ IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
     try{
         const result = yield IAM.getAccountPasswordPolicy().promise();
         const {PasswordPolicy} = result;
-        console.log({PasswordPolicy, config});
+        // console.log(PasswordPolicy,config);
         let errors =_.map(config, (value,key) => {
             let PasswordPolicyValue = PasswordPolicy[key];
             if(PasswordPolicyValue !== value)

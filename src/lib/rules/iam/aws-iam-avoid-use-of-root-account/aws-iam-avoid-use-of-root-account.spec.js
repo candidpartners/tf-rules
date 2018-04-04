@@ -1,10 +1,9 @@
-const AWS = require('aws-sdk');
 const AWSPromiseMock = require('../../../../aws-promise-mock');
 const rule = require('./aws-iam-avoid-use-of-root-account');
 
 let csv =
 `user,password_last_used
-<root_account>,${(new Date(new Date() - 1000 * 60 * 60 * 24 * 2)).toDateString()}`;
+<root_account>,${(new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 2)).toDateString()}`;
 
 let _AWS = new AWSPromiseMock();
 let content = {
