@@ -48,7 +48,8 @@ function validateConfig(rules, config) {
     return errors;
 }
 
-function report(result, instanceName, rule) {
+function report(result, instanceName, rule, ruleId) {
+    console.log(colors.white(`\n${ruleId}`));
     if (result) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
@@ -132,6 +133,7 @@ let livecheck = co.wrap(function* (params) {
         if (_.isFunction(rule.livecheck)) {
             let promise = rule.livecheck({config, provider}).then(result => ({
                 rule,
+                ruleId,
                 result
             }));
             promises.push(promise)
@@ -139,9 +141,9 @@ let livecheck = co.wrap(function* (params) {
     }
     // Report back
     let results = yield Promise.all(promises);
-    results.forEach(({rule, result}) => {
+    results.forEach(({rule, ruleId, result}) => {
         if (params.report)
-            report(result, "", rule);
+            report(result, "", rule, ruleId);
     });
     return results.map(x => x.result);
 });
