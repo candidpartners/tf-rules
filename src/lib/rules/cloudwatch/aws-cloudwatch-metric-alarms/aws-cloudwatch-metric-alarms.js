@@ -177,7 +177,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have a metric filter set up for the rule for ${filterPatterns[i].rule}.`
+                    message: `does not have a metric filter set up for ${filterPatterns[i].rule}.`
                 }));
             }
 
@@ -186,7 +186,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an alarm set up for the metric filter for ${filterPatterns[i].rule}.`
+                    message: `does not have an alarm set up for ${filterPatterns[i].rule}.`
                 }));
             }
 
@@ -195,7 +195,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an alarm set up for the metric filter for ${filterPatterns[i].rule}.`
+                    message: `does not have an action linked to the alarm for ${filterPatterns[i].rule}.`
                 }));
             }
 
@@ -204,7 +204,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an alarm set up for the metric filter for ${filterPatterns[i].rule}.`
+                    message: `does not have any subscribers linked to the alarm for ${filterPatterns[i].rule}.`
                 }));
             }
         }
