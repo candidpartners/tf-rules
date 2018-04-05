@@ -3,6 +3,9 @@ const {loadConfig} = require('./bin/cli');
 const AWS = require('aws-sdk');
 AWS.config.update({region: "us-west-2"});
 
+
+jest.setTimeout(15000);
+
 describe("Snitch", () => {
     it("Can be called from JS", async () => {
         let config = Snitch.LoadConfigFromFile(__dirname + "/snitch.config.yml");
