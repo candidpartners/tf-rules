@@ -9,7 +9,21 @@ rules :
 - aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
 
 #CloudWatch
-- aws-cloudwatch-log-metric-filter-and-alarm-exist-for-unauthorized-api-calls : true
+- aws-cloudwatch-metric-alarms :
+    UnauthorizedAPICalls : true
+    ManagementConsoleSignInWithoutMFA : true
+    UsageOfRootAccount : true
+    IAMPolicyChanges : true
+    CloudTrailConfigurationChanges : true
+    AWSManagementConsoleAuthenticationFailures : true
+    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
+    S3BucketPolicyChanges : true
+    AWSConfigConfigurationChanges : true
+    SecurityGroupChanges : true
+    ChangesToNetworkAccessControlLists : true
+    ChangesToNetworkGateways : true
+    RouteTableChanges : true
+    VPCChanges : true
 
 #DynamoDB
 - aws-dynamodb-encryption :
