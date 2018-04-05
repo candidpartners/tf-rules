@@ -91,6 +91,73 @@
     }
   },
   {
+    "name": "aws-cloudwatch-metric-alarms",
+    "uuid": "2681139d-4660-4518-a847-0320eb8593e9",
+    "groupName": "CloudWatch",
+    "tags": [
+      "Livecheck",
+      "Recommended",
+      "CIS | 1.1.0 | 3.1"
+    ],
+    "config_triggers": [
+      "AWS::CloudWatch::Alarm"
+    ],
+    "paths": {
+      "LogMetricFilterAndAlarmExistForUnauthorizedAPICalls": "aws_cloudwatch_metric_alarm"
+    },
+    "docs": {
+      "description": "A log metric filter and alarm exist for all rules.",
+      "recommended": true
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "UnauthorizedAPICalls": {
+          "type": "boolean"
+        },
+        "ManagementConsoleSignInWithoutMFA": {
+          "type": "boolean"
+        },
+        "UsageOfRootAccount": {
+          "type": "boolean"
+        },
+        "IAMPolicyChanges": {
+          "type": "boolean"
+        },
+        "CloudTrailConfigurationChanges": {
+          "type": "boolean"
+        },
+        "AWSManagementConsoleAuthenticationFailures": {
+          "type": "boolean"
+        },
+        "DisablingOrScheduledDeletionOfCustomerCreatedCMKs": {
+          "type": "boolean"
+        },
+        "S3BucketPolicyChanges": {
+          "type": "boolean"
+        },
+        "AWSConfigConfigurationChanges": {
+          "type": "boolean"
+        },
+        "SecurityGroupChanges": {
+          "type": "boolean"
+        },
+        "ChangesToNetworkAccessControlLists": {
+          "type": "boolean"
+        },
+        "ChangesToNetworkGateways": {
+          "type": "boolean"
+        },
+        "RouteTableChanges": {
+          "type": "boolean"
+        },
+        "VPCChanges": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  {
     "name": "aws-dynamodb-encryption",
     "uuid": "e391e00a-ddce-4064-80ad-6b0ef351ccc6",
     "groupName": "DynamoDB",
@@ -753,6 +820,39 @@
       "type": "object",
       "properties": {
         "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "aws-s3-only-allow-encrypted-objects",
+    "uuid": "6151e4fa-3814-462c-a017-1dc89a60ea0b",
+    "groupName": "S3",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::S3::Bucket"
+    ],
+    "paths": {},
+    "docs": {
+      "description": "Ensures the S3 bucket policy only allows uploads if encryption is specified.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "AllowAES256": {
+          "type": "boolean"
+        },
+        "AllowKMS": {
+          "type": "boolean"
+        },
+        "ExcludeBuckets": {
           "type": "array",
           "items": {
             "type": "string"

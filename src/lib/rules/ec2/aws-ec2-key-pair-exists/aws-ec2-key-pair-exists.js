@@ -85,6 +85,13 @@ EC2KeyPairExists.validate = function* (context) {
                 };
             }
         }
+        else {
+            result = {
+                valid: 'fail',
+                resource_type: "AWS::EC2::Instance",
+                message: `Key [${context.instance.key_name}] not found`
+            };
+        }
     }
     return result;
 };
