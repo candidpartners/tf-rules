@@ -149,7 +149,13 @@ let livecheck = co.wrap(function* (params) {
         if (params.report)
             report(result, "", rule, ruleId);
     });
-    return results.map(x => x.result);
+
+    return results.map(x => {
+        if(x.result)
+            return x.result
+        else
+            throw x
+    });
 });
 
 module.exports = {

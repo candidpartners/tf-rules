@@ -1,12 +1,11 @@
 require('dotenv').config();
 const AWS = require('aws-sdk');
-const co = require('co');
 const _ = require('lodash');
 const AWSConfig = new AWS.ConfigService();
 const Snitch = require('@candidpartners/snitch');
 
 // Receives the event and context from AWS Lambda.
-exports.handler = co.wrap(function * (event, context, callback){
+exports.handler = async function (event, context, callback){
     console.log(event);
     let {resultToken,accountId,invokingEvent, configRuleName} = event;
 
@@ -15,12 +14,15 @@ exports.handler = co.wrap(function * (event, context, callback){
 
     try{
         let config = Snitch.LoadConfigFromFile(__dirname + "/snitch.config.yml");
-        let result = yield Snitch.Livecheck({
+        let result = await Snitch.Livecheck({
             provider: AWS,
             config,
             config_triggers: config_trigger ? [config_trigger] : []
         });
-        let failedResults = result.filter(x => x.valid == 'fail');
+        console.log({result});
+        let failedResults = result
+            .filter(x => x)
+            .filter(x => x.valid == 'fail');
 
         console.log(JSON.stringify(failedResults,null,2));
         let nonCompliantResources = _.flatMap(failedResults, x => x.noncompliant_resources || []);
@@ -37,11 +39,11 @@ exports.handler = co.wrap(function * (event, context, callback){
             Evaluations: resourceEvaluations
         };
 
-        let putEvaluationsResult = yield AWSConfig.putEvaluations(params).promise();
+        let putEvaluationsResult = await AWSConfig.putEvaluations(params).promise();
         callback(null,{params,putEvaluationsResult});
     } catch (err) {
         console.error(err);
         callback(err,null)
 
     }
-});
+};

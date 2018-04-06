@@ -9,7 +9,7 @@ resource "aws_lambda_function" "function" {
   function_name = "snitch-${var.env}-lambda"
   handler = "index.handler"
   role = "${aws_iam_role.role.arn}"
-  runtime = "nodejs6.10"
+  runtime = "nodejs8.10"
   filename = "${var.zip_path}"
   source_code_hash = "${var.source_code_hash}"
   timeout = 300
