@@ -2,12 +2,16 @@ const AWS = require('aws-sdk');
 const AWSPromiseMock = require('../../../../aws-promise-mock');
 const rule = require('./aws-cloudwatch-metric-alarms');
 
+
+// Should fail because no filters at all
 let BadFiltersAWS = new AWSPromiseMock();
 BadFiltersAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 BadFiltersAWS.Service("CloudWatchLogs", "describeMetricFilters", {metricFilters: []});
 BadFiltersAWS.Service("CloudWatch", "describeAlarms", {});
 BadFiltersAWS.Service("SNS", "listSubscriptionsByTopic", {});
 
+
+// Should fail because no filter for the specific rule
 let BadFilterAWS = new AWSPromiseMock();
 BadFilterAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 BadFilterAWS.Service("CloudWatchLogs", "describeMetricFilters", {
@@ -29,6 +33,8 @@ BadFilterAWS.Service("CloudWatchLogs", "describeMetricFilters", {
 BadFilterAWS.Service("CloudWatch", "describeAlarms", {});
 BadFilterAWS.Service("SNS", "listSubscriptionsByTopic", {});
 
+
+// Should fail because no alarm for the rule
 let BadAlarmAWS = new AWSPromiseMock();
 BadAlarmAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 BadAlarmAWS.Service("CloudWatchLogs", "describeMetricFilters",
@@ -46,6 +52,8 @@ BadAlarmAWS.Service("CloudWatchLogs", "describeMetricFilters",
 BadAlarmAWS.Service("CloudWatch", "describeAlarms", {MetricAlarms: []});
 BadAlarmAWS.Service("SNS", "listSubscriptionsByTopic", {});
 
+
+// Should fail because no alarm actions
 let BadActionAWS = new AWSPromiseMock();
 BadActionAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 BadActionAWS.Service("CloudWatchLogs", "describeMetricFilters",
@@ -63,6 +71,8 @@ BadActionAWS.Service("CloudWatchLogs", "describeMetricFilters",
 BadActionAWS.Service("CloudWatch", "describeAlarms", {MetricAlarms: [{MetricName: "MyMetric", AlarmActions: []}]});
 BadActionAWS.Service("SNS", "listSubscriptionsByTopic", {});
 
+
+// Should fail because no subscribers
 let BadSubscriberAWS = new AWSPromiseMock();
 BadSubscriberAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 BadSubscriberAWS.Service("CloudWatchLogs", "describeMetricFilters",
@@ -84,6 +94,7 @@ BadSubscriberAWS.Service("CloudWatch", "describeAlarms", {
 });
 BadSubscriberAWS.Service("SNS", "listSubscriptionsByTopic", {Subscriptions: []});
 
+// Should pass all tests
 let GoodAWS = new AWSPromiseMock();
 GoodAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
 GoodAWS.Service("CloudWatchLogs", "describeMetricFilters",
@@ -237,6 +248,7 @@ GoodAWS.Service("CloudWatch", "describeAlarms", {
     ]
 });
 GoodAWS.Service("SNS", "listSubscriptionsByTopic", {Subscriptions: [{Owner: "1234"}]});
+
 
 describe("A log metric filter and alarm exist for all rules.", () => {
 

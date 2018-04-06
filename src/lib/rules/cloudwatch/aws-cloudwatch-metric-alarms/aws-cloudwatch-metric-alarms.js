@@ -39,58 +39,72 @@ CloudWatchMetricAlarms.schema = {
 
 const filterPatterns = [
     {
+        config: "UnauthorizedAPICalls",
         rule: 'unauthorized API calls',
         pattern: '{ ($.errorCode = "*UnauthorizedOperation") || ($.errorCode = "AccessDenied*") }'
     },
     {
+        config: "ManagementConsoleSignInWithoutMFA",
         rule: 'management console sign-in without MFA',
         pattern: '{ ($.eventName = "ConsoleLogin") && ($.additionalEventData.MFAUsed != "Yes") }'
     },
     {
+        config: "UsageOfRootAccount",
         rule: 'usage of root account',
         pattern: '{ ($.userIdentity.type = "Root") && ($.userIdentity.invokedBy NOTEXISTS) && ($.eventType != "AwsServiceEvent") }'
     },
     {
+        config: "IAMPolicyChanges",
         rule: 'IAM policy changes',
         pattern: '{ ($.eventName = DeleteGroupPolicy) || ($.eventName = DeleteRolePolicy) || ($.eventName = DeleteUserPolicy) || ($.eventName = PutGroupPolicy) || ($.eventName = PutRolePolicy) || ($.eventName = PutUserPolicy) || ($.eventName = CreatePolicy) || ($.eventName = DeletePolicy) || ($.eventName = CreatePolicyVersion) || ($.eventName = DeletePolicyVersion) || ($.eventName = AttachRolePolicy) || ($.eventName = DetachRolePolicy) || ($.eventName = AttachUserPolicy) || ($.eventName = DetachUserPolicy) || ($.eventName = AttachGroupPolicy) || ($.eventName = DetachGroupPolicy) }'
     },
     {
+        config: "CloudTrailConfigurationChanges",
         rule: 'CloudTrail configuration changes',
         pattern: '{ ($.eventName = CreateTrail) || ($.eventName = UpdateTrail) ||($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }'
     },
     {
+        config: "AWSManagementConsoleAuthenticationFailures",
         rule: 'AWS management console authentication failures',
         pattern: '{ ($.eventName = ConsoleLogin) && ($.errorMessage = "Failedauthentication") }'
     },
     {
+        config: "DisablingOrScheduledDeletionOfCustomerCreatedCMKs",
         rule: 'disabling or scheduled deletion of customer created CMKs',
         pattern: '{ ($.eventSource = kms.amazonaws.com) && (($.eventName = DisableKey) || ($.eventName = ScheduleKeyDeletion)) }'
     },
     {
+        config : "S3BucketPolicyChanges",
         rule: 'S3 bucket policy changes',
         pattern: '{ ($.eventSource = s3.amazonaws.com) && (($.eventName = PutBucketAcl) || ($.eventName = PutBucketPolicy) || ($.eventName = PutBucketCors) || ($.eventName = PutBucketLifecycle) || ($.eventName = PutBucketReplication) || ($.eventName = DeleteBucketPolicy) || ($.eventName = DeleteBucketCors) || ($.eventName = DeleteBucketLifecycle) || ($.eventName = DeleteBucketReplication)) }'
     },
     {
+        config: "AWSConfigConfigurationChanges",
         rule: 'AWS Config configuration changes',
         pattern: '{ ($.eventSource = config.amazonaws.com) && (($.eventName = StopConfigurationRecorder) || ($.eventName = DeleteDeliveryChannel) || ($.eventName = PutDeliveryChannel) || ($.eventName = PutConfigurationRecorder)) }'
     },
     {
+        config: "SecurityGroupChanges",
         rule: 'security group changes',
         pattern: '{ ($.eventName = AuthorizeSecurityGroupIngress) || ($.eventName = AuthorizeSecurityGroupEgress) || ($.eventName = RevokeSecurityGroupIngress) || ($.eventName = RevokeSecurityGroupEgress) || ($.eventName = CreateSecurityGroup) || ($.eventName = DeleteSecurityGroup) }'
     },
     {
+        config: "ChangesToNetworkAccessControlLists",
         rule: 'changes to Network Access Control Lists',
         pattern: '{ ($.eventName = CreateNetworkAcl) || ($.eventName = CreateNetworkAclEntry) || ($.eventName = DeleteNetworkAcl) || ($.eventName = DeleteNetworkAclEntry) || ($.eventName = ReplaceNetworkAclEntry) || ($.eventName = ReplaceNetworkAclAssociation) }'
     },
     {
+        config: "ChangesToNetworkGateways",
         rule: 'changes to network gateways',
         pattern: '{ ($.eventName = CreateCustomerGateway) || ($.eventName = DeleteCustomerGateway) || ($.eventName = AttachInternetGateway) || ($.eventName = CreateInternetGateway) || ($.eventName = DeleteInternetGateway) || ($.eventName = DetachInternetGateway) }'
     },
     {
+        config: "RouteTableChanges",
         rule: 'route table changes',
         pattern: '{ ($.eventName = CreateRoute) || ($.eventName = CreateRouteTable) || ($.eventName = ReplaceRoute) || ($.eventName = ReplaceRouteTableAssociation) || ($.eventName = DeleteRouteTable) || ($.eventName = DeleteRoute) || ($.eventName = DisassociateRouteTable) }'
     },
     {
+        config: "VPCChanges",
         rule: 'VPC changes',
         pattern: '{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) || ($.eventName = CreateVpcPeeringConnection) || ($.eventName = DeleteVpcPeeringConnection) || ($.eventName = RejectVpcPeeringConnection) || ($.eventName = AttachClassicLinkVpc) || ($.eventName = DetachClassicLinkVpc) || ($.eventName = DisableVpcClassicLink) || ($.eventName = EnableVpcClassicLink) }'
     },
@@ -149,14 +163,15 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
         })
     }
 
-    // filterPatterns.forEach(pattern => {
-    for (let i = 0; i < filterPatterns.length; i++) {
+    // Filter to only check the rules specified in the config
+    let activeFilterPatterns = filterPatterns.filter(filterPattern => config[filterPattern.config]);
 
-        // metricNames.forEach(name => {
+    for (let i = 0; i < activeFilterPatterns.length; i++) {
+
         for (let j = 0; j < metricNames.length; j++) {
 
 
-            let activeFilter = metricFilters[0].metricFilters.find(x => x.filterPattern === filterPatterns[i].pattern);
+            let activeFilter = metricFilters[0].metricFilters.find(x => x.filterPattern === activeFilterPatterns[i].pattern);
             let filteredAlarm = undefined;
             let topicArn = undefined;
             let subscribers = undefined;
@@ -177,7 +192,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have a metric filter set up for ${filterPatterns[i].rule}.`
+                    message: `does not have a metric filter set up for ${activeFilterPatterns[i].rule}.`
                 }));
             }
 
@@ -186,7 +201,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an alarm set up for ${filterPatterns[i].rule}.`
+                    message: `does not have an alarm set up for ${activeFilterPatterns[i].rule}.`
                 }));
             }
 
@@ -195,7 +210,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an action linked to the alarm for ${filterPatterns[i].rule}.`
+                    message: `does not have an action linked to the alarm for ${activeFilterPatterns[i].rule}.`
                 }));
             }
 
@@ -204,7 +219,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 noncompliant_resources.push(new NonCompliantResource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have any subscribers linked to the alarm for ${filterPatterns[i].rule}.`
+                    message: `does not have any subscribers linked to the alarm for ${activeFilterPatterns[i].rule}.`
                 }));
             }
         }
