@@ -13,26 +13,6 @@ resource "aws_iam_role" "role" {
   assume_role_policy = "${data.aws_iam_policy_document.assume.json}"
 }
 
-//resource "aws_iam_role_policy_attachment" "AmazonEC2ReadOnlyAccess" {
-//  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
-//  role = "${aws_iam_role.role.id}"
-//}
-//
-//resource "aws_iam_role_policy_attachment" "AWSCloudTrailReadOnlyAccess" {
-//  policy_arn = "arn:aws:iam::aws:policy/AWSCloudTrailReadOnlyAccess"
-//  role = "${aws_iam_role.role.id}"
-//}
-//
-//resource "aws_iam_role_policy_attachment" "IAMReadOnlyAccess" {
-//  policy_arn = "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
-//  role = "${aws_iam_role.role.id}"
-//}
-//
-//resource "aws_iam_role_policy_attachment" "RDSReadOnlyAccess" {
-//  policy_arn = "arn:aws:iam::aws:policy/RDSReadOnlyAccess"
-//  role = "${aws_iam_role.role.id}"
-//}
-//
 resource "aws_iam_role_policy_attachment" "AWSConfigRulesExecutionRole" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRulesExecutionRole"
   role = "${aws_iam_role.role.id}"

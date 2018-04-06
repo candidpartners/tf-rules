@@ -2,14 +2,15 @@ provider :
   region : us-west-2
 rules :
 - aws-iam-account-password-policy :
-  - MinimumPasswordLength : 14
-  - RequireSymbols : true
-  - RequireNumbers : true
-  - RequireUppercaseCharacters : true
-  - RequireLowercaseCharacters : true
-  - AllowUsersToChangePassword : true
-  - ExpirePasswords : true
-  - HardExpiry : true
+    MinimumPasswordLength : 14
+    MaxPasswordAge: 90
+    PasswordReusePrevention: 10
+    RequireSymbols : true
+    RequireNumbers : true
+    RequireUppercaseCharacters : true
+    RequireLowercaseCharacters : true
+    AllowUsersToChangePassword : true
+    ExpirePasswords : true
 - aws-iam-no-root-account-access-key-exists : true
 - aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
 - aws-iam-mfa-is-enabled-for-root-account : true
