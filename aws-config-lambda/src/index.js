@@ -40,6 +40,7 @@ exports.handler = co.wrap(function * (event, context, callback){
         let putEvaluationsResult = yield AWSConfig.putEvaluations(params).promise();
         callback(null,{params,putEvaluationsResult});
     } catch (err) {
+        console.error(err);
         callback(err,null)
 
     }

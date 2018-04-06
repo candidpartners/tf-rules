@@ -103,7 +103,7 @@ function* validatePlan(params) {
                         let instance = searchResult.search[instanceName];
                         let result = yield rule.validate({config, instance, plan, jp, provider, _});
                         results.push(result);
-                        report(result, instanceName, rule);
+                        report(result, instanceName, rule, ruleId);
                     }
                 }
             }

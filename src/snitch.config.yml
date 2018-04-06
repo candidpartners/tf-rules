@@ -79,6 +79,8 @@ rules :
       - vra
 
 #S3
+- aws-s3-only-allow-encrypted-objects:
+    AllowAES256: true
 - aws-s3-cloudtrail-bucket-access-logging-enabled : true
 - aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
 - aws-s3-encryption :

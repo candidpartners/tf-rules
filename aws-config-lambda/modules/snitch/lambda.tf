@@ -39,9 +39,5 @@ resource "aws_config_config_rule" "rule" {
     }
   }
 
-  scope {
-    compliance_resource_types = ["AWS::EC2::Instance"]
-  }
-
   depends_on = ["aws_lambda_permission.permission"]
 }
