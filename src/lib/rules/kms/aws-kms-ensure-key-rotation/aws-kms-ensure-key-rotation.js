@@ -12,7 +12,7 @@ const KMSKeyRotation = {};
 
 KMSKeyRotation.uuid = "07d3c190-37f7-4699-8498-ef1175033516";
 KMSKeyRotation.groupName = "KMS";
-KMSKeyRotation.tags = ["CIS | 1.1.0 | 2.8"];
+KMSKeyRotation.tags = [["CIS", "1.1.0", "2.8"]];
 KMSKeyRotation.config_triggers = ["AWS::::Account"];
 KMSKeyRotation.paths = {awsIAMUserPolicyDoesNotExist: 'aws_kms_key'};
 KMSKeyRotation.docs = {

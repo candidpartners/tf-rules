@@ -9,7 +9,7 @@ const IAMAvoidUseOfRootAccount = {};
 
 IAMAvoidUseOfRootAccount.uuid = "5f11d82f-4435-4973-91e8-1175698f84b6";
 IAMAvoidUseOfRootAccount.groupName = "IAM";
-IAMAvoidUseOfRootAccount.tags = ["CIS | 1.1.0 | 1.1"];
+IAMAvoidUseOfRootAccount.tags = [["CIS", "1.1.0", "1.1"]];
 IAMAvoidUseOfRootAccount.config_triggers = ["AWS::IAM::User"];
 IAMAvoidUseOfRootAccount.paths = {IAMAvoidUseOfRootAccount: "aws_iam_user"};
 IAMAvoidUseOfRootAccount.docs = {

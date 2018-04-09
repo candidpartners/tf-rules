@@ -10,7 +10,7 @@ const S3CloudTrailBucketIsNotPubliclyAccessible = {};
 
 S3CloudTrailBucketIsNotPubliclyAccessible.uuid = "75760d07-6998-4c75-880f-290dc4947e62";
 S3CloudTrailBucketIsNotPubliclyAccessible.groupName = "S3";
-S3CloudTrailBucketIsNotPubliclyAccessible.tags = ["CIS | 1.1.0 | 2.3"];
+S3CloudTrailBucketIsNotPubliclyAccessible.tags = [["CIS", "1.1.0", "2.3"]];
 S3CloudTrailBucketIsNotPubliclyAccessible.config_triggers = ["AWS::CloudTrail::Trail"];
 S3CloudTrailBucketIsNotPubliclyAccessible.paths = {S3CloudTrailBucketIsNotPubliclyAccessible: "aws_s3_bucket"};
 S3CloudTrailBucketIsNotPubliclyAccessible.docs = {

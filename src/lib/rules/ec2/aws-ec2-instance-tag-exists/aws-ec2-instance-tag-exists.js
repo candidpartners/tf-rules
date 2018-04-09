@@ -12,7 +12,7 @@ const EC2TagExists = {};
 
 EC2TagExists.uuid = "cb6da3e8-cff5-490c-b200-4d43f8cc0632";
 EC2TagExists.groupName = "EC2";
-EC2TagExists.tags = [];
+EC2TagExists.tags = [["Snitch", "1.0", "4"]];
 EC2TagExists.config_triggers = ["AWS::EC2::Instance"];
 EC2TagExists.paths = {EC2TagExists: "aws_instance"};
 EC2TagExists.docs = {

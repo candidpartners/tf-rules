@@ -10,7 +10,7 @@ const IAMSupportRoleIsAttached = {};
 
 IAMSupportRoleIsAttached.uuid = "5302e8ca-c6af-4f11-9389-431b029d15a9";
 IAMSupportRoleIsAttached.groupName = "IAM";
-IAMSupportRoleIsAttached.tags = ["CIS | 1.1.0 | 1.22"];
+IAMSupportRoleIsAttached.tags = [["CIS", "1.1.0", "1.22"]];
 IAMSupportRoleIsAttached.config_triggers = ["AWS::IAM::Role"];
 IAMSupportRoleIsAttached.paths = {IAMSupportRoleHasBeenCreated: "aws_iam_role"};
 IAMSupportRoleIsAttached.docs = {description: 'The AWSSupportAccess IAM role is attached to one or more roles, groups, or users.', recommended: true};

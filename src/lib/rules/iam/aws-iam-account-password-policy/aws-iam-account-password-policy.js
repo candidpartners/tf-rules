@@ -13,13 +13,13 @@ const IAMAccountPasswordPolicy = {};
 IAMAccountPasswordPolicy.uuid = "8acddea0-73b7-474a-9f65-5db172c5aefb";
 IAMAccountPasswordPolicy.groupName = "IAM";
 IAMAccountPasswordPolicy.tags = [
-    "CIS | 1.1.0 | 1.5",
-    "CIS | 1.1.0 | 1.6",
-    "CIS | 1.1.0 | 1.7",
-    "CIS | 1.1.0 | 1.8",
-    "CIS | 1.1.0 | 1.9",
-    "CIS | 1.1.0 | 1.10",
-    "CIS | 1.1.0 | 1.11"
+    ["CIS", "1.1.0", "1.5"],
+    ["CIS", "1.1.0", "1.6"],
+    ["CIS", "1.1.0", "1.7"],
+    ["CIS", "1.1.0", "1.8"],
+    ["CIS", "1.1.0", "1.9"],
+    ["CIS", "1.1.0", "1.10"],
+    ["CIS", "1.1.0", "1.11"]
 ];
 IAMAccountPasswordPolicy.config_triggers = ["AWS::::Account"];
 IAMAccountPasswordPolicy.paths = {IAMAccountPasswordPolicy: 'aws_iam_account_password_policy'};

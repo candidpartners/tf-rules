@@ -13,7 +13,7 @@ const AWSSecurityGroupDoesNotAllowOutbound = {};
 
 AWSSecurityGroupDoesNotAllowOutbound.uuid = "14065b90-a755-4b78-8ab9-02a19ed7d82f";
 AWSSecurityGroupDoesNotAllowOutbound.groupName = "Security Group";
-AWSSecurityGroupDoesNotAllowOutbound.tags = [];
+AWSSecurityGroupDoesNotAllowOutbound.tags = [["Snitch", "1.0", "13"]];
 AWSSecurityGroupDoesNotAllowOutbound.config_triggers = ["AWS::::Account"];
 AWSSecurityGroupDoesNotAllowOutbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupDoesNotAllowOutbound.docs = {

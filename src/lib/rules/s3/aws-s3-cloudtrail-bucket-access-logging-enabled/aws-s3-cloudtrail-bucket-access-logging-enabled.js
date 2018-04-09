@@ -12,7 +12,7 @@ const S3CloudTrailBucketAccessLoggingEnabled = {};
 
 S3CloudTrailBucketAccessLoggingEnabled.uuid = "e6f0f199-1b03-4fe6-8def-ce7c69852c69";
 S3CloudTrailBucketAccessLoggingEnabled.groupName = "S3";
-S3CloudTrailBucketAccessLoggingEnabled.tags = ["CIS | 1.1.0 | 2.6"];
+S3CloudTrailBucketAccessLoggingEnabled.tags = [["CIS", "1.1.0", "2.6"]];
 S3CloudTrailBucketAccessLoggingEnabled.config_triggers = ["AWS::S3::Bucket"];
 S3CloudTrailBucketAccessLoggingEnabled.paths = {S3Encryption: "aws_s3_bucket"};
 S3CloudTrailBucketAccessLoggingEnabled.docs = {

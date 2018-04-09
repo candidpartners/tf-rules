@@ -10,7 +10,7 @@ const EC2TagFormat = {};
 
 EC2TagFormat.uuid = "d2065bd9-4ece-4cb7-a4dc-3ad161415e15";
 EC2TagFormat.groupName = "EC2";
-EC2TagFormat.tags = [];
+EC2TagFormat.tags = [["Snitch", "1.0", "5"]];
 EC2TagFormat.config_triggers = ["AWS::EC2::Instance"];
 EC2TagFormat.paths = {EC2TagFormat : 'aws_instance'};
 EC2TagFormat.docs = {

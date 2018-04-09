@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const AWSPromiseMock = require('../../../../aws-promise-mock');
 const rule = require('./aws-cloudwatch-metric-alarms');
 
-
 // Should fail because no filters at all
 let BadFiltersAWS = new AWSPromiseMock();
 BadFiltersAWS.Service("CloudTrail", "describeTrails", {trailList: [{CloudWatchLogsLogGroupArn: "arn:aws:logs:us-west-2:421471939647:log-group:MyTrail:*"}]});
@@ -254,38 +253,88 @@ describe("A log metric filter and alarm exist for all rules.", () => {
 
     test("it fails because of no filters", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: BadFiltersAWS});
+        let result = await rule.livecheck({
+            config: {UnauthorizedAPICalls: true, VPCChanges: true},
+            provider: BadFiltersAWS
+        });
         expect(result.valid).toBe('fail');
         expect(result.message).toBe("A log metric filter and alarm do not exist for any rules.")
     });
     test("it fails because of no filter for the rule", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: BadFilterAWS});
+        let result = await rule.livecheck({
+            config: {
+                UnauthorizedAPICalls: true,
+                ManagementConsoleSignInWithoutMFA: true,
+                UsageOfRootAccount: true
+            }, provider: BadFilterAWS
+        });
         expect(result.valid).toBe('fail');
         expect(result.message).toBe("A log metric filter and alarm do not exist for one or more rules.")
     });
     test("it fails because of no alarm for the rule", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: BadAlarmAWS});
+        let result = await rule.livecheck({
+            config: {
+                UnauthorizedAPICalls: true,
+                ManagementConsoleSignInWithoutMFA: true,
+                UsageOfRootAccount: true,
+                IAMPolicyChanges: true,
+            }, provider: BadAlarmAWS
+        });
         expect(result.valid).toBe('fail');
         expect(result.message).toBe("A log metric filter and alarm do not exist for one or more rules.")
     });
     test("it fails because of no alarm action", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: BadActionAWS});
+        let result = await rule.livecheck({
+            config: {
+                UnauthorizedAPICalls: true,
+                ManagementConsoleSignInWithoutMFA: true,
+                UsageOfRootAccount: true,
+                IAMPolicyChanges: true,
+                CloudTrailConfigurationChanges: true
+            }, provider: BadActionAWS
+        });
         expect(result.valid).toBe('fail');
         expect(result.message).toBe("A log metric filter and alarm do not exist for one or more rules.")
     });
     test("it fails because of no subscriber", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: BadSubscriberAWS});
+        let result = await rule.livecheck({
+            config: {
+                UnauthorizedAPICalls: true,
+                ManagementConsoleSignInWithoutMFA: true,
+                UsageOfRootAccount: true,
+                IAMPolicyChanges: true,
+                ChangesToNetworkGateways: true,
+                RouteTableChanges: true
+            }, provider: BadSubscriberAWS
+        });
         expect(result.valid).toBe('fail');
         expect(result.message).toBe("A log metric filter and alarm do not exist for one or more rules.")
     });
 
     test("it passes", async () => {
         jasmine.DEFAULT_TIMEOUT_INTERVAL = 50000;
-        let result = await rule.livecheck({provider: GoodAWS});
+        let result = await rule.livecheck({
+            config: {
+                UnauthorizedAPICalls: true,
+                ManagementConsoleSignInWithoutMFA: true,
+                UsageOfRootAccount: true,
+                IAMPolicyChanges: true,
+                CloudTrailConfigurationChanges: true,
+                AWSManagementConsoleAuthenticationFailures: true,
+                DisablingOrScheduledDeletionOfCustomerCreatedCMKs: true,
+                S3BucketPolicyChanges: true,
+                AWSConfigConfigurationChanges: true,
+                SecurityGroupChanges: true,
+                ChangesToNetworkAccessControlLists: true,
+                ChangesToNetworkGateways: true,
+                RouteTableChanges: true,
+                VPCChanges: true
+            }, provider: GoodAWS
+        });
         expect(result.valid).toBe('success');
     });
 }, 10000);

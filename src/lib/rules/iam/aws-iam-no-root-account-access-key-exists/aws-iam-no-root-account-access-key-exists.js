@@ -10,7 +10,7 @@ const IAMNoRootAccountAccessKeyExists = {};
 
 IAMNoRootAccountAccessKeyExists.uuid = "3fea4347-2101-4e89-a83a-143d9a523bfd";
 IAMNoRootAccountAccessKeyExists.groupName = "IAM";
-IAMNoRootAccountAccessKeyExists.tags = ["CIS | 1.1.0 | 1.12"];
+IAMNoRootAccountAccessKeyExists.tags = [["CIS", "1.1.0", "1.12"]];
 IAMNoRootAccountAccessKeyExists.config_triggers = ["AWS::IAM::User"];
 IAMNoRootAccountAccessKeyExists.paths = {IAMAvoidUseOfRootAccount: "aws_iam_user"};
 IAMNoRootAccountAccessKeyExists.docs = {

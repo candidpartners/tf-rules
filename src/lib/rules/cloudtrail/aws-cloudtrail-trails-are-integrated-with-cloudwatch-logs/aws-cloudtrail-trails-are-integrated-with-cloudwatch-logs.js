@@ -10,7 +10,7 @@ const CloudTrailTrailsAreIntegratedWithCloudWatchLogs = {};
 
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.uuid = "f030c67a-48b2-4499-bbec-c14c7798e8a0";
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.groupName = "CloudTrail";
-CloudTrailTrailsAreIntegratedWithCloudWatchLogs.tags = ["CIS | 1.1.0 | 2.4"];
+CloudTrailTrailsAreIntegratedWithCloudWatchLogs.tags = [["CIS", "1.1.0", "2.4"]];
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.config_triggers = ["AWS::CloudTrail::Trail"];
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.paths = {CloudTrailTrailsAreIntegratedWithCloudWatchLogs: "aws_cloudtrail"};
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.docs = {

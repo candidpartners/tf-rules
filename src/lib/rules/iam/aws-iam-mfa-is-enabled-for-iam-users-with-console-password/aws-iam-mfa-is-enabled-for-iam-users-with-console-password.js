@@ -10,7 +10,7 @@ const MFAIsEnabledForIAMUsersWithConsolePassword = {};
 
 MFAIsEnabledForIAMUsersWithConsolePassword.uuid = "0435cc47-21dc-45e3-a942-45dbef1cfb1b";
 MFAIsEnabledForIAMUsersWithConsolePassword.groupName = "IAM";
-MFAIsEnabledForIAMUsersWithConsolePassword.tags = ["CIS | 1.1.0 | 1.2"];
+MFAIsEnabledForIAMUsersWithConsolePassword.tags = [["CIS", "1.1.0", "1.2"]];
 MFAIsEnabledForIAMUsersWithConsolePassword.config_triggers = ["AWS::IAM::User"];
 MFAIsEnabledForIAMUsersWithConsolePassword.paths = {MFAIsEnabledForIAMUsersWithConsolePassword: "aws_iam_user"};
 MFAIsEnabledForIAMUsersWithConsolePassword.docs = {

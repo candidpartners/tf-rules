@@ -10,7 +10,7 @@ const MFAIsEnabledForRootAccount = {};
 
 MFAIsEnabledForRootAccount.uuid = "ce94627d-c31b-412b-803b-51de836e0449";
 MFAIsEnabledForRootAccount.groupName = "IAM";
-MFAIsEnabledForRootAccount.tags = ["CIS | 1.1.0 | 1.13"];
+MFAIsEnabledForRootAccount.tags = [["CIS", "1.1.0", "1.13"]];
 MFAIsEnabledForRootAccount.config_triggers = ["AWS::IAM::User"];
 MFAIsEnabledForRootAccount.paths = {MFAIsEnabledForIAMUsersWithConsolePassword: "aws_iam_user"};
 MFAIsEnabledForRootAccount.docs = {
