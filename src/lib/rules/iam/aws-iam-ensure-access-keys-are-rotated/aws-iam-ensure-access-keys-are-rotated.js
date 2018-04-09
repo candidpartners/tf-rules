@@ -10,7 +10,7 @@ const IAMEnsureAccessKeysAreRotated = {};
 
 IAMEnsureAccessKeysAreRotated.uuid = "b5dfcf10-f6a4-4eb0-acd6-439dfb813c1c";
 IAMEnsureAccessKeysAreRotated.groupName = "IAM";
-IAMEnsureAccessKeysAreRotated.tags = ["CIS | 1.1.0 | 1.4"];
+IAMEnsureAccessKeysAreRotated.tags = [["CIS", "1.1.0", "1.4"]];
 IAMEnsureAccessKeysAreRotated.config_triggers = ["AWS::IAM::Group"];
 IAMEnsureAccessKeysAreRotated.paths = {IAMEnsureAccessKeysAreRotated: "aws_iam_group"};
 IAMEnsureAccessKeysAreRotated.docs = {

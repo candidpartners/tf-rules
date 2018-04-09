@@ -10,7 +10,7 @@ const IAMMasterAndManagerRolesAreActive = {};
 
 IAMMasterAndManagerRolesAreActive.uuid = "69fe01f9-b2d5-47a4-b33f-5b86a98b5722";
 IAMMasterAndManagerRolesAreActive.groupName = "IAM";
-IAMMasterAndManagerRolesAreActive.tags = ["CIS | 1.1.0 | 1.18"];
+IAMMasterAndManagerRolesAreActive.tags = [["CIS", "1.1.0", "1.18"]];
 IAMMasterAndManagerRolesAreActive.config_triggers = ["AWS::IAM::Role"];
 IAMMasterAndManagerRolesAreActive.paths = {IAMMasterAndManagerRolesAreActive: "aws_iam_role"};
 IAMMasterAndManagerRolesAreActive.docs = {description: 'Both Master and Manager IAM roles are active.', recommended: true};

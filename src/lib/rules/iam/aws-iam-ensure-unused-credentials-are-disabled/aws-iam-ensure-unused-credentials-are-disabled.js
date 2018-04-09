@@ -11,7 +11,7 @@ const IAMEnsureUnusedCredentialsAreDisabled = {};
 
 IAMEnsureUnusedCredentialsAreDisabled.uuid = "944996af-32cd-4af6-9bb2-03819a631b44";
 IAMEnsureUnusedCredentialsAreDisabled.groupName = "IAM";
-IAMEnsureUnusedCredentialsAreDisabled.tags = ["CIS | 1.1.0 | 1.3"];
+IAMEnsureUnusedCredentialsAreDisabled.tags = [["CIS", "1.1.0", "1.3"]];
 IAMEnsureUnusedCredentialsAreDisabled.config_triggers = ["AWS::IAM::User"];
 IAMEnsureUnusedCredentialsAreDisabled.paths = {IAMEnsureUnusedCredentialsAreDisabled: "aws_iam_user"};
 IAMEnsureUnusedCredentialsAreDisabled.docs = {

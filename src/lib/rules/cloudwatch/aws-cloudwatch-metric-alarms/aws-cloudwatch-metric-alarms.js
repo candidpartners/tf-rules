@@ -10,7 +10,22 @@ const CloudWatchMetricAlarms = {};
 
 CloudWatchMetricAlarms.uuid = "2681139d-4660-4518-a847-0320eb8593e9";
 CloudWatchMetricAlarms.groupName = "CloudWatch";
-CloudWatchMetricAlarms.tags = ["CIS | 1.1.0 | 3.1"];
+CloudWatchMetricAlarms.tags = [
+    ["CIS", "1.1.0", "3.1"],
+    ["CIS", "1.1.0", "3.2"],
+    ["CIS", "1.1.0", "3.3"],
+    ["CIS", "1.1.0", "3.4"],
+    ["CIS", "1.1.0", "3.5"],
+    ["CIS", "1.1.0", "3.6"],
+    ["CIS", "1.1.0", "3.7"],
+    ["CIS", "1.1.0", "3.8"],
+    ["CIS", "1.1.0", "3.9"],
+    ["CIS", "1.1.0", "3.10"],
+    ["CIS", "1.1.0", "3.11"],
+    ["CIS", "1.1.0", "3.12"],
+    ["CIS", "1.1.0", "3.13"],
+    ["CIS", "1.1.0", "3.14"],
+];
 CloudWatchMetricAlarms.config_triggers = ["AWS::CloudWatch::Alarm"];
 CloudWatchMetricAlarms.paths = {LogMetricFilterAndAlarmExistForUnauthorizedAPICalls: "aws_cloudwatch_metric_alarm"};
 CloudWatchMetricAlarms.docs = {

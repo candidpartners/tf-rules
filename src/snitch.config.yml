@@ -68,7 +68,6 @@ rules :
 - aws-iam-mfa-is-enabled-for-root-account : true
 - aws-iam-no-root-account-access-key-exists : true
 - aws-iam-policies-are-attached-only-to-groups-or-roles : true
-- aws-iam-user-policy-does-not-exist : true
 
 #KMS
 - aws-kms-ensure-key-rotation : true

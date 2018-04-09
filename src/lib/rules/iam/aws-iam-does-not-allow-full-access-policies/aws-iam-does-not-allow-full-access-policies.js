@@ -10,7 +10,7 @@ const IAMDoesNotAllowFullAccessPolicies = {};
 
 IAMDoesNotAllowFullAccessPolicies.uuid = "345b6958-9966-4cb7-814b-4daea7857c79";
 IAMDoesNotAllowFullAccessPolicies.groupName = "IAM";
-IAMDoesNotAllowFullAccessPolicies.tags = ["CIS | 1.1.0 | 1.24"];
+IAMDoesNotAllowFullAccessPolicies.tags = [["CIS", "1.1.0", "1.24"]];
 IAMDoesNotAllowFullAccessPolicies.config_triggers = ["AWS::IAM::Policy"];
 IAMDoesNotAllowFullAccessPolicies.paths = {IAMDoesNotAllowFullAccessPolicies: 'aws_iam_policy'};
 IAMDoesNotAllowFullAccessPolicies.docs = {

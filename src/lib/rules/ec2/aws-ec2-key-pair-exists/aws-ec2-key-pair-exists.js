@@ -12,7 +12,7 @@ const EC2KeyPairExists = {};
 
 EC2KeyPairExists.uuid = "25c51c51-c2c5-4f5d-bfe4-bf900dc86f3a";
 EC2KeyPairExists.groupName = "EC2";
-EC2KeyPairExists.tags = [];
+EC2KeyPairExists.tags = [["Snitch", "1.0", "6"]];
 EC2KeyPairExists.config_triggers = ["AWS::EC2::Instance"];
 EC2KeyPairExists.paths = {EC2KeyPairExists: 'aws_instance'};
 EC2KeyPairExists.docs = {
