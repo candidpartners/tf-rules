@@ -17,7 +17,7 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.docs = {
     description: 'No IAM Policies are attached directly to a user.',
     recommended: true
 };
-IAMPoliciesAreAttachedOnlyToGroupsOrRoles.schema = {type: 'boolean'};
+IAMPoliciesAreAttachedOnlyToGroupsOrRoles.schema = {type: 'boolean', default: true};
 
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;

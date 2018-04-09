@@ -16,31 +16,22 @@ EBSVolumeEncryption.tags = [];
 EBSVolumeEncryption.config_triggers = ["AWS::EC2::Volume"];
 EBSVolumeEncryption.paths = {EBSVolumeEncryption: 'aws_ebs_volume'};
 EBSVolumeEncryption.docs = {
-  description: "All EBS volumes have encryption enabled.",
-  recommended: false
+    description: "All EBS volumes have encryption enabled.",
+    recommended: false
 };
 EBSVolumeEncryption.schema = {
-  anyOf: [
-    { type : 'boolean' },
-    {
-      type: 'object',
-      properties : {
-        exclude : {
-          type : 'array',
-          items : {
-            type : 'string'
-          }
+    type: 'object',
+    required: ["enabled"],
+    properties: {
+        enabled: {type: "boolean", default: true},
+        exclude: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         },
-        include : {
-          type : 'array',
-          items : {
-            type : 'string'
-          }
-        }
-      }
     }
-  ]
-};
+}
 
 
 EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
@@ -75,9 +66,9 @@ EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
 });
 
 EBSVolumeEncryption.validate = co.wrap(function* (context) {
-    let {config,instance,provider} = context;
+    let {config, instance, provider} = context;
 
-    if(instance.encrypted === true){
+    if (instance.encrypted === true) {
         return {valid: 'success'}
     }
     else {

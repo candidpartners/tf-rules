@@ -17,7 +17,7 @@ HardwareMFAIsEnabledForRootAccount.docs = {
     description: 'The root account has hardware MFA enabled.',
     recommended: false
 };
-HardwareMFAIsEnabledForRootAccount.schema = { type : 'boolean' };
+HardwareMFAIsEnabledForRootAccount.schema = { type : 'boolean', default: true };
 
 
 HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {

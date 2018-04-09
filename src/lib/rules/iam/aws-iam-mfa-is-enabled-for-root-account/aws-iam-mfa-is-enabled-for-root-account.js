@@ -17,7 +17,7 @@ MFAIsEnabledForRootAccount.docs = {
     description: 'The root account has MFA enabled.',
     recommended: false
 };
-MFAIsEnabledForRootAccount.schema = { type : 'boolean' };
+MFAIsEnabledForRootAccount.schema = { type : 'boolean', default: true };
 
 
 MFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {

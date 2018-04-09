@@ -17,7 +17,7 @@ IAMNoRootAccountAccessKeyExists.docs = {
     description: 'No root account access key exists.',
     recommended: false
 };
-IAMNoRootAccountAccessKeyExists.schema = {type: 'boolean'};
+IAMNoRootAccountAccessKeyExists.schema = {type: 'boolean', default: true};
 
 
 IAMNoRootAccountAccessKeyExists.livecheck = co.wrap(function* (context) {

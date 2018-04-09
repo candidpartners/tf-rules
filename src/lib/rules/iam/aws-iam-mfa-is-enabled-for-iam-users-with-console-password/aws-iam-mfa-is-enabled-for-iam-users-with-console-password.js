@@ -17,7 +17,7 @@ MFAIsEnabledForIAMUsersWithConsolePassword.docs = {
     description: 'All IAM users with a console password have MFA enabled.',
     recommended: false
 };
-MFAIsEnabledForIAMUsersWithConsolePassword.schema = { type : 'boolean' };
+MFAIsEnabledForIAMUsersWithConsolePassword.schema = { type : 'boolean', default: true };
 
 
 MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( context ) {

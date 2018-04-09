@@ -18,7 +18,7 @@ AWSSecurityGroupExists.docs = {
     recommended: true
 };
 
-AWSSecurityGroupExists.schema = {type: 'boolean'};
+AWSSecurityGroupExists.schema = {type: 'boolean', default: true};
 
 
 AWSSecurityGroupExists.validate = function* (context) {

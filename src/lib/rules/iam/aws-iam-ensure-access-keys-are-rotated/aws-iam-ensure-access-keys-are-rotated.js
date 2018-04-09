@@ -17,7 +17,8 @@ IAMEnsureAccessKeysAreRotated.docs = {
     description: 'All IAM access keys have been rotated in the last 90 days.',
     recommended: false
 };
-IAMEnsureAccessKeysAreRotated.schema = {type: 'number'};
+
+IAMEnsureAccessKeysAreRotated.schema = {type: 'number', default: 90};
 
 IAMEnsureAccessKeysAreRotated.livecheck = co.wrap(function* (context) {
     const IAM = new context.provider.IAM();

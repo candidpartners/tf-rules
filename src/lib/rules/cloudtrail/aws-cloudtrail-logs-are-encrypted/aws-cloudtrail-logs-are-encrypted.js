@@ -19,7 +19,10 @@ CloudtrailLogsAreEncrypted.docs = {
     description: "All CloudTrail logs are encrypted at rest.",
     recommended: false
 };
-CloudtrailLogsAreEncrypted.schema = { type: 'boolean' };
+CloudtrailLogsAreEncrypted.schema = {
+    type: 'boolean',
+    default: true
+};
 
 
 CloudtrailLogsAreEncrypted.livecheck = co.wrap(function* (context) {

@@ -19,7 +19,10 @@ CloudtrailLogFileValidation.docs = {
     description: "Log file validation is enabled on every CloudTrail resource.",
     recommended: false
 };
-CloudtrailLogFileValidation.schema = {type: 'boolean'};
+CloudtrailLogFileValidation.schema = {
+    type: 'boolean',
+    default: true
+};
 
 CloudtrailLogFileValidation.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;

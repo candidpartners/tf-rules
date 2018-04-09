@@ -17,7 +17,7 @@ IAMUserPolicyDoesNotExist.docs = {
     description: "IAM policies are attached only to groups or roles.",
     recommended: false
 };
-IAMUserPolicyDoesNotExist.schema = {type: 'boolean'};
+IAMUserPolicyDoesNotExist.schema = {type: 'boolean', default: true};
 
 
 IAMUserPolicyDoesNotExist.validate = function (context) {

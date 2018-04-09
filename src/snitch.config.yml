@@ -31,8 +31,8 @@ rules :
       - volker-dev-accounts
 
 #EBS
-- aws-ebs-volume-encryption : true
-
+- aws-ebs-volume-encryption :
+    enabled: true
 #EC2
 - aws-ec2-ami-includes-sql-server : false
 - aws-ec2-instance-tag-exists :

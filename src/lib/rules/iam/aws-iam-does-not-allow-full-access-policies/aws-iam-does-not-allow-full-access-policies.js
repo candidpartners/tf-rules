@@ -17,7 +17,7 @@ IAMDoesNotAllowFullAccessPolicies.docs = {
     description: "No IAM policies allow full administrative privileges",
     recommended: false
 };
-IAMDoesNotAllowFullAccessPolicies.schema = {type: 'boolean'};
+IAMDoesNotAllowFullAccessPolicies.schema = {type: 'boolean', default: true};
 
 
 IAMDoesNotAllowFullAccessPolicies.validate = function (context) {

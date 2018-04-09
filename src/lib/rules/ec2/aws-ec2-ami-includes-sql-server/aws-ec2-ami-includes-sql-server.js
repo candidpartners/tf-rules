@@ -17,7 +17,7 @@ EC2AMIIncludesSQL.docs = {
   description: 'The AMI includes a MS SQL Server.',
   recommended: false
 };
-EC2AMIIncludesSQL.schema = { type : 'boolean' };
+EC2AMIIncludesSQL.schema = { type : 'boolean', default: true};
 
 
 EC2AMIIncludesSQL.validate = function *( context ) {
