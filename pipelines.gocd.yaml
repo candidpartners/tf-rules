@@ -22,6 +22,7 @@ pipelines:
                   cd snitch/src
                   npm i
                   npm run coverage
+
       - deploy-to-npm:
           approval:
             type: manual # Require someone in the UI to manually approve the execution of this stage
