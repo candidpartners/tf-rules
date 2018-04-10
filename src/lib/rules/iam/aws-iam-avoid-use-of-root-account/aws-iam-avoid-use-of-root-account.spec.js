@@ -20,7 +20,7 @@ describe("IAMAvoidUseOfRootAccount", () => {
     test("It recognizes when the root account logged in recently", async () => {
         let result = await rule.livecheck({config: 5, provider: _AWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe(`<root_account> logged in 2 days ago.`)
+        expect(result.message.includes(`<root_account> logged in`)).toBeTruthy();
     });
 
     test("It recognizes when the root account has not logged in recently", async () => {
