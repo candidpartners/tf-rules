@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -41,7 +41,7 @@ IAMNoRootAccountAccessKeyExists.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: "One or both of the root user access keys are still in use.",
-            noncompliant_resources: new NonCompliantResource({
+            noncompliant_resources: new Resource({
                 resource_id: rootUser.arn,
                 resource_type: "AWS::IAM::User",
                 message: "Root account still has access keys enabled."

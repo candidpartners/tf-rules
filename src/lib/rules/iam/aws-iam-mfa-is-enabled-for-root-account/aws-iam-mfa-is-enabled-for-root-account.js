@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -37,7 +37,7 @@ MFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have MFA enabled.",
-            noncompliant_resources: [new NonCompliantResource({
+            noncompliant_resources: [new Resource({
                 resource_id: rootUser.arn,
                 resource_type: "AWS::IAM::User",
                 message: "does not have MFA enabled."

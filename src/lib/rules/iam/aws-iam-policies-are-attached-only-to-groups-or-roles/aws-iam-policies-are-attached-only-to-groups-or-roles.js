@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -39,7 +39,7 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = co.wrap(function* (context
         return new RuleResult({
             valid: "fail",
             message: "One or more users have policies directly attached.",
-            noncompliant_resources: usersWithPolicies.map(x => new NonCompliantResource({
+            noncompliant_resources: usersWithPolicies.map(x => new Resource({
                 resource_id: x,
                 resource_type: "AWS::IAM::User",
                 message: "has a policy directly attached."

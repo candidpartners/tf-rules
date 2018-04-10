@@ -2,7 +2,7 @@
 const debug = require('debug')('snitch/s3-bucket-logging');
 const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -37,7 +37,7 @@ S3CloudTrailBucketAccessLoggingEnabled.livecheck = co.wrap(function* (context) {
         if (enabledBuckets.length !== logs.length) {
             let disabledBuckets = logs.filter(x => !x.hasOwnProperty("LoggingEnabled"));
             let noncompliant_resources = disabledBuckets.map(x => {
-                return new NonCompliantResource({
+                return new Resource({
                     resource_id: x,
                     resource_type: "AWS::S3::Bucket",
                     message: "does not have logging enabled"
@@ -59,7 +59,7 @@ S3CloudTrailBucketAccessLoggingEnabled.livecheck = co.wrap(function* (context) {
             return new RuleResult({
                 valid: "fail",
                 message: "Snitch does not have access to the CloudTrail S3 bucket from this account.",
-                noncompliant_resources: [new NonCompliantResource({
+                noncompliant_resources: [new Resource({
                     resource_id: "Permission Error",
                     resource_type: "AWS::::Account",
                     message: "Snitch does not have access to the CloudTrail S3 bucket from this account."

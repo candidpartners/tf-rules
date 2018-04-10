@@ -1,7 +1,7 @@
 const co = require('co');
 const Papa = require('papaparse');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -68,12 +68,12 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
     let noncompliant_resources = [
-            ...invalidPasswordUsers.map(x => new NonCompliantResource({
+            ...invalidPasswordUsers.map(x => new Resource({
             resource_id: x.user,
             resource_type: "AWS::IAM::User",
             message: `has a password they have not used in over ${dateRange} days.`
         })),
-        ...invalidAccessKeyUsers.map(x => new NonCompliantResource({
+        ...invalidAccessKeyUsers.map(x => new Resource({
             resource_id: x.user,
             resource_type: "AWS::IAM::User",
             message: `has an access key they have not used in over ${dateRange} days.`

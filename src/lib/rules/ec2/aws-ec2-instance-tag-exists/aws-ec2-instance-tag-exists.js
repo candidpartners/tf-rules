@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const co = require('co');
 const debug = require('debug')('snitch/tag-exists');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -58,7 +58,7 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
             let {Tags, InstanceId} = inst;
             let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
 
-            return new NonCompliantResource({
+            return new Resource({
                 resource_id: InstanceId,
                 resource_type: "AWS::EC2::Instance",
                 message: `Missing tags ${missingTags}`

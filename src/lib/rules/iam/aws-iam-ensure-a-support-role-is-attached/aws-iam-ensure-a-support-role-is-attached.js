@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -27,7 +27,7 @@ IAMSupportRoleIsAttached.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: "The AWSSupportAccess policy is not attached to any roles, groups, or users.",
-            noncompliant_resources: new NonCompliantResource({
+            noncompliant_resources: new Resource({
                 resource_id: "AWSSupportAccess",
                 resource_type: "AWS::IAM::Policy",
                 message: "is not attached to any roles, groups, or users."

@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -37,7 +37,7 @@ IAMMasterAndManagerRolesAreActive.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: "One or both of the IAM Master and IAM Manager roles are not active.",
-            noncompliant_resources: inactive.map(x => new NonCompliantResource({
+            noncompliant_resources: inactive.map(x => new Resource({
                 resource_id: x.RoleName,
                 resource_type: "AWS::IAM::Role",
                 message: "is not active"

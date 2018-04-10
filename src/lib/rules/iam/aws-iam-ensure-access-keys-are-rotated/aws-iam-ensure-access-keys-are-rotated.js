@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -72,7 +72,7 @@ IAMEnsureAccessKeysAreRotated.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: 'fail',
             message: `${invalidAccessKeyUsers.length} users have an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`,
-            noncompliant_resources: invalidAccessKeyUsers.map(x => new NonCompliantResource({
+            noncompliant_resources: invalidAccessKeyUsers.map(x => new Resource({
                 resource_id: x.user,
                 resource_type: "AWS::IAM::User",
                 message: `has an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`

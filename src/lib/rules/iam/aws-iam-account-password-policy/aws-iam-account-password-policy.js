@@ -2,7 +2,7 @@
 const co = require('co');
 const _ = require('lodash');
 const debug = require('debug')('snitch/tag-format');
-const {RuleResult,NonCompliantResource} = require('../../../rule-result');
+const {RuleResult,Resource} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -67,7 +67,7 @@ IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
                 valid: "fail",
                 message: "The account password policy is not compliant",
                 noncompliant_resources: [
-                    new NonCompliantResource({
+                    new Resource({
                         resource_id: "Password Policy",
                         resource_type:"AWS::::Account",
                         message: "The password policy does not conform to the config. " + errors.join('\n')

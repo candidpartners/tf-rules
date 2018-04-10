@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -36,7 +36,7 @@ MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( conte
         return new RuleResult({
             valid: 'fail',
             message: "Some console users don't have MFA enabled.",
-            noncompliant_resources: usersWithPasswordButNoMFA.map(x => new NonCompliantResource({
+            noncompliant_resources: usersWithPasswordButNoMFA.map(x => new Resource({
                 resource_id: x.arn,
                 resource_type: "AWS::IAM::User",
                 message: "does not have MFA enabled."

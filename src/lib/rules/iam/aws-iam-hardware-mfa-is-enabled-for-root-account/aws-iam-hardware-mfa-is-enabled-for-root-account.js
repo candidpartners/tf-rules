@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -44,7 +44,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have hardware MFA enabled.",
-            noncompliant_resources: [new NonCompliantResource({
+            noncompliant_resources: [new Resource({
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
                 message: "has virtual MFA enabled, hardware MFA is required for compliance."
@@ -55,7 +55,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have hardware MFA enabled.",
-            noncompliant_resources: [new NonCompliantResource({
+            noncompliant_resources: [new Resource({
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
                 message: "does not have virtual or hardware MFA enabled."

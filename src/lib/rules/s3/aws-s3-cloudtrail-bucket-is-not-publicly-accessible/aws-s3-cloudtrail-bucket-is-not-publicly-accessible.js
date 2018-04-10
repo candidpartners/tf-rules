@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -37,7 +37,7 @@ S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = co.wrap(function* (context
             return new RuleResult({
                 valid: "fail",
                 message: "One or more CloudTrail S3 buckets is publicly accessible.",
-                noncompliant_resources: nonCompliantBuckets.map(x => new NonCompliantResource({
+                noncompliant_resources: nonCompliantBuckets.map(x => new Resource({
                     resource_id: x.Resource,
                     resource_type: "AWS::S3::Bucket",
                     message: "is publicly accessible."
@@ -55,7 +55,7 @@ S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = co.wrap(function* (context
                 valid: "fail",
                 message: "Snitch does not have access to the CloudTrail S3 bucket from this account.",
                 noncompliant_resources: [
-                    new NonCompliantResource({
+                    new Resource({
                         resource_id: "Permission Error",
                         resource_type: "AWS::::Account",
                         message: "Snitch does not have access to the CloudTail S3 bucket from this account."

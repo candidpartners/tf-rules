@@ -1,6 +1,6 @@
 const co = require('co');
 const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -166,7 +166,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
     // Check if no metric filters exist
     if (metrics.length === 0) {
-        noncompliant_resources.push(new NonCompliantResource({
+        noncompliant_resources.push(new Resource({
             resource_id: "CloudWatchLogs",
             resource_type: "AWS::CloudWatch::Alarm",
             message: "does not have any metric filters set up."
@@ -204,7 +204,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no metric filters exist for the specified rule
             if (activeFilter === undefined) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have a metric filter set up for ${activeFilterPatterns[i].rule}.`
@@ -213,7 +213,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no alarms exist for the specified filter
             else if (filteredAlarm === undefined) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have an alarm set up for ${activeFilterPatterns[i].rule}.`
@@ -222,7 +222,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no actions exist for the specified alarm
             else if (filteredAlarm.AlarmActions.length === 0) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have an action linked to the alarm for ${activeFilterPatterns[i].rule}.`
@@ -231,7 +231,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no subscriptions exist for the specified alarm
             else if (subscribers.Subscriptions.length === 0) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have any subscribers linked to the alarm for ${activeFilterPatterns[i].rule}.`

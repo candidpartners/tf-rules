@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+// @flow
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -23,44 +22,57 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.schema = {
 };
 
 
-CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = co.wrap(function* (context) {
+CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let trail = new provider.CloudTrail();
 
-    let trails = yield trail.describeTrails().promise();
+    let trails = await trail.describeTrails().promise();
     let noncompliant_resources = [];
+    let compliant_resources = [];
     let promises = [];
 
     trails.trailList.map(tr => {
         promises.push(trail.getTrailStatus({Name: tr.Name}).promise());
     });
 
-    let status = yield Promise.all(promises);
+    let status = await Promise.all(promises);
 
     trails.trailList.map(tr => {
         status.map(x => {
             let latestDate = new Date(x.LatestCloudWatchLogsDeliveryTime);
             let today = new Date();
-            if ((today - latestDate) > 86400000) {
+            if ((today - latestDate) > 86400000)
                 noncompliant_resources.push(tr)
-            }
+            else
+                compliant_resources.push(tr)
         })
     });
 
-    if (noncompliant_resources.length > 0) {
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more CloudTrail trails are not integrated with CloudWatch logs.",
-            noncompliant_resources: noncompliant_resources.map(x => new NonCompliantResource({
-                resource_id: x.Name,
-                resource_type: "AWS::CloudTrail::Trail",
-                message: "is not integrated with CloudWatch logs."
-            }))
+    let bad_resources = noncompliant_resources.map(x => {
+
+        return new Resource({
+            is_compliant: false,
+            resource_id: x.Name,
+            resource_type: "AWS::CloudTrail::Trail",
+            message: "is not integrated with CloudWatch logs."
         })
-    }
-    else return new RuleResult({
-        valid: "success"
+    });
+
+    let good_resources = compliant_resources.map(x => {
+        return new Resource({
+            is_compliant: true,
+            resource_id: x.Name,
+            resource_type: "AWS::CloudTrail::Trail",
+            message: "is integrated with CloudWatch logs."
+        })
     })
-});
+
+    return new RuleResult({
+        valid: (noncompliant_resources.length > 0) ? "fail" : "success",
+        message: CloudTrailTrailsAreIntegratedWithCloudWatchLogs.docs.description,
+        resources: [...good_resources,...bad_resources],
+    })
+
+};
 
 module.exports = CloudTrailTrailsAreIntegratedWithCloudWatchLogs;
