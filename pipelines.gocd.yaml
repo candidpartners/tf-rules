@@ -47,7 +47,5 @@ pipelines:
                 - terraform
               tasks:
               - script: |
-                  cd snitch/src
-                  npm i
-                  cd ../ui
+                  cd snitch/ui
                   ./deploy.sh
