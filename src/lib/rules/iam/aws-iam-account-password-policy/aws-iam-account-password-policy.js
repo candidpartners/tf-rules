@@ -24,7 +24,7 @@ IAMAccountPasswordPolicy.tags = [
 IAMAccountPasswordPolicy.config_triggers = ["AWS::::Account"];
 IAMAccountPasswordPolicy.paths = {IAMAccountPasswordPolicy: 'aws_iam_account_password_policy'};
 IAMAccountPasswordPolicy.docs = {
-    description: "The IAM account password policy complies to CIS standards.",
+    description: "The IAM account password policy complies to specified standards.",
     recommended: false
 };
 IAMAccountPasswordPolicy.schema = {
