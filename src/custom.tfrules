@@ -1,2 +1,0 @@
-rules :
-- aws-ec2-uses-key-pair : MyKey
