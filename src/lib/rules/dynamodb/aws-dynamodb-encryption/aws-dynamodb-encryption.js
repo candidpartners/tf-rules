@@ -1,8 +1,7 @@
-'use strict';
+// @flow
 const debug = require('debug')('snitch/dynamodb-encryption');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -32,51 +31,49 @@ DynamoDBEncryption.schema = {
     }
 };
 
-DynamoDBEncryption.livecheck = co.wrap(function* (context) {
+DynamoDBEncryption.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{
     let {config, provider} = context;
     let exclude = config.exclude || [];
 
     let dynamo = new provider.DynamoDB();
-    let reqTags = config;
 
-    let tables = yield dynamo.listTables().promise();
+    let tables = await dynamo.listTables().promise();
     let promises = [];
     tables.TableNames.map(x => {
         let params = {TableName: x};
         promises.push(dynamo.describeTable(params).promise())
     });
-    let results = yield Promise.all(promises);
+    let results = await Promise.all(promises);
 
-    while (results.NextToken) {
-        let result = yield dynamo.describeTable({NextToken: result.NextToken}).promise();
-        dynamo = [...dynamo, ...result];
-    }
+    // while (results.NextToken) {
+    //     let result = await dynamo.describeTable({NextToken: result.NextToken}).promise();
+    //     dynamo = [...dynamo, ...result];
+    // }
 
     let Instances = _.flatMap(results, "Table");
 
     // Find unencrypted instances
-    let UnencryptedInstances = Instances.filter(instance => !exclude.includes(instance.TableName) && !instance.hasOwnProperty("SSEDescription"));
+    let InstanceIsUnencrypted = instance => !exclude.includes(instance.TableName) && !instance.hasOwnProperty("SSEDescription");
+    let UnencryptedInstances = Instances.filter(InstanceIsUnencrypted);
 
-    if (UnencryptedInstances.length > 0) {
-        let noncompliant_resources = UnencryptedInstances.map(inst => {
-            return new NonCompliantResource({
-                resource_id: inst.TableName,
-                resource_type: "AWS::DynamoDB::Table",
-                message: `is unencrypted.`,
-            })
-        });
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more DynamoDB tables are not encrypted.",
-            noncompliant_resources
+    let resources = Instances.map(x => {
+        let isUnencrypted = InstanceIsUnencrypted(x);
+        return new Resource({
+            is_compliant: isUnencrypted ? false : true,
+            resource_id: x.TableName,
+            resource_type: "AWS::DynamoDB::Table",
+            message: isUnencrypted ? `is unencrypted.` : "is encrypted"
         })
-    }
-    else {
-        return new RuleResult({valid: "success"})
-    }
-});
+    });
 
-DynamoDBEncryption.validate = co.wrap(function* (context) {
+    return new RuleResult({
+        valid: (UnencryptedInstances.length > 0) ? "fail" : "success",
+        message: "DynamoDB tables should be encrypted",
+        resources
+    })
+};
+
+DynamoDBEncryption.validate = function (context /*: Context */) {
     // debug( '%O', context );
     let {config,provider,instance} = context;
 
@@ -90,7 +87,7 @@ DynamoDBEncryption.validate = co.wrap(function* (context) {
             message: "A dynamodb instance is not encrypted"
         }
     }
-});
+};
 
 module.exports = DynamoDBEncryption;
 

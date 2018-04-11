@@ -1,8 +1,7 @@
-'use strict';
-const co = require('co');
+// @flow
 const _ = require('lodash');
 const debug = require('debug')('snitch/tag-format');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -21,49 +20,52 @@ KMSKeyRotation.docs = {
 };
 KMSKeyRotation.schema = {type: 'boolean', default: true};
 
-KMSKeyRotation.livecheck = co.wrap(function* (context) {
+KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<RuleResult>*/ {
     let {config, provider} = context;
     let kms = new provider.KMS();
     let filters = [
         "arn:aws:kms:us-west-2:421471939647:key/9890eec1-6d8e-4d1a-a4c9-a11b28fd92c0",
         "arn:aws:kms:us-west-2:421471939647:key/fdbcb545-598c-454e-b26a-1504e4ee1600"];
 
-    let {Keys} = yield kms.listKeys().promise();
+    let {Keys} = await kms.listKeys().promise();
     let filteredKeys = Keys.filter(x => !filters.includes(x.KeyArn));
     let promises = filteredKeys.map(key => kms.getKeyRotationStatus({KeyId: key.KeyArn}).promise());
     try {
         let keys = filteredKeys.map(x => x);
-        let result = yield Promise.all(promises);
+        let result = await Promise.all(promises);
         let combined = _.zip(keys, result);
         let noncompliant_resources = combined.filter(x => x[1].KeyRotationEnabled === false);
 
-        if (noncompliant_resources.length > 0) {
-            return new RuleResult({
-                valid: "fail",
-                message: "One or more of your KMS keys does not have rotation enabled.",
-                noncompliant_resources: noncompliant_resources.map(x => new NonCompliantResource({
+        return new RuleResult({
+            valid: (noncompliant_resources.length > 0) ? "fail" : "success",
+            message: KMSKeyRotation.docs.description,
+            resources: combined.map(x => {
+                let is_compliant = (x[1].KeyRotationEnabled) ? true : false
+                return new Resource({
+                    is_compliant,
                     resource_id: x[0].KeyArn,
                     resource_type: "AWS::KMS::Key",
-                    message: "does not have rotation enabled."
-                }))
+                    message: (is_compliant) ? "has rotation enabled" : "does not have rotation enabled."
+                })
             })
-        }
-        else return new RuleResult({valid: "success"})
+        })
+
     } catch (err) {
         console.error(err.message);
         return new RuleResult({
             valid: "fail",
             message: err.message,
-            noncompliant_resources: [ new NonCompliantResource({
-                resource_id: "Invalid KMS Keys",
+            resources:[{
+                is_compliant: false,
+                resource_id: "Snitch_Error",
                 resource_type: "AWS::KMS::Key",
-                message: err.message
-            })]
+                message:err.message,
+            }],
         })
     }
-});
+};
 
-KMSKeyRotation.validate = function (context) {
+KMSKeyRotation.validate = function (context /*: Context */) {
     let {config, instance} = context;
 
     let enabled = config;

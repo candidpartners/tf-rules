@@ -1,8 +1,7 @@
-'use strict';
+// @flow
 const _ = require('lodash');
-const co = require('co');
 const debug = require('debug')('snitch/tag-format');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -30,30 +29,29 @@ CloudtrailLogFileValidation.schema = {
     }
 };
 
-CloudtrailLogFileValidation.livecheck = co.wrap(function* (context) {
+CloudtrailLogFileValidation.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let cloud = new provider.CloudTrail();
 
-    let trails = yield cloud.describeTrails().promise();
+    let trails = await cloud.describeTrails().promise();
     let disabledTrails = trails.trailList.filter(x => x.LogFileValidationEnabled === false);
 
-    if (disabledTrails.length > 0) {
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more CloudTrail resources have log file validation disabled.",
-            noncompliant_resources: disabledTrails.map(x => new NonCompliantResource({
-                resource_id: x.Name,
+    return new RuleResult({
+        valid: (disabledTrails.length > 0) ? "fail" : "success",
+        message: CloudtrailLogFileValidation.docs.description,
+        resources: trails.trailList.map(t => {
+            let isDisabled = (t.LogFileValidationEnabled === false);
+            return new Resource({
+                is_compliant: isDisabled ? false : true,
+                resource_id: t.Name,
                 resource_type: "AWS::CloudTrail::Trail",
                 message: "has log file validation disabled."
-            }))
+            })
         })
-    }
-    else return new RuleResult({
-        valid: "success"
-    })
-});
+    });
+};
 
-CloudtrailLogFileValidation.validate = function (context) {
+CloudtrailLogFileValidation.validate = function (context /*: Context */) {
     let instance = context.instance;
 
     if(!instance.enable_log_file_validation)

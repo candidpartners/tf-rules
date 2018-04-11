@@ -1,8 +1,8 @@
+// @flow
 'use strict';
 const debug = require('debug')('snitch/rds-encryption-exists');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -31,19 +31,18 @@ RDSEncryptionKeyExists.schema = {
     }
 };
 
-RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
+RDSEncryptionKeyExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let exclude = config.exclude || [];
 
     let rds = new provider.RDS();
-    let reqTags = config;
 
     // Get all RDS instances
-    let result = yield rds.describeDBInstances().promise();
+    let result = await rds.describeDBInstances().promise();
     let DBInstances = result.DBInstances;
 
     while (result.NextToken) {
-        let result = yield rds.describeDBInstances({NextToken: result.NextToken}).promise();
+        result = await rds.describeDBInstances({NextToken: result.NextToken}).promise();
         DBInstances = [...DBInstances, ...result.DBInstances];
     }
 
@@ -53,32 +52,28 @@ RDSEncryptionKeyExists.livecheck = co.wrap(function* (context) {
     // Find unencrypted instances
     let UnencryptedInstances = Instances.filter(instance => instance.kms_key_id === undefined);
 
-    if (UnencryptedInstances.length > 0) {
-        let noncompliant_resources = UnencryptedInstances.map(inst => {
-            return new NonCompliantResource({
-                resource_id: inst.DBInstanceIdentifier,
-                resource_type: "AWS::RDS::DBInstance",
-                message: `is unencrypted.`
-            })
-        });
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more RDS instances are not encrypted.",
-            noncompliant_resources
-        })
-    }
-    else {
-        return {valid: "success"}
-    }
-});
+    return new RuleResult({
+        valid: (UnencryptedInstances.length > 0) ? "fail" : "success",
+        message: "RDS instances must be encrypted",
+        resources: Instances.map(instance => {
+            let unencrypted = instance.kms_key_id === undefined;
 
-RDSEncryptionKeyExists.validate = function* (context) {
-    // debug( '%O', context );
+            return new Resource({
+                is_compliant: unencrypted ? false : true,
+                resource_id: instance.DBInstanceIdentifier,
+                resource_type: "AWS::RDS::DBInstance",
+                message: unencrypted ? `is unencrypted.` : "is encrypted"
+            })
+        })
+    });
+};
+
+RDSEncryptionKeyExists.validate = async function(context /*: Context */) {
     const kms = new context.provider.KMS();
     let result = null;
     if (context.config == true) {
         if (context.instance.kms_key_id) {
-            const queryResult = yield kms.listKeys({}).promise();
+            const queryResult = await kms.listKeys({}).promise();
             debug('%O', queryResult);
             debug('%O', context.instance.kms_key_id);
             if (_.find(queryResult.Keys, {KeyArn: context.instance.kms_key_id})) {

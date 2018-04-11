@@ -1,8 +1,6 @@
-'use strict';
-const co = require('co');
-const _ = require('lodash');
+// @flow
 const debug = require('debug')('snitch/tag-format');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -25,32 +23,28 @@ CloudtrailLogsAreEncrypted.schema = {
 };
 
 
-CloudtrailLogsAreEncrypted.livecheck = co.wrap(function* (context) {
+CloudtrailLogsAreEncrypted.livecheck = async function (context /*: Context*/) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
 
     let Cloud = new provider.CloudTrail();
-    let trail = yield Cloud.describeTrails().promise();
+    let trail = await Cloud.describeTrails().promise();
     let trails = trail.trailList;
     let UnencryptedTrails = trails.filter(x => !x.hasOwnProperty("KmsKeyId"));
 
-    if(UnencryptedTrails.length !== 0) {
-        let noncompliant_resources = UnencryptedTrails.map(x => {
-            return new NonCompliantResource({
-                resource_id: x.TrailARN,
+    return new RuleResult({
+        valid: (UnencryptedTrails.length > 0) ? "fail" : "success",
+        message: CloudtrailLogsAreEncrypted.docs.description,
+        resources: trails.map(t => {
+            let isUnencrypted = !t.hasOwnProperty("KmsKeyId");
+            return new Resource({
+                is_compliant: isUnencrypted ? false : true,
+                resource_id: t.TrailARN,
                 resource_type: "AWS::CloudTrail::Trail",
-                message: "is not encrypted."
+                message: isUnencrypted ? "is not encrypted.": "is encrypted"
             })
-        });
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more CloudTrail logs are not encrypted.",
-            noncompliant_resources
         })
-    }
-    else {
-        return new RuleResult({ valid: "success" })
-    }
-});
+    })
+};
 
 module.exports = CloudtrailLogsAreEncrypted;
 

@@ -11,7 +11,6 @@ describe("Snitch", () => {
         let config = Snitch.LoadConfigFromFile(__dirname + "/snitch.config.yml");
 
         let result = await Snitch.Livecheck({provider: AWS, config, report: false});
-        console.log(result);
         expect(result.length).toBeGreaterThan(0);
     });
 

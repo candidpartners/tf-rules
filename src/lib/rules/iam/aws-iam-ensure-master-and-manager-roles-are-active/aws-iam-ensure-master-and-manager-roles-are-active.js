@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+// @flow
+const {Resource,RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -17,11 +16,11 @@ IAMMasterAndManagerRolesAreActive.docs = {description: 'Both Master and Manager 
 IAMMasterAndManagerRolesAreActive.schema = {type: 'boolean', default: true};
 
 
-IAMMasterAndManagerRolesAreActive.livecheck = co.wrap(function* (context) {
+IAMMasterAndManagerRolesAreActive.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{
     let {config, provider} = context;
     let iam = new provider.IAM();
 
-    let roles = yield iam.listRoles().promise();
+    let roles = await iam.listRoles().promise();
     let masterRole = roles.Roles.find(x => x.RoleName === "IAM_Master");
     let managerRole = roles.Roles.find(x => x.RoleName === "IAM_Manager");
 
@@ -33,20 +32,24 @@ IAMMasterAndManagerRolesAreActive.livecheck = co.wrap(function* (context) {
         inactive.push({RoleName: "IAM_Manager"});
     }
 
-    if (inactive.length > 0) {
-        return new RuleResult({
-            valid: "fail",
-            message: "One or both of the IAM Master and IAM Manager roles are not active.",
-            noncompliant_resources: inactive.map(x => new NonCompliantResource({
-                resource_id: x.RoleName,
+    return new RuleResult({
+        valid: (!masterRole || !managerRole) ? "fail" : "success",
+        message: "IAM must have Master and Manager Roles",
+        resources: [
+            {
+                is_compliant: masterRole ? true : false,
+                resource_id: "IAM_Master",
                 resource_type: "AWS::IAM::Role",
-                message: "is not active"
-            }))
-        })
-    }
-    else return new RuleResult({
-        valid: "success"
-    })
-});
+                message: masterRole ? "Account has an IAM_Master role" : "No IAM_Master role found"
+            },
+            {
+                is_compliant: managerRole ? true : false,
+                resource_id: "IAM_Manager",
+                resource_type: "AWS::IAM::Role",
+                message: managerRole ? "Account has an IAM_Manager role" : "No IAM_Manager role found"
+            }
+        ]
+    });
+};
 
 module.exports = IAMMasterAndManagerRolesAreActive;

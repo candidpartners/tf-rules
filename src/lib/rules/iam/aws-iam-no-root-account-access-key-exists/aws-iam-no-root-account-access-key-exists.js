@@ -1,6 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,13 +20,13 @@ IAMNoRootAccountAccessKeyExists.docs = {
 IAMNoRootAccountAccessKeyExists.schema = {type: 'boolean', default: true};
 
 
-IAMNoRootAccountAccessKeyExists.livecheck = co.wrap(function* (context) {
+IAMNoRootAccountAccessKeyExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{
     const IAM = new context.provider.IAM();
-    let {config, provider} = context;
+    // let {config, provider} = context;
 
     // Get credential report
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -37,20 +37,17 @@ IAMNoRootAccountAccessKeyExists.livecheck = co.wrap(function* (context) {
     let key1 = rootUser.access_key_1_active == "true" ? true : false;
     let key2 = rootUser.access_key_2_active == "true" ? true : false;
 
-    if (key1 || key2) {
-        return new RuleResult({
-            valid: "fail",
-            message: "One or both of the root user access keys are still in use.",
-            noncompliant_resources: new NonCompliantResource({
-                resource_id: rootUser.arn,
-                resource_type: "AWS::IAM::User",
-                message: "Root account still has access keys enabled."
-            })
-        })
-    }
-    else return new RuleResult({
-        valid: "success"
-    })
-});
+    let isRootKey = (key1 || key2);
+    return new RuleResult({
+        valid: isRootKey ? "fail" : "success",
+        message: "Root account should not have access keys",
+        resources: [{
+            is_compliant: isRootKey ? false : true,
+            resource_id: rootUser.arn,
+            resource_type: "AWS::IAM::User",
+            message: isRootKey ? "Root account still has access keys enabled." : "The root account does not have access keys"
+        }]
+    });
+};
 
 module.exports = IAMNoRootAccountAccessKeyExists;

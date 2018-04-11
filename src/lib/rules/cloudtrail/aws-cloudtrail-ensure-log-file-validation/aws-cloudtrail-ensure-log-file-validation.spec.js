@@ -13,7 +13,7 @@ describe("All CloudTrail resources should have log file validation enabled.", ()
     test("it fails", async () => {
         let result = await rule.livecheck({provider: BadAWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("One or more CloudTrail resources have log file validation disabled.")
+        expect(result.message).toBeTruthy();
     });
 
     test("it passes", async () => {

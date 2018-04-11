@@ -54,6 +54,7 @@ function validateConfig(rules, config) {
 
 function report(result, instanceName, rule, ruleId) {
     console.log(colors.white(`\n${ruleId}`));
+
     if (result) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
@@ -66,12 +67,17 @@ function report(result, instanceName, rule, ruleId) {
             } else {
                 console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(result.message || rule.docs.description), instanceName && colors.gray(':'), instanceName);
             }
-            //Print out non-compliant resources
-            if (result.noncompliant_resources) {
-                result.noncompliant_resources.forEach(x => {
-                    console.log('\t', colors.red(x.resource_id), colors.gray(x.message))
-                })
-            }
+        }
+        if(result.resources){
+            result.resources.forEach(x => {
+                let message = colors.white(x.resource_id) + " " + x.message;
+                if(x.is_compliant){
+                    console.log('\t' + colors.green(symbols.ok) + message)
+                }
+                else{
+                    console.log('\t' + colors.red(symbols.err) + message)
+                }
+            })
         }
     }
 }
@@ -112,8 +118,21 @@ function* validatePlan(params) {
     return results;
 }
 
+async function getAccountRegionIdentifier(provider){
+    let iam = new provider.IAM();
+    let sts = new provider.STS();
+    let callerIdentity = sts.getCallerIdentity({}).promise();
+    let aliases = iam.listAccountAliases({}).promise();
+    callerIdentity = await callerIdentity;
+    aliases = await aliases;
+    let identifier = _.get(aliases,'AccountAliases[0]',callerIdentity.Account);
+    return `${identifier}/${provider.config.region}/`;
+}
+
 let livecheck = co.wrap(function* (params) {
     const provider = params.provider;
+    let accountAndRegion = yield getAccountRegionIdentifier(provider);
+
     let config_triggers = params.config_triggers || [];
 
     debug('allConfig: %j', params.config);
@@ -135,24 +154,34 @@ let livecheck = co.wrap(function* (params) {
 
         // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
-            let promise = rule.livecheck({config, provider}).then(result => ({
-                rule,
-                ruleId,
-                result
-            }));
+            let promise = rule.livecheck({config, provider}).then(result => {
+
+                // Add account identifier to resources
+                result.resources = result.resources.map(x => Object.assign({},x,{resource_id: `${accountAndRegion}${x.resource_id}`}))
+                return {
+                    rule,
+                    ruleId,
+                    result
+                }
+            })
+
+
             promises.push(promise)
         }
     }
-    // Report back
-    let results = yield Promise.all(promises);
-    results.forEach(({rule, ruleId, result}) => {
-        if (params.report)
-            report(result, "", rule, ruleId);
-    });
+    // Report back in order, but as fast as possible
+    for(let i = 0; i < promises.length; i++){
+        let promise = promises[i];
 
+        let {rule, ruleId, result} = yield promise;
+        if(params.report)
+            report(result, "", rule, ruleId)
+    }
+
+    let results = yield Promise.all(promises);
     return results.map(x => {
         if(x.result)
-            return x.result
+            return x.result;
         else
             throw x
     });

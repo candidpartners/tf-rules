@@ -20,27 +20,31 @@ exports.handler = async function (event, context, callback){
             config_triggers: config_trigger ? [config_trigger] : []
         });
         console.log({result});
-        let failedResults = result
-            .filter(x => x)
-            .filter(x => x.valid == 'fail');
+        result = result.filter(x => x);
 
-        console.log(JSON.stringify(failedResults,null,2));
-        let nonCompliantResources = _.flatMap(failedResults, x => x.noncompliant_resources || []);
-        let resourceEvaluations = nonCompliantResources.map(x => ({
+        console.log(JSON.stringify(result,null,2));
+        let resources = _.flatMap(result, x => x.resources || []);
+        let resourceEvaluations = resources.map(x => ({
             ComplianceResourceId: x.resource_id,
             ComplianceResourceType: x.resource_type,
-            ComplianceType: "NON_COMPLIANT",
+            ComplianceType: x.is_compliant ? "COMPLIANT" : "NON_COMPLIANT",
             OrderingTimestamp: new Date(),
             Annotation: x.message
         }));
 
-        let params = {
-            ResultToken: resultToken,
-            Evaluations: resourceEvaluations
-        };
+        let evaluationChunks = _.chunk(resourceEvaluations,100);
 
-        let putEvaluationsResult = await AWSConfig.putEvaluations(params).promise();
-        callback(null,{params,putEvaluationsResult});
+        for(let i = 0; i < evaluationChunks.length; i++){
+            let evaluations = evaluationChunks[i];
+            let params = {
+                ResultToken: resultToken,
+                Evaluations: evaluations
+            };
+
+            await AWSConfig.putEvaluations(params).promise()
+        }
+        callback(null, "Uploaded resources!");
+
     } catch (err) {
         console.error(err);
         callback(err,null)

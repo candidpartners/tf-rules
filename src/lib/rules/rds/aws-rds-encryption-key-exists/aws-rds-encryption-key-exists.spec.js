@@ -53,7 +53,7 @@ describe('rds-encryption-key-exists', function () {
 
         let failResult = await rule.livecheck({config: {}, provider: badProvider});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("One or more RDS instances are not encrypted.");
+        expect(failResult.message).toBeTruthy();
     });
 
     it("It can exclude instances", async () => {

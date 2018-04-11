@@ -63,7 +63,7 @@ describe('dynamodb-encryption', function () {
 
         let failResult = await rule.livecheck({config: {}, provider: BadAWSMock});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("One or more DynamoDB tables are not encrypted.");
+        expect(failResult.message).toBeTruthy();
     });
 
     it("It can exclude instances", async () => {

@@ -1,8 +1,8 @@
+// @flow
 'use strict';
 const debug = require('debug')('snitch/s3-bucket-logging');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -21,52 +21,46 @@ S3CloudTrailBucketAccessLoggingEnabled.docs = {
 };
 S3CloudTrailBucketAccessLoggingEnabled.schema = {type: 'boolean', default: true};
 
-S3CloudTrailBucketAccessLoggingEnabled.livecheck = co.wrap(function* (context) {
+S3CloudTrailBucketAccessLoggingEnabled.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
 
     let s3 = new provider.S3();
     let cloud = new provider.CloudTrail();
-    let trail = yield cloud.describeTrails().promise();
+    let trail = await cloud.describeTrails().promise();
     let list = trail.trailList;
     let buckets = list.map(x => x.S3BucketName);
 
     try {
-        let logs = yield buckets.map(x => s3.getBucketLogging({Bucket: x}).promise());
+        let logs = await Promise.all(buckets.map(x => s3.getBucketLogging({Bucket: x}).promise()));
         let enabledBuckets = logs.filter(x => x.hasOwnProperty("LoggingEnabled"));
 
-        if (enabledBuckets.length !== logs.length) {
-            let disabledBuckets = logs.filter(x => !x.hasOwnProperty("LoggingEnabled"));
-            let noncompliant_resources = disabledBuckets.map(x => {
-                return new NonCompliantResource({
+        return new RuleResult({
+            valid: (enabledBuckets.length === logs.length) ? "success" : "fail",
+            message: "S3 Buckets should have logging enabled",
+            resources: logs.map(x => {
+                let isLoggingEnabled = x.hasOwnProperty("LoggingEnabled");
+                return new Resource({
+                    is_compliant: isLoggingEnabled ? true : false,
                     resource_id: x,
                     resource_type: "AWS::S3::Bucket",
-                    message: "does not have logging enabled"
+                    message: isLoggingEnabled ? "has logging enabled" : "does not have logging enabled"
                 })
-            });
-            return new RuleResult({
-                valid: "fail",
-                message: "One or more of your CloudTrail S3 buckets does not have logging enabled.",
-                noncompliant_resources
             })
-        }
-        else {
-            return new RuleResult({valid: "success"})
-        }
+        });
 
-    // Thrown if the CloudTrail S3 bucket is in a different account than Snitch is being run in.
+        // Thrown if the CloudTrail S3 bucket is in a different account than Snitch is being run in.
     } catch (err) {
-        if (err.code === 'AccessDenied') {
-            return new RuleResult({
-                valid: "fail",
-                message: "Snitch does not have access to the CloudTrail S3 bucket from this account.",
-                noncompliant_resources: [new NonCompliantResource({
-                    resource_id: "Permission Error",
-                    resource_type: "AWS::::Account",
-                    message: "Snitch does not have access to the CloudTrail S3 bucket from this account."
-                })]
-            })
-        }
+        return new RuleResult({
+            valid: "fail",
+            message: "Snitch encountered an error",
+            resources: [new Resource({
+                is_compliant: false,
+                resource_id: "Permission Error",
+                resource_type: "AWS::::Account",
+                message: err.message
+            })]
+        })
     }
-});
+};
 
 module.exports = S3CloudTrailBucketAccessLoggingEnabled;
