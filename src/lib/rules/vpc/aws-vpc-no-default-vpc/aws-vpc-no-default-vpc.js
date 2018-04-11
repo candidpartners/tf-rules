@@ -1,8 +1,8 @@
+// @flow
 'use strict';
 const debug = require('debug')('snitch/vpc');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -25,39 +25,39 @@ DefaultVPC.schema = {
 };
 
 
-DefaultVPC.livecheck = co.wrap(function* (context) {
+DefaultVPC.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
 
     let ec2 = new provider.EC2();
     let reqTags = config;
 
-    let attributes = yield ec2.describeAccountAttributes().promise();
+    let attributes = await ec2.describeAccountAttributes().promise();
 
     let defaultVPC = attributes.AccountAttributes.find(x => x.AttributeName === 'default-vpc');
-    if (defaultVPC) {
-        let noncompliant_resources = [
-            new NonCompliantResource({
-                resource_id: JSON.stringify(defaultVPC.AttributeValues[0].AttributeValue),
+
+    let defaultVPCID = "Default VPC";
+    if(defaultVPC)
+        defaultVPCID = JSON.stringify(defaultVPC.AttributeValues[0].AttributeValue);
+
+    return new RuleResult({
+        valid: defaultVPC ? "fail" : "success",
+        message: "There should be no default VPC",
+        resources: [
+            new Resource({
+                is_compliant: defaultVPC ? false : true,
+                resource_id: "Default_VPC",
                 resource_type: "AWS::EC2::VPC",
-                message: `exists.`
+                message: defaultVPC ? `${defaultVPCID} exists.` : "No Default VPC Exists"
             })
-        ];
-        return new RuleResult({
-            valid: "fail",
-            message: `A default VPC exists.`,
-            noncompliant_resources
-        })
-    }
-    else {
-        return new RuleResult({valid: "success"})
-    }
-});
+        ]
+    });
+};
 
 DefaultVPC.paths = {
     EC2: 'aws_default_vpc'
 };
 
-DefaultVPC.validate = co.wrap(function* (context) {
+DefaultVPC.validate = async function(context /*: Context */) {
     let {config,instance,provider} = context;
 
     if(instance.AccountAttributes.length === 0){
@@ -70,7 +70,7 @@ DefaultVPC.validate = co.wrap(function* (context) {
             message: "A default VPC exists"
         }
     }
-});
+};
 
 module.exports = DefaultVPC;
 

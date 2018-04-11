@@ -13,7 +13,7 @@ describe("aws-cloudtrail-logs-are-encrypted", () => {
     it("Will fail if logs are not encrypted",async () => {
         const result = await rule.livecheck({config: true, provider: provider1});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe('One or more CloudTrail logs are not encrypted.');
+        expect(result.message).toBeTruthy();
     });
 
     it("Will succeed if logs are encrypted", async () => {

@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+// @flow
+const {Resource,RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,29 +19,23 @@ CloudTrailIsEnabledInAllRegions.schema = {
 };
 
 
-CloudTrailIsEnabledInAllRegions.livecheck = co.wrap(function* (context) {
+CloudTrailIsEnabledInAllRegions.livecheck = async function (context /*: Context */) /*: Promise<RuleResult>*/{
     let {config, provider} = context;
     let cloud = new provider.CloudTrail();
 
-    let trails = yield cloud.describeTrails().promise();
+    let trails = await cloud.describeTrails().promise();
     let multi = trails.trailList.map(x => x.IsMultiRegionTrail);
 
-    if (!multi.includes(true)) {
-        return new RuleResult({
-            valid: "fail",
-            message: "There are no CloudTrail resources that are enabled in all regions.",
-            noncompliant_resources: [
-                new NonCompliantResource({
-                    resource_id: "Cloudtrail",
-                    resource_type: "AWS::::Account",
-                    message: "does not have IsMultiRegionTrail enabled."
-                })
-            ]
-        })
-    }
-    else return new RuleResult({
-        valid: "success"
-    })
-});
+    return new RuleResult({
+       valid: (multi.includes(true)) ? "success" : "fail",
+       message: CloudTrailIsEnabledInAllRegions.docs.description,
+       resources: [{
+           is_compliant: multi.includes(true) ? true : false,
+           resource_id: "Cloudtrail",
+           resource_type: "AWS::::Account",
+           message: "does not have IsMultiRegionTrail enabled."
+       }]
+    });
+};
 
 module.exports = CloudTrailIsEnabledInAllRegions;

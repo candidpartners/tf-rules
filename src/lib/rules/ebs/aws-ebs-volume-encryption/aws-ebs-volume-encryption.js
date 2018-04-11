@@ -1,8 +1,7 @@
-'use strict';
+// @flow
 const debug = require('debug')('snitch/ebs-encryption');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -34,38 +33,34 @@ EBSVolumeEncryption.schema = {
 }
 
 
-EBSVolumeEncryption.livecheck = co.wrap(function* (context) {
+EBSVolumeEncryption.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let exclude = config.exclude || [];
 
     let ec2 = new provider.EC2();
-    let reqTags = config;
 
-    let volumes = yield ec2.describeVolumes().promise();
+    let volumes = await ec2.describeVolumes().promise();
 
-    let UnencryptedVolumes = volumes.Volumes.filter(x => !exclude.includes(x.VolumeId) && x.Encrypted === false);
+    let isVolumeUnencrypted = x => !exclude.includes(x.VolumeId) && x.Encrypted === false
+    let UnencryptedVolumes = volumes.Volumes.filter(isVolumeUnencrypted);
 
-    if (UnencryptedVolumes.length > 0) {
-        let noncompliant_resources = UnencryptedVolumes.map(vol => {
-            return new NonCompliantResource({
-                resource_id: vol.VolumeId,
+    return new RuleResult({
+        valid: (UnencryptedVolumes.length > 0) ? "fail" : "success",
+        message: "EBS Volumes must be encrypted",
+        resources: volumes.Volumes.map(x => {
+            let isUnencrypted = isVolumeUnencrypted(x);
+            return new Resource({
+                is_compliant: isUnencrypted ? false : true,
+                resource_id: x.VolumeId,
                 resource_type: "AWS::EC2::Volume",
-                message: 'is unencrypted.'
+                message: isUnencrypted ? 'is unencrypted.' : "is encrypted"
             })
-        });
-        // console.log(noncompliant_resources);
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more EBS volumes are not encrypted.",
-            noncompliant_resources
-        })
-    }
-    else {
-        return {valid: "success"}
-    }
-});
 
-EBSVolumeEncryption.validate = co.wrap(function* (context) {
+        })
+    });
+};
+
+EBSVolumeEncryption.validate = function (context /*: Context */) {
     let {config, instance, provider} = context;
 
     if (instance.encrypted === true) {
@@ -78,7 +73,7 @@ EBSVolumeEncryption.validate = co.wrap(function* (context) {
             message: "A dynamodb instance is not encrypted"
         }
     }
-});
+};
 
 module.exports = EBSVolumeEncryption;
 

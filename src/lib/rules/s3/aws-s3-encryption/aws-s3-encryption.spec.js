@@ -94,7 +94,7 @@ describe('s3-encryption', function () {
 
         let failResult = await rule.livecheck({config: {}, provider: BadAWSMock});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("One or more S3 buckets are not encrypted.");
+        expect(failResult.message).toBeTruthy();
     });
 
     it("It can exclude instances", async () => {

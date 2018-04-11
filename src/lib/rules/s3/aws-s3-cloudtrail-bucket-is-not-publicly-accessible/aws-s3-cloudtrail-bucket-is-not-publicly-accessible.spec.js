@@ -15,7 +15,7 @@ describe("The CloudTrail S3 logging bucket should not be publicly accessible.", 
     test("it fails", async () => {
         let result = await rule.livecheck({provider: BadAWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("One or more CloudTrail S3 buckets is publicly accessible.")
+        expect(result.message).toBeTruthy();
     });
 
     test("it passes", async () => {

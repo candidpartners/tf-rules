@@ -1,6 +1,7 @@
-const co = require('co');
+// @flow
+const _ = require('lodash');
 const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -126,7 +127,7 @@ const filterPatterns = [
 ];
 
 
-CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
+CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{
     let {config, provider} = context;
     let trail = new provider.CloudTrail();
     let logs = new provider.CloudWatchLogs();
@@ -136,7 +137,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
     let noncompliant_resources = [];
 
     // Get the names of all the CloudTrail log groups
-    let trails = yield trail.describeTrails().promise();
+    let trails = await trail.describeTrails().promise();
     let logGroupArns = trails.trailList.map(x => x.CloudWatchLogsLogGroupArn);
 
     let logGroupNames = [];
@@ -149,7 +150,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
     logGroupNames.map(x => {
         promises.push(logs.describeMetricFilters({logGroupName: x}).promise());
     });
-    let metricFilters = yield Promise.all(promises);
+    let metricFilters = await Promise.all(promises);
 
     // Get the names of all the metric filters that match a rule pattern
     let patterns = filterPatterns.map(x => x.pattern);
@@ -157,16 +158,17 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
     let metricNames = metrics.map(x => x.metricTransformations[0].metricName);
 
     // Get all the alarms under those metric filters
-    let result = yield watch.describeAlarms().promise();
+    let result = await watch.describeAlarms().promise();
     let alarms = result.MetricAlarms;
     while (result.NextToken) {
-        result = yield watch.describeAlarms({NextToken: result.NextToken}).promise();
+        result = await watch.describeAlarms({NextToken: result.NextToken}).promise();
         alarms = [...alarms, ...result.MetricAlarms]
     }
 
     // Check if no metric filters exist
     if (metrics.length === 0) {
-        noncompliant_resources.push(new NonCompliantResource({
+        noncompliant_resources.push(new Resource({
+            is_compliant: false,
             resource_id: "CloudWatchLogs",
             resource_type: "AWS::CloudWatch::Alarm",
             message: "does not have any metric filters set up."
@@ -174,7 +176,7 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
         return new RuleResult({
             valid: "fail",
             message: `A log metric filter and alarm do not exist for any rules.`,
-            noncompliant_resources
+            resources: noncompliant_resources
         })
     }
 
@@ -198,13 +200,14 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
                 topicArn = filteredAlarm.AlarmActions[0];
             }
             if (topicArn) {
-                subscribers = yield sns.listSubscriptionsByTopic({TopicArn: topicArn}).promise();
+                subscribers = await sns.listSubscriptionsByTopic({TopicArn: topicArn}).promise();
             }
 
 
             // Check if no metric filters exist for the specified rule
             if (activeFilter === undefined) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
+                    is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have a metric filter set up for ${activeFilterPatterns[i].rule}.`
@@ -213,7 +216,8 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no alarms exist for the specified filter
             else if (filteredAlarm === undefined) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
+                    is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have an alarm set up for ${activeFilterPatterns[i].rule}.`
@@ -222,7 +226,8 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
 
             // Check if no actions exist for the specified alarm
             else if (filteredAlarm.AlarmActions.length === 0) {
-                noncompliant_resources.push(new NonCompliantResource({
+                noncompliant_resources.push(new Resource({
+                    is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have an action linked to the alarm for ${activeFilterPatterns[i].rule}.`
@@ -230,8 +235,9 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
             }
 
             // Check if no subscriptions exist for the specified alarm
-            else if (subscribers.Subscriptions.length === 0) {
-                noncompliant_resources.push(new NonCompliantResource({
+            else if (_.get(subscribers,'Subscriptions.length') === 0) {
+                noncompliant_resources.push(new Resource({
+                    is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have any subscribers linked to the alarm for ${activeFilterPatterns[i].rule}.`
@@ -240,18 +246,12 @@ CloudWatchMetricAlarms.livecheck = co.wrap(function* (context) {
         }
     }
 
-    if (noncompliant_resources.length > 0) {
-        return new RuleResult({
-            valid: "fail",
-            message: `A log metric filter and alarm do not exist for one or more rules.`,
-            noncompliant_resources
-        })
-    }
-    else {
-        return new RuleResult({
-            valid: "success"
-        })
-    }
-});
+    return new RuleResult({
+        valid: (noncompliant_resources.length > 0) ? "fail" : "success",
+        message: "aws-cloudwatch-metric-alarms",
+        resources: noncompliant_resources
+    })
+
+};
 
 module.exports = CloudWatchMetricAlarms;

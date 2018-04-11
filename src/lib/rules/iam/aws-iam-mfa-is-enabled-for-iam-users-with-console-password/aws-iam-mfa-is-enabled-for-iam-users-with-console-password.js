@@ -1,6 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -17,37 +17,37 @@ MFAIsEnabledForIAMUsersWithConsolePassword.docs = {
     description: 'All IAM users with a console password have MFA enabled.',
     recommended: false
 };
-MFAIsEnabledForIAMUsersWithConsolePassword.schema = { type : 'boolean', default: true };
+MFAIsEnabledForIAMUsersWithConsolePassword.schema = {type: 'boolean', default: true};
 
 
-MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = co.wrap(function *( context ) {
+MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = async function (context /*: Context */) /*: Promise<RuleResult>*/{
 
     let IAM = new context.provider.IAM();
 
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
     let usersWithPasswordButNoMFA = data.filter(x => x.password_enabled == 'true' && x.mfa_active == 'false');
 
-    if(usersWithPasswordButNoMFA.length > 0){
-        return new RuleResult({
-            valid: 'fail',
-            message: "Some console users don't have MFA enabled.",
-            noncompliant_resources: usersWithPasswordButNoMFA.map(x => new NonCompliantResource({
+    return new RuleResult({
+        valid: (usersWithPasswordButNoMFA.length > 0) ? "fail" : "success",
+        message: "Console users must have MFA.",
+        resources: data.map(x => {
+            let password_enabled = x.password_enabled == 'true';
+            let mfa_active = x.mfa_active == 'true';
+            let hasPasswordWithoutMFA = password_enabled && !mfa_active;
+
+            return new Resource({
+                is_compliant: hasPasswordWithoutMFA ? false : true,
                 resource_id: x.arn,
                 resource_type: "AWS::IAM::User",
-                message: "does not have MFA enabled."
-            }))
+                message: hasPasswordWithoutMFA ? "has console access but no MFA enabled." : "is compliant."
+            })
         })
-    }
-    else if (usersWithPasswordButNoMFA.length == 0){
-        return new RuleResult({
-            valid: 'success'
-        })
-    }
-});
+    })
+};
 
 module.exports = MFAIsEnabledForIAMUsersWithConsolePassword;

@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+// @flow
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -19,11 +18,11 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.docs = {
 };
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.schema = {type: 'boolean', default: true};
 
-IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = co.wrap(function* (context) {
+IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let iam = new provider.IAM();
 
-    let users = yield iam.listUsers().promise();
+    let users = await iam.listUsers().promise();
     let userNames = users.Users.map(x => x.UserName);
     let usersWithPolicies = [];
 
@@ -35,20 +34,17 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = co.wrap(function* (context
         }
     });
 
-    if (usersWithPolicies.length > 0) {
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more users have policies directly attached.",
-            noncompliant_resources: usersWithPolicies.map(x => new NonCompliantResource({
-                resource_id: x,
-                resource_type: "AWS::IAM::User",
-                message: "has a policy directly attached."
-            }))
-        })
-    }
-    else return new RuleResult({
-        valid: "success"
+    let isInvalid = usersWithPolicies.length > 0;
+    return new RuleResult({
+        valid: isInvalid ? "fail" : "success",
+        message: "Users should not have policies directly attached",
+        resources: usersWithPolicies.map(x => new Resource({
+            is_compliant: false,
+            resource_id: x,
+            resource_type: "AWS::IAM::User",
+            message: "has a policy directly attached."
+        }))
     })
-});
+};
 
 module.exports = IAMPoliciesAreAttachedOnlyToGroupsOrRoles;

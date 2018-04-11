@@ -21,7 +21,7 @@ describe("mfa-is-enabled-for-root-account", () => {
 
         let result = await rule.livecheck({provider: provider});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe('Root account does not have MFA enabled.');
+        expect(result.message).toBe('Root account must have MFA enabled');
     });
 
     test("Can confirm if valid = success", async () => {

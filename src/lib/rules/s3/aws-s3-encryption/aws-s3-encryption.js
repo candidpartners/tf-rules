@@ -1,8 +1,8 @@
+// @flow
 'use strict';
 const debug = require('debug')('snitch/s3-encryption');
-const co = require('co');
 const _ = require('lodash');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -32,14 +32,14 @@ S3Encryption.schema = {
     }
 };
 
-S3Encryption.livecheck = co.wrap(function* (context) {
+S3Encryption.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let exclude = config.exclude || [];
 
     let s3 = new provider.S3();
     let reqTags = config;
 
-    let buckets = yield s3.listBuckets().promise();
+    let buckets = await s3.listBuckets().promise();
     let bucketNames = _.flatMap(buckets.Buckets, "Name");
 
     let promises = bucketNames.map(x => {
@@ -48,35 +48,31 @@ S3Encryption.livecheck = co.wrap(function* (context) {
             .catch(error => ({bucket:x, status: "fail", error}))
     });
 
-    let UnencryptedBuckets = yield Promise.all(promises)
-        .then(results => {
-            return results.filter(x => x.status === 'fail' && x.error.code === 'ServerSideEncryptionConfigurationNotFoundError')
-        });
+    let AllBuckets = await Promise.all(promises);
+    let isUnencrypted = x => x.status === 'fail' && x.error.code === 'ServerSideEncryptionConfigurationNotFoundError'
+    let UnencryptedBuckets  = AllBuckets.filter(isUnencrypted);
 
-    if (UnencryptedBuckets.length > 0) {
-        let noncompliant_resources = UnencryptedBuckets.map(bucket => {
-            return new NonCompliantResource({
-                resource_id: bucket.bucket,
+    return new RuleResult({
+        valid: (UnencryptedBuckets.length > 0) ? "fail" : "success",
+        message: "S3 Buckets must be encrypted",
+        resources: AllBuckets.map(x => {
+            let unencrypted = isUnencrypted(x);
+
+            return new Resource({
+                is_compliant: unencrypted ? false : true,
+                resource_id: x.bucket,
                 resource_type: "AWS::S3::Bucket",
-                message: `is unencrypted.`
+                message: unencrypted ? `is unencrypted.` : "is encrypted"
             })
-        });
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more S3 buckets are not encrypted.",
-            noncompliant_resources
         })
-    }
-    else {
-        return {valid: "success"}
-    }
-});
+    })
+};
 
 S3Encryption.paths = {
     S3: 'aws_s3_bucket'
 };
 
-S3Encryption.validate = function* (context) {
+S3Encryption.validate = async function(context /*: Context */) {
     let {config,provider,instance} = context;
 
     let server_side_encryption_array = _.get(instance,'server_side_encryption_configuration',[]);

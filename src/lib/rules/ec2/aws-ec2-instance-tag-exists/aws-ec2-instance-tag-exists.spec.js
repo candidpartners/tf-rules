@@ -26,7 +26,7 @@ describe("aws-ec2-instance-tag-exists", () => {
 
         let failResult = await rule.livecheck({config:["OtherTag"], provider});
         expect(failResult.valid).toBe('fail');
-        expect(failResult.message).toBe("One or more EC2 instances are missing required tags.");
+        expect(failResult.message).toBe("EC2 Instances must have specified tags");
     });
 
     it("Can perform a tfcheck", async () => {

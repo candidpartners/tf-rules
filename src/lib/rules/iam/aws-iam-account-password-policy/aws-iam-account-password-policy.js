@@ -1,8 +1,7 @@
-'use strict';
-const co = require('co');
+// @flow
 const _ = require('lodash');
 const debug = require('debug')('snitch/tag-format');
-const {RuleResult,NonCompliantResource} = require('../../../rule-result');
+const {RuleResult,Resource, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -48,12 +47,12 @@ IAMAccountPasswordPolicy.schema = {
 };
 
 
-IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
+IAMAccountPasswordPolicy.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     const IAM = new context.provider.IAM();
     let config = context.config;
 
     try{
-        const result = yield IAM.getAccountPasswordPolicy().promise();
+        const result = await IAM.getAccountPasswordPolicy().promise();
         const {PasswordPolicy} = result;
         // console.log(PasswordPolicy,config);
         let errors =_.map(config, (value,key) => {
@@ -66,8 +65,9 @@ IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
             return new RuleResult({
                 valid: "fail",
                 message: "The account password policy is not compliant",
-                noncompliant_resources: [
-                    new NonCompliantResource({
+                resources: [
+                    new Resource({
+                        is_compliant: false,
                         resource_id: "Password Policy",
                         resource_type:"AWS::::Account",
                         message: "The password policy does not conform to the config. " + errors.join('\n')
@@ -76,16 +76,37 @@ IAMAccountPasswordPolicy.livecheck = co.wrap(function* (context) {
         }
         else{
             return new RuleResult({
-                valid: "success"
+                valid: "success",
+                message: "The account password policy is compliant",
+                resources: [
+                    new Resource({
+                        is_compliant: true,
+                        resource_id: "Password Policy",
+                        resource_type: "AWS::::Account",
+                        message: "The password policy conforms to the config."
+                    })
+                ]
             })
         }
 
     } catch(error){
-        return {valid: 'fail', message: error.message}
-    }
-});
+        return new RuleResult({
+            valid: "fail",
+            message: "aws-iam-account-password-policy encountered an error",
+            resources: [
+                {
+                    is_compliant: false,
+                    resource_id: "Password Policy",
+                    resource_type: "AWS::::Account",
+                    message: error.message
+                }
+            ]
 
-IAMAccountPasswordPolicy.validate = function (context) {
+        })
+    }
+};
+
+IAMAccountPasswordPolicy.validate = function (context /*: Context */){
     let instance = context.instance;
     const {
         MinimumPasswordLength,

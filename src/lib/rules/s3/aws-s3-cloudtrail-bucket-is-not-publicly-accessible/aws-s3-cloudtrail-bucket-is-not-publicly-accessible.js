@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource, RuleResult} = require('../../../rule-result');
+// @flow
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,50 +19,52 @@ S3CloudTrailBucketIsNotPubliclyAccessible.docs = {
 S3CloudTrailBucketIsNotPubliclyAccessible.schema = {type: 'boolean', default: true};
 
 
-S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = co.wrap(function* (context) {
+S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     let cloud = new provider.CloudTrail();
     let s3 = new provider.S3();
 
-    let trails = yield cloud.describeTrails().promise();
+    let trails = await cloud.describeTrails().promise();
     let buckets = trails.trailList.map(x => x.S3BucketName);
 
     try {
-        let trailBuckets = yield buckets.map(x => s3.getBucketPolicy({Bucket: x}).promise());
+        let trailBuckets = await Promise.all(buckets.map(x => s3.getBucketPolicy({Bucket: x}).promise()));
         let bucketStatements = trailBuckets.map(x => x.Policy.Statement);
-        let nonCompliantBuckets = bucketStatements.filter(x => x.Effect === "Allow" && x.Principal === "*");
+        let isBucketNonCompliant = x => x.Effect === "Allow" && x.Principal === "*";
+        let nonCompliantBuckets = bucketStatements.filter(isBucketNonCompliant);
 
-        if (nonCompliantBuckets.length > 0) {
-            return new RuleResult({
-                valid: "fail",
-                message: "One or more CloudTrail S3 buckets is publicly accessible.",
-                noncompliant_resources: nonCompliantBuckets.map(x => new NonCompliantResource({
+        return new RuleResult({
+            valid: (nonCompliantBuckets.length > 0) ? "fail" : "success",
+            message: "S3 Cloudtrail bucket should not be publicly accessible",
+            resources: bucketStatements.map(x => {
+                let isPublic = isBucketNonCompliant(x);
+
+                return new Resource({
+                    is_compliant: isPublic ? false : true,
                     resource_id: x.Resource,
                     resource_type: "AWS::S3::Bucket",
-                    message: "is publicly accessible."
-                }))
+                    message: isPublic ? "is publicly accessible." : "is not publicly accessible"
+                })
             })
-        }
-        else return new RuleResult({
-            valid: "success"
-        })
+        });
 
     // Thrown if the CloudTrail S3 bucket is in a different account than Snitch is being run in.
     } catch (err) {
-        if (err.code === 'AccessDenied') {
+        // if (err.code === 'AccessDenied') {
             return new RuleResult({
                 valid: "fail",
-                message: "Snitch does not have access to the CloudTrail S3 bucket from this account.",
-                noncompliant_resources: [
-                    new NonCompliantResource({
-                        resource_id: "Permission Error",
+                message: "Snitch encountered an error",
+                resources: [
+                    new Resource({
+                        is_compliant: false,
+                        resource_id: "AWS Error",
                         resource_type: "AWS::::Account",
-                        message: "Snitch does not have access to the CloudTail S3 bucket from this account."
+                        message: err.message
                     })
                 ]
             })
-        }
+        // }
     }
-});
+};
 
 module.exports = S3CloudTrailBucketIsNotPubliclyAccessible;
