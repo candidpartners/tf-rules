@@ -1,7 +1,7 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
 const _ = require('lodash');
-const {Resource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -21,13 +21,13 @@ IAMEnsureUnusedCredentialsAreDisabled.docs = {
 IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number', default: 90};
 
 
-IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
+IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
     const IAM = new context.provider.IAM();
 
     // Get credential report
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -67,29 +67,53 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {
     let invalidPasswordUsers = data.filter(x => !userIsValid(x));
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
-    let noncompliant_resources = [
-            ...invalidPasswordUsers.map(x => new Resource({
-            resource_id: x.user,
-            resource_type: "AWS::IAM::User",
-            message: `has a password they have not used in over ${dateRange} days.`
-        })),
-        ...invalidAccessKeyUsers.map(x => new Resource({
-            resource_id: x.user,
-            resource_type: "AWS::IAM::User",
-            message: `has an access key they have not used in over ${dateRange} days.`
-        }))
-    ];
 
-    if (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0) {
-        return new RuleResult({
-            valid: 'fail',
-            message: `${invalidPasswordUsers.length} users have a password they have not used in over ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in over ${dateRange} days.`,
-            noncompliant_resources: noncompliant_resources
+    return new RuleResult({
+        valid: (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers.length > 0) ? "fail" : "success",
+        message: "Users must have a valid password and access key",
+        resources: data.map(user => {
+            let validPassword = userIsValid(user);
+            let validAccessKeys = userAccessKeysAreValid(user);
+
+            let message = "";
+            if(validPassword && validAccessKeys)
+                message = "User has a valid password and access keys.";
+            if(!validPassword)
+                message += `User has a password they have not used in over ${dateRange} days. `;
+            if(!validAccessKeys)
+                message += `User has an access key they have not used in over ${dateRange} days.`;
+            return new Resource({
+                is_compliant: (validPassword && validAccessKeys),
+                message,
+                resource_id: user.user,
+                resource_type: "AWS::IAM::User",
+            })
         })
-    }
-    else {
-        return new RuleResult({valid: 'success'})
-    }
-});
+    })
+
+    // let noncompliant_resources = [
+    //         ...invalidPasswordUsers.map(x => new Resource({
+    //         resource_id: x.user,
+    //         resource_type: "AWS::IAM::User",
+    //         message: `has a password they have not used in over ${dateRange} days.`
+    //     })),
+    //     ...invalidAccessKeyUsers.map(x => new Resource({
+    //         resource_id: x.user,
+    //         resource_type: "AWS::IAM::User",
+    //         message: `has an access key they have not used in over ${dateRange} days.`
+    //     }))
+    // ];
+
+    // if (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0) {
+    //     return new RuleResult({
+    //         valid: 'fail',
+    //         message: `${invalidPasswordUsers.length} users have a password they have not used in over ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in over ${dateRange} days.`,
+    //         noncompliant_resources: noncompliant_resources
+    //     })
+    // }
+    // else {
+    //     return new RuleResult({valid: 'success'})
+    // }
+};
 
 module.exports = IAMEnsureUnusedCredentialsAreDisabled;

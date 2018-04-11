@@ -1,6 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
-const {Resource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,13 +20,13 @@ IAMEnsureAccessKeysAreRotated.docs = {
 
 IAMEnsureAccessKeysAreRotated.schema = {type: 'number', default: 90};
 
-IAMEnsureAccessKeysAreRotated.livecheck = co.wrap(function* (context) {
+IAMEnsureAccessKeysAreRotated.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     const IAM = new context.provider.IAM();
     let {config, provider} = context;
 
     // Get credential report
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -68,20 +68,19 @@ IAMEnsureAccessKeysAreRotated.livecheck = co.wrap(function* (context) {
 
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
-    if (invalidAccessKeyUsers.length > 0) {
-        return new RuleResult({
-            valid: 'fail',
-            message: `${invalidAccessKeyUsers.length} users have an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`,
-            noncompliant_resources: invalidAccessKeyUsers.map(x => new Resource({
+    return new RuleResult({
+        valid: (invalidAccessKeyUsers.length > 0) ? "fail" : "success",
+        message: "User access keys must be rotated",
+        resources: data.map(x => {
+            let isValid = userAccessKeysAreValid(x);
+            return new Resource({
+                is_compliant: isValid ? true : false,
                 resource_id: x.user,
                 resource_type: "AWS::IAM::User",
-                message: `has an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`
-            }))
+                message: isValid ? "Access keys have been rotated" : `has an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`
+            })
         })
-    }
-    else {
-        return new RuleResult({valid: 'success'})
-    }
-});
+    });
+};
 
 module.exports = IAMEnsureAccessKeysAreRotated;

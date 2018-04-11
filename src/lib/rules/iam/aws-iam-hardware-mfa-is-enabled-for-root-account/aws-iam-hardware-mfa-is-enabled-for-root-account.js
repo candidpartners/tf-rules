@@ -1,6 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
-const {Resource,RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -17,14 +17,14 @@ HardwareMFAIsEnabledForRootAccount.docs = {
     description: 'The root account has hardware MFA enabled.',
     recommended: false
 };
-HardwareMFAIsEnabledForRootAccount.schema = { type : 'boolean', default: true };
+HardwareMFAIsEnabledForRootAccount.schema = {type: 'boolean', default: true};
 
 
-HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
+HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     let IAM = new context.provider.IAM();
 
-    yield IAM.generateCredentialReport().promise();
-    let report1 = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report1 = await IAM.getCredentialReport().promise();
 
     let content = report1.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -34,7 +34,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
 
     let virtualRoot = undefined;
     if (rootUser1.mfa_active === "true") {
-        let virtualReport = yield IAM.listVirtualMFADevices().promise();
+        let virtualReport = await IAM.listVirtualMFADevices().promise();
         if (virtualReport.VirtualMFADevices) {
             virtualRoot = virtualReport.VirtualMFADevices.find(x => x.SerialNumber.includes("mfa/root-account-mfa-device"));
         }
@@ -44,7 +44,8 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have hardware MFA enabled.",
-            noncompliant_resources: [new Resource({
+            resources: [new Resource({
+                is_compliant: false,
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
                 message: "has virtual MFA enabled, hardware MFA is required for compliance."
@@ -55,7 +56,8 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
         return new RuleResult({
             valid: 'fail',
             message: "Root account does not have hardware MFA enabled.",
-            noncompliant_resources: [new Resource({
+            resources: [new Resource({
+                is_compliant: false,
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
                 message: "does not have virtual or hardware MFA enabled."
@@ -64,9 +66,18 @@ HardwareMFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
     }
     else {
         return new RuleResult({
-            valid: 'success'
+            valid: 'success',
+            message: "Root account has hardware MFA enabled",
+            resources: [
+                new Resource({
+                    is_compliant: true,
+                    resource_id: rootUser1.arn,
+                    resource_type: "AWS::IAM::User",
+                    message: "has virtual or hardware MFA enabled."
+                })
+            ]
         })
     }
-});
+};
 
 module.exports = HardwareMFAIsEnabledForRootAccount;

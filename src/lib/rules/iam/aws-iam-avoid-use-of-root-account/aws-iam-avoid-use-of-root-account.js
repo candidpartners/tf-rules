@@ -1,5 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
+const {RuleResult, Resource, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -19,13 +20,13 @@ IAMAvoidUseOfRootAccount.docs = {
 IAMAvoidUseOfRootAccount.schema = {type: 'number', default: 30};
 
 
-IAMAvoidUseOfRootAccount.livecheck = co.wrap(function* (context) {
+IAMAvoidUseOfRootAccount.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     const IAM = new context.provider.IAM();
     let {config, provider} = context;
 
     // Get credential report
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -43,18 +44,18 @@ IAMAvoidUseOfRootAccount.livecheck = co.wrap(function* (context) {
     let daysSinceLastUsed = getNumberOfDaysSince(loginDate);
     let RequiredDaysSinceLastUsed = config;
 
-    if (daysSinceLastUsed >= RequiredDaysSinceLastUsed) {
-        return {
-            valid: 'success'
-        };
-    }
-    else {
-        return {
-            valid: 'fail',
-            message: `<root_account> logged in ${daysSinceLastUsed.toFixed(0)} days ago.`
-        }
-    }
-});
+    let hasBeenUsedRecently = (daysSinceLastUsed >= RequiredDaysSinceLastUsed);
+    return new RuleResult({
+        valid: hasBeenUsedRecently ? "fail" : "success",
+        message: "The root account should not be used.",
+        resources: [{
+            is_compliant: true,
+            message: hasBeenUsedRecently ? `<root_account> logged in ${daysSinceLastUsed.toFixed(0)} days ago.` : "The root account has not been used recently.",
+            resource_type: "AWS::::Account",
+            resource_id: "PasswordPolicy"
+        }]
+    })
+};
 
 module.exports = IAMAvoidUseOfRootAccount;
 

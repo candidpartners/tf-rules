@@ -1,6 +1,6 @@
-const co = require('co');
+// @flow
 const Papa = require('papaparse');
-const {Resource,RuleResult} = require('../../../rule-result');
+const {Resource,RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -20,12 +20,12 @@ MFAIsEnabledForRootAccount.docs = {
 MFAIsEnabledForRootAccount.schema = { type : 'boolean', default: true };
 
 
-MFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
+MFAIsEnabledForRootAccount.livecheck = async function( context /*: Context */) /*: Promise<RuleResult> */ {
 
     let IAM = new context.provider.IAM();
 
-    yield IAM.generateCredentialReport().promise();
-    let report = yield IAM.getCredentialReport().promise();
+    await IAM.generateCredentialReport().promise();
+    let report = await IAM.getCredentialReport().promise();
 
     let content = report.Content.toString();
     let csv = Papa.parse(content, {header: true});
@@ -33,22 +33,17 @@ MFAIsEnabledForRootAccount.livecheck = co.wrap(function *( context ) {
 
     let rootUser = data.find(x => x.user === `<root_account>`);
 
-    if(rootUser.mfa_active === "false"){
-        return new RuleResult({
-            valid: 'fail',
-            message: "Root account does not have MFA enabled.",
-            noncompliant_resources: [new Resource({
-                resource_id: rootUser.arn,
-                resource_type: "AWS::IAM::User",
-                message: "does not have MFA enabled."
-            })]
-        })
-    }
-    else {
-        return new RuleResult({
-            valid: 'success'
-        })
-    }
-});
+    let isInvalid = (rootUser.mfa_active === "false")
+    return new RuleResult({
+        valid: isInvalid ? "fail" : "success",
+        message: "Root account must have MFA enabled",
+        resources: [{
+            is_compliant: isInvalid ? false : true,
+            resource_id: rootUser.arn,
+            resource_type: "AWS::IAM::User",
+            message: isInvalid ? "does not have MFA enabled." : "has MFA enabled"
+        }]
+    });
+};
 
 module.exports = MFAIsEnabledForRootAccount;
