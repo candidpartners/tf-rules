@@ -68,7 +68,7 @@ describe('aws-ec2-key-pair-exists-livecheck', function () {
         let provider = getProvider([{KeyName: "MyKey"},{}]);
         let result = await rule.livecheck({provider});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("One or more of your EC2 instances do not have a Key Pair.");
+        expect(result.message).toBeTruthy();
     })
 
     it("Should succeed if all ec2 instances are found with a key", async function () {

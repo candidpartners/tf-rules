@@ -68,26 +68,6 @@ EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<Rule
             })
         })
     })
-    // if (InstancesWithoutTags.length > 0) {
-    //     let noncompliant_resources = InstancesWithoutTags.map(inst => {
-    //         let {Tags, InstanceId} = inst;
-    //         let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
-    //
-    //         return new Resource({
-    //             resource_id: InstanceId,
-    //             resource_type: "AWS::EC2::Instance",
-    //             message: `Missing tags ${missingTags}`
-    //         })
-    //     });
-    //     return new RuleResult({
-    //         valid: "fail",
-    //         message: "One or more EC2 instances are missing required tags.",
-    //         noncompliant_resources: noncompliant_resources
-    //     })
-    // }
-    // else {
-    //     return new RuleResult({valid: 'success'});
-    // }
 };
 
 

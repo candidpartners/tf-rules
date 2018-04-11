@@ -66,12 +66,23 @@ function report(result, instanceName, rule, ruleId) {
             } else {
                 console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(result.message || rule.docs.description), instanceName && colors.gray(':'), instanceName);
             }
-            //Print out non-compliant resources
-            if (result.noncompliant_resources) {
-                result.noncompliant_resources.forEach(x => {
-                    console.log('\t', colors.red(x.resource_id), colors.gray(x.message))
+            if(result.resources){
+                result.resources.forEach(x => {
+                    let message = colors.white(x.resource_id) + " " + x.message;
+                    if(x.is_compliant){
+                        console.log('\t' + colors.green(symbols.ok) + message)
+                    }
+                    else{
+                        console.log('\t' + colors.red(symbols.err) + message)
+                    }
                 })
             }
+            //Print out non-compliant resources
+            // if (result.noncompliant_resources) {
+            //     result.noncompliant_resources.forEach(x => {
+            //         console.log('\t', colors.red(x.resource_id), colors.gray(x.message))
+            //     })
+            // }
         }
     }
 }
@@ -143,16 +154,19 @@ let livecheck = co.wrap(function* (params) {
             promises.push(promise)
         }
     }
-    // Report back
-    let results = yield Promise.all(promises);
-    results.forEach(({rule, ruleId, result}) => {
-        if (params.report)
-            report(result, "", rule, ruleId);
-    });
+    // Report back in order, but as fast as possible
+    for(let i = 0; i < promises.length; i++){
+        let promise = promises[i];
 
+        let {rule, ruleId, result} = yield promise;
+        if(params.report)
+            report(result, "", rule, ruleId)
+    }
+
+    let results = yield Promise.all(promises);
     return results.map(x => {
         if(x.result)
-            return x.result
+            return x.result;
         else
             throw x
     });

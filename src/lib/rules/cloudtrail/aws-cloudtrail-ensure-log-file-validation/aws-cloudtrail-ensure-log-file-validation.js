@@ -33,7 +33,7 @@ CloudtrailLogFileValidation.livecheck = async function (context /*: Context */) 
     return new RuleResult({
         valid: (disabledTrails.length > 0) ? "fail" : "success",
         message: CloudtrailLogFileValidation.docs.description,
-        resources: trails.map(t => {
+        resources: trails.trailList.map(t => {
             let isDisabled = (t.LogFileValidationEnabled === false);
             return new Resource({
                 is_compliant: isDisabled ? false : true,

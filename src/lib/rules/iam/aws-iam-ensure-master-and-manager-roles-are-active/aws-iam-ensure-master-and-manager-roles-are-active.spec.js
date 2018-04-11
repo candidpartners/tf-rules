@@ -13,7 +13,7 @@ describe("Master and Manager roles should be active.", () => {
     test("it fails", async () => {
         let result = await rule.livecheck({provider: BadAWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("One or both of the IAM Master and IAM Manager roles are not active.")
+        expect(result.message).toBeTruthy();
     });
 
     test("it passes", async () => {

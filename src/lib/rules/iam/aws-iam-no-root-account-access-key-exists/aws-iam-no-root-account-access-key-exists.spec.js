@@ -34,7 +34,7 @@ describe("IAMNoRootAccountAccessKeyExists", () => {
     test("It recognizes when the root account still has an access key.", async () => {
         let result = await rule.livecheck({provider: _AWS1});
         expect(result.valid).toBe('fail');
-        expect(result.message.includes(`One or both of the root user access keys are still in use.`)).toBeTruthy()
+        expect(result.message).toBeTruthy()
     });
 
     test("It recognizes when the root account does not have an access key.", async () => {

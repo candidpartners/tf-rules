@@ -36,9 +36,10 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
     let dateRange = config;
 
     function getDaysAgo(date) {
+        let givenDate = new Date(date);
         let currentDate = new Date();
         let XDaysAgoInMS = 86400000; //1 Day == 86,400,000 ms
-        let differenceInMS = Math.abs(date - currentDate);
+        let differenceInMS = Math.abs(givenDate - currentDate);
         return differenceInMS / XDaysAgoInMS;
     }
 
@@ -68,6 +69,9 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
 
+    // console.log(data);
+    // console.log(invalidAccessKeyUsers);
+    // console.log(invalidPasswordUsers.length + " | " + invalidAccessKeyUsers.length);
     return new RuleResult({
         valid: (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers.length > 0) ? "fail" : "success",
         message: "Users must have a valid password and access key",
@@ -90,30 +94,6 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
             })
         })
     })
-
-    // let noncompliant_resources = [
-    //         ...invalidPasswordUsers.map(x => new Resource({
-    //         resource_id: x.user,
-    //         resource_type: "AWS::IAM::User",
-    //         message: `has a password they have not used in over ${dateRange} days.`
-    //     })),
-    //     ...invalidAccessKeyUsers.map(x => new Resource({
-    //         resource_id: x.user,
-    //         resource_type: "AWS::IAM::User",
-    //         message: `has an access key they have not used in over ${dateRange} days.`
-    //     }))
-    // ];
-
-    // if (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers > 0) {
-    //     return new RuleResult({
-    //         valid: 'fail',
-    //         message: `${invalidPasswordUsers.length} users have a password they have not used in over ${dateRange} days. ${invalidAccessKeyUsers.length} users have an access key they have not used in over ${dateRange} days.`,
-    //         noncompliant_resources: noncompliant_resources
-    //     })
-    // }
-    // else {
-    //     return new RuleResult({valid: 'success'})
-    // }
 };
 
 module.exports = IAMEnsureUnusedCredentialsAreDisabled;

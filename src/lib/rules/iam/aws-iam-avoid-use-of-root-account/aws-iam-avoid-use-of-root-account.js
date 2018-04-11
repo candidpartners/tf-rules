@@ -44,7 +44,7 @@ IAMAvoidUseOfRootAccount.livecheck = async function (context /*: Context */) /*:
     let daysSinceLastUsed = getNumberOfDaysSince(loginDate);
     let RequiredDaysSinceLastUsed = config;
 
-    let hasBeenUsedRecently = (daysSinceLastUsed >= RequiredDaysSinceLastUsed);
+    let hasBeenUsedRecently = (daysSinceLastUsed <= RequiredDaysSinceLastUsed);
     return new RuleResult({
         valid: hasBeenUsedRecently ? "fail" : "success",
         message: "The root account should not be used.",

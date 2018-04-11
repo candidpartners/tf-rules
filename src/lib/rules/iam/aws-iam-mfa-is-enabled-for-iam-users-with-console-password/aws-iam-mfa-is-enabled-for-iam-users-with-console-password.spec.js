@@ -21,7 +21,7 @@ describe("mfa-is-enabled-for-iam-users-with-console-password", () => {
 
         let result = await rule.livecheck({provider: provider});
         expect(result.valid).toBe('fail');
-        expect(result.noncompliant_resources).toHaveLength(1);
+        expect(result.resources).toHaveLength(1);
     })
 
     test("Can confirm if valid = fail", async () => {
