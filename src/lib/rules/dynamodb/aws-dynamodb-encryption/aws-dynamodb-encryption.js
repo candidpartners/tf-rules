@@ -1,6 +1,5 @@
 // @flow
 const debug = require('debug')('snitch/dynamodb-encryption');
-// const co = require('co');
 const _ = require('lodash');
 const {Resource, RuleResult, Context} = require('../../../rule-result');
 
@@ -54,7 +53,7 @@ DynamoDBEncryption.livecheck = async function(context /*: Context */) /*: Promis
     let Instances = _.flatMap(results, "Table");
 
     // Find unencrypted instances
-    let InstanceIsUnencrypted = instance => !exclude.includes(instance.TableName) && !instance.hasOwnProperty("SSEDescription")
+    let InstanceIsUnencrypted = instance => !exclude.includes(instance.TableName) && !instance.hasOwnProperty("SSEDescription");
     let UnencryptedInstances = Instances.filter(InstanceIsUnencrypted);
 
     let resources = Instances.map(x => {
