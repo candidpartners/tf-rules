@@ -1,8 +1,7 @@
+// @flow
 const _ = require('lodash');
-
-const co = require('co');
 const debug = require('debug')('snitch/tag-exists');
-const {Resource, RuleResult} = require('../../../rule-result');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -28,18 +27,18 @@ EC2TagExists.schema = {
 
 
 
-EC2TagExists.livecheck = co.wrap(function* (context) {
+EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
 
     let ec2 = new provider.EC2();
     let reqTags = config;
 
     // Get all EC2 Instances
-    let result = yield ec2.describeInstances().promise();
+    let result = await ec2.describeInstances().promise();
     let Reservations = result.Reservations;
 
     while (result.NextToken) {
-        let result = yield ec2.describeInstances({NextToken: result.NextToken}).promise();
+        result = await ec2.describeInstances({NextToken: result.NextToken}).promise();
         Reservations = [...Reservations, ...result.Reservations];
     }
 
@@ -53,34 +52,50 @@ EC2TagExists.livecheck = co.wrap(function* (context) {
         return MissingRequiredTags.length > 0
     });
 
-    if (InstancesWithoutTags.length > 0) {
-        let noncompliant_resources = InstancesWithoutTags.map(inst => {
-            let {Tags, InstanceId} = inst;
+    return new RuleResult({
+        valid: (InstancesWithoutTags.length > 0) ? "fail" : "success",
+        message: "EC2 Instances must have specified tags",
+        resources: Instances.map(instance => {
+            let {Tags, InstanceId} = instance;
             let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
+            let hasMissingTags = missingTags.length > 0;
 
             return new Resource({
+                is_compliant: hasMissingTags ? false : true,
                 resource_id: InstanceId,
                 resource_type: "AWS::EC2::Instance",
-                message: `Missing tags ${missingTags}`
+                message: hasMissingTags ? `Missing tags ${missingTags}` : "Has required tags"
             })
-        });
-        return new RuleResult({
-            valid: "fail",
-            message: "One or more EC2 instances are missing required tags.",
-            noncompliant_resources: noncompliant_resources
         })
-    }
-    else {
-        return new RuleResult({valid: 'success'});
-    }
-});
+    })
+    // if (InstancesWithoutTags.length > 0) {
+    //     let noncompliant_resources = InstancesWithoutTags.map(inst => {
+    //         let {Tags, InstanceId} = inst;
+    //         let missingTags = _.difference(reqTags, Tags.map(x => x.Key));
+    //
+    //         return new Resource({
+    //             resource_id: InstanceId,
+    //             resource_type: "AWS::EC2::Instance",
+    //             message: `Missing tags ${missingTags}`
+    //         })
+    //     });
+    //     return new RuleResult({
+    //         valid: "fail",
+    //         message: "One or more EC2 instances are missing required tags.",
+    //         noncompliant_resources: noncompliant_resources
+    //     })
+    // }
+    // else {
+    //     return new RuleResult({valid: 'success'});
+    // }
+};
 
 
 EC2TagExists.paths = {
     awsInstance: 'aws_instance'
 };
 
-EC2TagExists.validate = function (context) {
+EC2TagExists.validate = function (context /*: Context */) {
     let reqTags = context.config;
 
     debug('Tag List: %j', reqTags);

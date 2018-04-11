@@ -1,8 +1,7 @@
-const AWS = require('aws-sdk');
+// @flow
 const debug = require('debug')('snitch/ec2-key-pair-exists');
-const co = require('co');
 const _ = require('lodash');
-const {RuleResult,Resource} = require('../../../rule-result');
+const {RuleResult, Resource, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -23,39 +22,40 @@ EC2KeyPairExists.docs = {
 EC2KeyPairExists.schema = {type: 'boolean', default: true};
 
 
-EC2KeyPairExists.livecheck = co.wrap(function* (context) {
+EC2KeyPairExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let ec2 = new context.provider.EC2();
 
     function getEC2s(params) {
         return ec2.describeInstances(params).promise();
     }
 
-    let result = yield getEC2s({});
+    let result = await getEC2s({});
     let Reservations = result.Reservations;
 
     while (result.NextToken) {
-        result = yield getEC2s({NextToken: result.NextToken});
+        result = await getEC2s({NextToken: result.NextToken});
         Reservations.push(result.Reservations);
     }
 
     let Instances = _.flatMap(Reservations, res => res.Instances);
     let NoKeyInstances = Instances.filter(x => !x.KeyName);
 
-    if (NoKeyInstances.length > 0)
-        return new RuleResult({
-            valid: 'fail',
-            message: "One or more of your EC2 instances do not have a Key Pair.",
-            noncompliant_resources: NoKeyInstances.map(inst => new Resource({
+    return new RuleResult({
+        valid: (NoKeyInstances.length > 0) ? "fail" : "success",
+        message: "EC2 Instances must have a valid keypair",
+        resources: Instances.map(inst => {
+            let missingKey = !inst.KeyName;
+            return new Resource({
+                is_compliant: missingKey ? false : true,
                 resource_id: inst.InstanceId,
                 resource_type: "AWS::EC2::Instance",
-                message: "does not have a key pair."
-            }))
-        });
-    else
-        return new RuleResult({valid: 'success'});
-});
+                message: missingKey ? "does not have a key pair." : "has a key pair."
+            })
+        })
+    })
+};
 
-EC2KeyPairExists.validate = function* (context) {
+EC2KeyPairExists.validate = async function(context /*: Context */) {
     // debug( '%O', context );
 
     const ec2 = new context.provider.EC2();
@@ -63,7 +63,7 @@ EC2KeyPairExists.validate = function* (context) {
     if (context.config == true) {
         // debug('Instance: %j', context.instance)
         if (context.instance.key_name) {
-            const queryResult = yield ec2.describeKeyPairs({
+            const queryResult = await ec2.describeKeyPairs({
                 Filters: [
                     {
                         'Name': 'key-name',
