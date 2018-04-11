@@ -49,10 +49,10 @@ rules :
 - aws-ec2-instance-tag-format :
     enabled : true
     tags :
-        - name : ApplicationCode
-        - format : '^[A-Z]{3}$'
-        - name : Environment
-        - format : ^(DEV|QA|TEST|STAGING|PROD)$
+      - name : ApplicationCode
+      - format : '^[A-Z]{3}$'
+      - name : Environment
+      - format : ^(DEV|QA|TEST|STAGING|PROD)$
 - aws-ec2-key-pair-exists :
     enabled : true
 - aws-ec2-uses-security-group :

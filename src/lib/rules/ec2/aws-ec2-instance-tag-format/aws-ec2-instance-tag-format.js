@@ -1,5 +1,5 @@
 'use strict';
-const _  = require('lodash');
+const _ = require('lodash');
 const debug = require('debug')('snitch/tag-format');
 
 //------------------------------------------------------------------------------
@@ -12,10 +12,10 @@ EC2TagFormat.uuid = "d2065bd9-4ece-4cb7-a4dc-3ad161415e15";
 EC2TagFormat.groupName = "EC2";
 EC2TagFormat.tags = [["Candid", "1.0", "5"]];
 EC2TagFormat.config_triggers = ["AWS::EC2::Instance"];
-EC2TagFormat.paths = {EC2TagFormat : 'aws_instance'};
+EC2TagFormat.paths = {EC2TagFormat: 'aws_instance'};
 EC2TagFormat.docs = {
-  description: "EC2 instance tag values match provided format.",
-  recommended: false
+    description: "EC2 instance tag values match provided format.",
+    recommended: false
 };
 EC2TagFormat.schema = {
     type: "object",
@@ -23,17 +23,17 @@ EC2TagFormat.schema = {
         enabled: {type: "boolean", title: "Enabled", default: true},
         tags: {
             title: "Tags",
-            type : 'array',
-            items : {
-                type : 'object',
-                properties : {
-                    name : {
+            type: 'array',
+            items: {
+                type: 'object',
+                properties: {
+                    name: {
                         title: "Name",
-                        type : 'string'
+                        type: 'string'
                     },
-                    format : {
+                    format: {
                         title: "Format",
-                        type : 'string'
+                        type: 'string'
                     }
                 }
             }
@@ -42,42 +42,42 @@ EC2TagFormat.schema = {
 };
 
 
-EC2TagFormat.validate = function( context ) {
-  let result = null;
-  let tagSpec = null;
-  let reqTags = [];
-  let matchErrors = [];
-  let message = ''
+EC2TagFormat.validate = function (context) {
+    let result = null;
+    let tagSpec = null;
+    let reqTags = [];
+    let matchErrors = [];
+    let message = ''
 
-  debug('Config: %j', context.config)
+    debug('Config: %j', context.config)
 
-  for ( let tagSpec of context.config.tags){
-    if (tagSpec.format) {
-      try {
-        let re = new RegExp(tagSpec.format);
-        debug('Match: %j', re.test(context.instance.tags[tagSpec.name]))
-        if ( ! re.test(context.instance.tags[tagSpec.name])) {
-          matchErrors.push(tagSpec.name + ' tag does not match provided format of: ' + tagSpec.format)
+    for (let tagSpec of context.config.tags) {
+        if (tagSpec.format) {
+            try {
+                let re = new RegExp(tagSpec.format);
+                debug('Match: %j', re.test(context.instance.tags[tagSpec.name]))
+                if (!re.test(context.instance.tags[tagSpec.name])) {
+                    matchErrors.push(tagSpec.name + ' tag does not match provided format of: ' + tagSpec.format)
+                }
+            } catch (e) {
+                matchErrors.push(e)
+            }
         }
-      } catch(e) {
-        matchErrors.push(e)
-      }
+        debug('Tag: %j', tagSpec)
     }
-    debug('Tag: %j', tagSpec)
-  }
 
-  if (matchErrors.length == 0) {
-    result = {
-      'valid' : 'success'
+    if (matchErrors.length == 0) {
+        result = {
+            'valid': 'success'
+        }
+    } else {
+        result = {
+            valid: 'fail',
+            message: matchErrors
+        }
     }
-  } else {
-    result = {
-      valid : 'fail',
-      message : matchErrors
-    }
-  }
 
-  return result;
+    return result;
 };
 
 module.exports = EC2TagFormat;

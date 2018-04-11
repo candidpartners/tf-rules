@@ -16,7 +16,7 @@ describe('aws-ec2-instance-tag-format', function() {
 
         const provider = { };
         const context = {
-            config : [{type: "Name", format:/(.*?)/}],
+            config : {tags: [{type: "Name", format:/(.*?)/}]},
             instance,
             provider
         };
@@ -33,7 +33,7 @@ describe('aws-ec2-instance-tag-format', function() {
 
         const provider = { };
         const context = {
-            config : [{type: "Name", format:/^RealInstance/}],
+            config : {tags: [{type: "Name", format:/^RealInstance/}]},
             instance,
             provider
         };
