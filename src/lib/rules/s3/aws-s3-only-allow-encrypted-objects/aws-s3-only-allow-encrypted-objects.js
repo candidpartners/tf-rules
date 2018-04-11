@@ -10,11 +10,11 @@ const RuleName = {};
 
 RuleName.uuid = "6151e4fa-3814-462c-a017-1dc89a60ea0b";
 RuleName.groupName = "S3";
-RuleName.tags = [["Snitch", "1.0", "10"]];
+RuleName.tags = [["Candid", "1.0", "10"]];
 RuleName.config_triggers = ["AWS::S3::Bucket"];
 RuleName.paths = {};
 RuleName.docs = {
-    description: 'All S3 bucket policies only allows uploads if encryption is specified.',
+    description: 'All S3 bucket policies only allow uploads if encryption is specified.',
     recommended: false
 };
 
