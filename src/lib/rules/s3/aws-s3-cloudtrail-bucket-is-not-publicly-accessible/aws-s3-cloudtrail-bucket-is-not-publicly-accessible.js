@@ -28,7 +28,7 @@ S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = async function(context /*:
     let buckets = trails.trailList.map(x => x.S3BucketName);
 
     try {
-        let trailBuckets = await buckets.map(x => s3.getBucketPolicy({Bucket: x}).promise());
+        let trailBuckets = await Promise.all(buckets.map(x => s3.getBucketPolicy({Bucket: x}).promise()));
         let bucketStatements = trailBuckets.map(x => x.Policy.Statement);
         let isBucketNonCompliant = x => x.Effect === "Allow" && x.Principal === "*";
         let nonCompliantBuckets = bucketStatements.filter(isBucketNonCompliant);

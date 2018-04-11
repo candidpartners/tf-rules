@@ -31,7 +31,7 @@ S3CloudTrailBucketAccessLoggingEnabled.livecheck = async function (context /*: C
     let buckets = list.map(x => x.S3BucketName);
 
     try {
-        let logs = await buckets.map(x => s3.getBucketLogging({Bucket: x}).promise());
+        let logs = await Promise.all(buckets.map(x => s3.getBucketLogging({Bucket: x}).promise()));
         let enabledBuckets = logs.filter(x => x.hasOwnProperty("LoggingEnabled"));
 
         return new RuleResult({

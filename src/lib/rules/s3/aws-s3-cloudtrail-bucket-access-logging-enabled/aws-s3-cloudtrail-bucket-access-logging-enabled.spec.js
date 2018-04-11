@@ -11,7 +11,7 @@ describe('s3-cloudtrail-bucket-access-logging-enabled', function () {
         provider.ServiceError("S3", "getBucketLogging", {code: "AccessDenied"});
         let result = await rule.livecheck({config: true, provider: provider});
         expect(result.valid).toBe("fail");
-        expect(result.message).toBe("S3 Buckets should have logging enabled");
+        expect(result.message).toBeTruthy();
     });
 
     it("Returns a fail", async () => {
@@ -20,7 +20,7 @@ describe('s3-cloudtrail-bucket-access-logging-enabled', function () {
         provider.Service("S3", "getBucketLogging", {});
         let result = await rule.livecheck({config: true, provider: provider});
         expect(result.valid).toBe("fail");
-        expect(result.message).toBe("S3 Buckets should have logging enabled");
+        expect(result.message).toBeTruthy();
     });
 
     it("Returns a success", async () => {

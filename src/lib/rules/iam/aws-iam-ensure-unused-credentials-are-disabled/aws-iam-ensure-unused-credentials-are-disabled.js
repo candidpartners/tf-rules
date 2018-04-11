@@ -68,10 +68,6 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
     let invalidPasswordUsers = data.filter(x => !userIsValid(x));
     let invalidAccessKeyUsers = data.filter(x => !userAccessKeysAreValid(x));
 
-
-    // console.log(data);
-    // console.log(invalidAccessKeyUsers);
-    // console.log(invalidPasswordUsers.length + " | " + invalidAccessKeyUsers.length);
     return new RuleResult({
         valid: (invalidPasswordUsers.length > 0 || invalidAccessKeyUsers.length > 0) ? "fail" : "success",
         message: "Users must have a valid password and access key",
