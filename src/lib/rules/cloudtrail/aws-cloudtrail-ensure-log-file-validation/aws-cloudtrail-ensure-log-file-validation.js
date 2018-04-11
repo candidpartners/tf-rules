@@ -20,8 +20,14 @@ CloudtrailLogFileValidation.docs = {
     recommended: false
 };
 CloudtrailLogFileValidation.schema = {
-    type: 'boolean',
-    default: true
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
 };
 
 CloudtrailLogFileValidation.livecheck = co.wrap(function* (context) {
