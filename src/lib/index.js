@@ -118,8 +118,21 @@ function* validatePlan(params) {
     return results;
 }
 
+async function getAccountRegionIdentifier(provider){
+    let iam = new provider.IAM();
+    let sts = new provider.STS();
+    let callerIdentity = sts.getCallerIdentity({}).promise();
+    let aliases = iam.listAccountAliases({}).promise();
+    callerIdentity = await callerIdentity;
+    aliases = await aliases;
+    let identifier = _.get(aliases,'AccountAliases[0]',callerIdentity.Account);
+    return `${identifier}/${provider.config.region}/`;
+}
+
 let livecheck = co.wrap(function* (params) {
     const provider = params.provider;
+    let accountAndRegion = yield getAccountRegionIdentifier(provider);
+
     let config_triggers = params.config_triggers || [];
 
     debug('allConfig: %j', params.config);
@@ -141,11 +154,18 @@ let livecheck = co.wrap(function* (params) {
 
         // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
-            let promise = rule.livecheck({config, provider}).then(result => ({
-                rule,
-                ruleId,
-                result
-            }));
+            let promise = rule.livecheck({config, provider}).then(result => {
+
+                // Add account identifier to resources
+                result.resources = result.resources.map(x => Object.assign({},x,{resource_id: `${accountAndRegion}${x.resource_id}`}))
+                return {
+                    rule,
+                    ruleId,
+                    result
+                }
+            })
+
+
             promises.push(promise)
         }
     }
