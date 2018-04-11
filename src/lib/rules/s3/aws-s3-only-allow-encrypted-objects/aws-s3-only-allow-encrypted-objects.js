@@ -94,7 +94,7 @@ RuleName.livecheck = async function (context /*: Context */) /*: Promise<RuleRes
             is_compliant: x.valid,
             resource_id: x.Bucket,
             resource_type: "AWS::S3::Bucket",
-            message: "allows unencrypted uploads."
+            message: x.valid ? "requires encryption": "allows unencrypted uploads."
         }));
 
     return new RuleResult({

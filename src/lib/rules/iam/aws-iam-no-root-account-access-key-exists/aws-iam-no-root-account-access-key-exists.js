@@ -45,7 +45,7 @@ IAMNoRootAccountAccessKeyExists.livecheck = async function(context /*: Context *
             is_compliant: isRootKey ? false : true,
             resource_id: rootUser.arn,
             resource_type: "AWS::IAM::User",
-            message: "Root account still has access keys enabled."
+            message: isRootKey ? "Root account still has access keys enabled." : "The root account does not have access keys"
         }]
     });
 };

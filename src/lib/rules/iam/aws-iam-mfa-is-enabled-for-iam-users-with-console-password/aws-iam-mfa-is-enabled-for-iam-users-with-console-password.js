@@ -44,7 +44,7 @@ MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = async function (context /
                 is_compliant: hasPasswordWithoutMFA ? false : true,
                 resource_id: x.arn,
                 resource_type: "AWS::IAM::User",
-                message: "does not have MFA enabled."
+                message: hasPasswordWithoutMFA ? "has console access but no MFA enabled." : "is compliant."
             })
         })
     })

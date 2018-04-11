@@ -52,7 +52,7 @@ EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<Rule
         return MissingRequiredTags.length > 0
     });
 
-    return new RuleResult({
+    let res = new RuleResult({
         valid: (InstancesWithoutTags.length > 0) ? "fail" : "success",
         message: "EC2 Instances must have specified tags",
         resources: Instances.map(instance => {
@@ -67,7 +67,8 @@ EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<Rule
                 message: hasMissingTags ? `Missing tags ${missingTags}` : "Has required tags"
             })
         })
-    })
+    });
+    return res;
 };
 
 

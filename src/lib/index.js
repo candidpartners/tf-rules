@@ -54,6 +54,7 @@ function validateConfig(rules, config) {
 
 function report(result, instanceName, rule, ruleId) {
     console.log(colors.white(`\n${ruleId}`));
+
     if (result) {
         if (result.valid == 'success') {
             console.log(colors.green(symbols.ok), colors.green(' OK'), colors.gray(rule.docs.description), instanceName && colors.gray(':'), instanceName);
@@ -66,23 +67,17 @@ function report(result, instanceName, rule, ruleId) {
             } else {
                 console.log(colors.red(symbols.err), colors.red('ERR'), colors.gray(result.message || rule.docs.description), instanceName && colors.gray(':'), instanceName);
             }
-            if(result.resources){
-                result.resources.forEach(x => {
-                    let message = colors.white(x.resource_id) + " " + x.message;
-                    if(x.is_compliant){
-                        console.log('\t' + colors.green(symbols.ok) + message)
-                    }
-                    else{
-                        console.log('\t' + colors.red(symbols.err) + message)
-                    }
-                })
-            }
-            //Print out non-compliant resources
-            // if (result.noncompliant_resources) {
-            //     result.noncompliant_resources.forEach(x => {
-            //         console.log('\t', colors.red(x.resource_id), colors.gray(x.message))
-            //     })
-            // }
+        }
+        if(result.resources){
+            result.resources.forEach(x => {
+                let message = colors.white(x.resource_id) + " " + x.message;
+                if(x.is_compliant){
+                    console.log('\t' + colors.green(symbols.ok) + message)
+                }
+                else{
+                    console.log('\t' + colors.red(symbols.err) + message)
+                }
+            })
         }
     }
 }
