@@ -33,4 +33,22 @@ describe("Rules", () => {
             expect(rule.groupName).toBeTruthy();
         })
     });
+
+    test.only("Each rule config is an object, with a property of enabled", () => {
+        let invalidRules = [];
+        _.forEach(rules,(rule,ruleName) => {
+            try{
+                expect(rule.schema).toBeTruthy();
+                expect(rule.schema.type).toBe("Object");
+                expect(rule.schema.properties.enabled).toBeTruthy();
+                expect(rule.schema.properties.enabled.type).toBeTruthy();
+            } catch(err){
+                invalidRules.push(ruleName);
+            }
+        });
+
+        if(invalidRules.length > 0)
+            console.error(`The following rules don't have a proper schema ${JSON.stringify(invalidRules,null,2)}`);
+        expect(invalidRules).toHaveLength(0);
+    })
 });
