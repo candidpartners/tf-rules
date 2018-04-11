@@ -51,7 +51,7 @@ EC2TagFormat.validate = function( context ) {
 
   debug('Config: %j', context.config)
 
-  for ( let tagSpec of context.config){
+  for ( let tagSpec of context.config.tags){
     if (tagSpec.format) {
       try {
         let re = new RegExp(tagSpec.format);
