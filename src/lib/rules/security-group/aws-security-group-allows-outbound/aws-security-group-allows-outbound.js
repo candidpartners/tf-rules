@@ -13,7 +13,7 @@ const AWSSecurityGroupAllowOutbound = {};
 
 AWSSecurityGroupAllowOutbound.uuid = "1c995e85-d35f-4410-8cc6-b7dd2c390802";
 AWSSecurityGroupAllowOutbound.groupName = "Security Group";
-AWSSecurityGroupAllowOutbound.tags = [["Snitch", "1.0", "12"]];
+AWSSecurityGroupAllowOutbound.tags = [["Candid", "1.0", "12"]];
 AWSSecurityGroupAllowOutbound.config_triggers = ["AWS::::Account"];
 AWSSecurityGroupAllowOutbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupAllowOutbound.docs = {

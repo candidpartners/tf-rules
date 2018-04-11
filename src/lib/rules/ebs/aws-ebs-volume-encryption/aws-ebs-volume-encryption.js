@@ -12,7 +12,7 @@ const EBSVolumeEncryption = {};
 
 EBSVolumeEncryption.uuid = "d8a29e45-d30a-4492-8380-fe1da3ed0cba";
 EBSVolumeEncryption.groupName = "EBS";
-EBSVolumeEncryption.tags = [["Snitch", "1.0", "2"]];
+EBSVolumeEncryption.tags = [["Candid", "1.0", "2"]];
 EBSVolumeEncryption.config_triggers = ["AWS::EC2::Volume"];
 EBSVolumeEncryption.paths = {EBSVolumeEncryption: 'aws_ebs_volume'};
 EBSVolumeEncryption.docs = {

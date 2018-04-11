@@ -12,7 +12,7 @@ const RDSEncryptionKeyExists = {};
 
 RDSEncryptionKeyExists.uuid = "196beb21-bb42-4a58-9ea0-0478c5f1042a";
 RDSEncryptionKeyExists.groupName = "RDS";
-RDSEncryptionKeyExists.tags = [["Snitch", "1.0", "8"]];
+RDSEncryptionKeyExists.tags = [["Candid", "1.0", "8"]];
 RDSEncryptionKeyExists.config_triggers = ["AWS::RDS::DBInstance"];
 RDSEncryptionKeyExists.paths = {RDSEncryptionKeyExists: "aws_db_instance"};
 RDSEncryptionKeyExists.docs = {

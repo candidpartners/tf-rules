@@ -14,7 +14,7 @@ IAMDoesNotAllowFullAccessPolicies.tags = [["CIS", "1.1.0", "1.24"]];
 IAMDoesNotAllowFullAccessPolicies.config_triggers = ["AWS::IAM::Policy"];
 IAMDoesNotAllowFullAccessPolicies.paths = {IAMDoesNotAllowFullAccessPolicies: 'aws_iam_policy'};
 IAMDoesNotAllowFullAccessPolicies.docs = {
-    description: "No IAM policies allow full administrative privileges",
+    description: "No IAM policies allow full administrative privileges.",
     recommended: false
 };
 IAMDoesNotAllowFullAccessPolicies.schema = {type: 'boolean'};
