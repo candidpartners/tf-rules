@@ -16,7 +16,7 @@ IAMAvoidUseOfRootAccount.docs = {
     description: 'The root account has not logged in in the required number of days.',
     recommended: false
 };
-IAMAvoidUseOfRootAccount.schema = {type: 'number'};
+IAMAvoidUseOfRootAccount.schema = {type: 'number', default: 30};
 
 
 IAMAvoidUseOfRootAccount.livecheck = co.wrap(function* (context) {

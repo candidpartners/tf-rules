@@ -22,6 +22,7 @@ S3Encryption.docs = {
 S3Encryption.schema = {
     type: 'object',
     properties: {
+        enabled: {type: "boolean", default: true},
         exclude: {
             type: "array",
             items: {

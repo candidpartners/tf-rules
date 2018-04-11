@@ -20,7 +20,7 @@ EC2KeyPairExists.docs = {
     recommended: true,
     tags: ["Live Check"]
 };
-EC2KeyPairExists.schema = {type: 'boolean'};
+EC2KeyPairExists.schema = {type: 'boolean', default: true};
 
 
 EC2KeyPairExists.livecheck = co.wrap(function* (context) {

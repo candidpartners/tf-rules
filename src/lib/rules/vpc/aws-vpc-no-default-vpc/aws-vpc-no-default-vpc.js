@@ -19,7 +19,10 @@ DefaultVPC.docs = {
     description: 'A default VPC does not exist in the region.',
     recommended: true
 };
-DefaultVPC.schema = {type: 'boolean'};
+DefaultVPC.schema = {
+    type: 'boolean',
+    default: true
+};
 
 
 DefaultVPC.livecheck = co.wrap(function* (context) {

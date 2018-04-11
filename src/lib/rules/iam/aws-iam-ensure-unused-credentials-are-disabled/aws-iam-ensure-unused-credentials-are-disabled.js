@@ -18,7 +18,7 @@ IAMEnsureUnusedCredentialsAreDisabled.docs = {
     description: 'Credentials unused for at least 90 days are disabled.',
     recommended: false
 };
-IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number'};
+IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number', default: 90};
 
 
 IAMEnsureUnusedCredentialsAreDisabled.livecheck = co.wrap(function* (context) {

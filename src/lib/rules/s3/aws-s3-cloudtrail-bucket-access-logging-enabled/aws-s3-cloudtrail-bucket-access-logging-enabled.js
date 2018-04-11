@@ -19,7 +19,7 @@ S3CloudTrailBucketAccessLoggingEnabled.docs = {
     description: 'Access logging is enabled on the CloudTrail S3 bucket.',
     recommended: true
 };
-S3CloudTrailBucketAccessLoggingEnabled.schema = {type: 'boolean'};
+S3CloudTrailBucketAccessLoggingEnabled.schema = {type: 'boolean', default: true};
 
 S3CloudTrailBucketAccessLoggingEnabled.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;

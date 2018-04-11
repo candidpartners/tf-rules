@@ -17,7 +17,10 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.docs = {
     description: 'All CloudTrail trails are integrated with CloudWatch logs.',
     recommended: true
 };
-CloudTrailTrailsAreIntegratedWithCloudWatchLogs.schema = {type: 'boolean'};
+CloudTrailTrailsAreIntegratedWithCloudWatchLogs.schema = {
+    type: 'boolean',
+    default: true
+};
 
 
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = co.wrap(function* (context) {

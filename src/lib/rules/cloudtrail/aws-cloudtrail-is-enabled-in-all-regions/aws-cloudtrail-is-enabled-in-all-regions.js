@@ -14,7 +14,10 @@ CloudTrailIsEnabledInAllRegions.tags = [["CIS", "1.1.0", "2.1"]];
 CloudTrailIsEnabledInAllRegions.config_triggers = ["AWS::CloudTrail::Trail"];
 CloudTrailIsEnabledInAllRegions.paths = {CloudTrailIsEnabledInAllRegions: "aws_cloudtrail"};
 CloudTrailIsEnabledInAllRegions.docs = {description: 'At least one CloudTrail resource is enabled in all regions.', recommended: true};
-CloudTrailIsEnabledInAllRegions.schema = {type: 'boolean'};
+CloudTrailIsEnabledInAllRegions.schema = {
+    type: 'boolean',
+    default: true
+};
 
 
 CloudTrailIsEnabledInAllRegions.livecheck = co.wrap(function* (context) {

@@ -14,7 +14,7 @@ IAMSupportRoleIsAttached.tags = [["CIS", "1.1.0", "1.22"]];
 IAMSupportRoleIsAttached.config_triggers = ["AWS::IAM::Role"];
 IAMSupportRoleIsAttached.paths = {IAMSupportRoleHasBeenCreated: "aws_iam_role"};
 IAMSupportRoleIsAttached.docs = {description: 'The AWSSupportAccess IAM role is attached to one or more roles, groups, or users.', recommended: true};
-IAMSupportRoleIsAttached.schema = {type: 'boolean'};
+IAMSupportRoleIsAttached.schema = {type: 'boolean', default: false};
 
 
 IAMSupportRoleIsAttached.livecheck = co.wrap(function* (context) {

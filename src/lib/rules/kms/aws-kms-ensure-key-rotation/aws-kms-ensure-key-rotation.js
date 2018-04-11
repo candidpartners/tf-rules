@@ -19,7 +19,7 @@ KMSKeyRotation.docs = {
     description: "All KMS keys are rotated.",
     recommended: false
 };
-KMSKeyRotation.schema = {type: 'boolean'};
+KMSKeyRotation.schema = {type: 'boolean', default: true};
 
 KMSKeyRotation.livecheck = co.wrap(function* (context) {
     let {config, provider} = context;
@@ -51,6 +51,15 @@ KMSKeyRotation.livecheck = co.wrap(function* (context) {
         else return new RuleResult({valid: "success"})
     } catch (err) {
         console.error(err.message);
+        return new RuleResult({
+            valid: "fail",
+            message: err.message,
+            noncompliant_resources: [ new NonCompliantResource({
+                resource_id: "Invalid KMS Keys",
+                resource_type: "AWS::KMS::Key",
+                message: err.message
+            })]
+        })
     }
 });
 
