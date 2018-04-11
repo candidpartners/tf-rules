@@ -3,13 +3,18 @@ provider :
 rules :
 
 #CloudTrail
-- aws-cloudtrail-ensure-log-file-validation : true
-- aws-cloudtrail-is-enabled-in-all-regions : true
-- aws-cloudtrail-logs-are-encrypted : true
-- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs : true
+- aws-cloudtrail-ensure-log-file-validation :
+    enabled : true
+- aws-cloudtrail-is-enabled-in-all-regions :
+    enabled : true
+- aws-cloudtrail-logs-are-encrypted :
+    enabled : true
+- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs :
+    enabled : true
 
 #CloudWatch
 - aws-cloudwatch-metric-alarms :
+    enabled : true
     UnauthorizedAPICalls : true
     ManagementConsoleSignInWithoutMFA : true
     UsageOfRootAccount : true
@@ -27,6 +32,7 @@ rules :
 
 #DynamoDB
 - aws-dynamodb-encryption :
+    enabled : true
     exclude :
       - volker-dev-accounts
 
@@ -34,20 +40,30 @@ rules :
 - aws-ebs-volume-encryption :
     enabled: true
 #EC2
-- aws-ec2-ami-includes-sql-server : false
+- aws-ec2-ami-includes-sql-server :
+    enabled : true
 - aws-ec2-instance-tag-exists :
-  - Name
+    enabled : true
+    names:
+      - Name
 - aws-ec2-instance-tag-format :
-  - name : ApplicationCode
-    format : '^[A-Z]{3}$'
-  - name : Environment
-    format : ^(DEV|QA|TEST|STAGING|PROD)$
-- aws-ec2-key-pair-exists : true
+    enabled : true
+    tags :
+        - name : ApplicationCode
+        - format : '^[A-Z]{3}$'
+        - name : Environment
+        - format : ^(DEV|QA|TEST|STAGING|PROD)$
+- aws-ec2-key-pair-exists :
+    enabled : true
 - aws-ec2-uses-security-group :
-  - sg-24b9b85d
+    enabled : true
+    security_groups :
+      - "Hello"
+      - "World"
 
 #IAM
 - aws-iam-account-password-policy :
+    enabled : true
     MinimumPasswordLength : 14
     MaxPasswordAge: 90
     PasswordReusePrevention: 10
@@ -57,49 +73,75 @@ rules :
     RequireLowercaseCharacters : true
     AllowUsersToChangePassword : true
     ExpirePasswords : true
-- aws-iam-avoid-use-of-root-account : 90
-- aws-iam-does-not-allow-full-access-policies : true
-- aws-iam-ensure-a-support-role-is-attached : true
-- aws-iam-ensure-access-keys-are-rotated : 90
-- aws-iam-ensure-master-and-manager-roles-are-active : true
-- aws-iam-ensure-unused-credentials-are-disabled : 90
-- aws-iam-hardware-mfa-is-enabled-for-root-account: true
-- aws-iam-mfa-is-enabled-for-iam-users-with-console-password : true
-- aws-iam-mfa-is-enabled-for-root-account : true
-- aws-iam-no-root-account-access-key-exists : true
-- aws-iam-policies-are-attached-only-to-groups-or-roles : true
+- aws-iam-avoid-use-of-root-account :
+    enabled : true
+    days : 90
+- aws-iam-does-not-allow-full-access-policies :
+    enabled : true
+- aws-iam-ensure-a-support-role-is-attached :
+    enabled : true
+- aws-iam-ensure-access-keys-are-rotated :
+    enabled : true
+    days : 90
+- aws-iam-ensure-master-and-manager-roles-are-active :
+    enabled : true
+- aws-iam-ensure-unused-credentials-are-disabled :
+    enabled : true
+    days : 90
+- aws-iam-hardware-mfa-is-enabled-for-root-account :
+    enabled : true
+- aws-iam-mfa-is-enabled-for-iam-users-with-console-password :
+    enabled : true
+- aws-iam-mfa-is-enabled-for-root-account :
+    enabled : true
+- aws-iam-no-root-account-access-key-exists :
+    enabled : true
+- aws-iam-policies-are-attached-only-to-groups-or-roles :
+    enabled : true
 
 #KMS
-- aws-kms-ensure-key-rotation : true
+- aws-kms-ensure-key-rotation :
+    enabled : true
 
 #RDS
 - aws-rds-encryption-key-exists :
+    enabled : true
     exclude :
       - vra
 
 #S3
 - aws-s3-only-allow-encrypted-objects:
+    enabled : true
     AllowAES256: true
-- aws-s3-cloudtrail-bucket-access-logging-enabled : true
-- aws-s3-cloudtrail-bucket-is-not-publicly-accessible : true
+- aws-s3-cloudtrail-bucket-access-logging-enabled :
+    enabled : true
+- aws-s3-cloudtrail-bucket-is-not-publicly-accessible :
+    enabled : true
 - aws-s3-encryption :
+    enabled : true
     exclude:
       - volker-dev-accounts
 
 #Security Group
 - aws-security-group-allows-inbound :
+    enabled : true
     cidr : '127.0.0.1/32'
     port : '80'
 - aws-security-group-allows-outbound :
+    enabled : true
     cidr : '127.0.0.2/32'
     port : '22'
 - aws-security-group-does-not-allow-inbound :
+    enabled : true
     cidr : '204.4.6.2/32'
     port : '9032-9034'
 - aws-security-group-does-not-allow-outbound :
+    enabled : true
     cidr : '204.4.6.2/32'
     port : '9032-9034'
-- aws-security-group-exists : true
+- aws-security-group-exists :
+    enabled : true
 
 #VPC
-- aws-vpc-no-default-vpc : true
+- aws-vpc-no-default-vpc :
+    enabled : true

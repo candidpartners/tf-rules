@@ -18,7 +18,16 @@ AWSSecurityGroupExists.docs = {
     recommended: true
 };
 
-AWSSecurityGroupExists.schema = {type: 'boolean', default: true};
+AWSSecurityGroupExists.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 AWSSecurityGroupExists.validate = function* (context) {
@@ -57,7 +66,7 @@ AWSSecurityGroupExists.validate = function* (context) {
 
         // debug('Query Result: %j', queryResult)
 
-        missingGroups = _.difference(sgl, _.map(_.get(queryResult,'SecurityGroups',[]), 'GroupId'))
+        missingGroups = _.difference(sgl, _.map(_.get(queryResult, 'SecurityGroups', []), 'GroupId'))
 
         debug('Missing Groups: %j', missingGroups)
 

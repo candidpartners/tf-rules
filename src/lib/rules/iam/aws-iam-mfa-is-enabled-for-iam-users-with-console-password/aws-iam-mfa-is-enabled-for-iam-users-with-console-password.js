@@ -17,7 +17,16 @@ MFAIsEnabledForIAMUsersWithConsolePassword.docs = {
     description: 'All IAM users with a console password have MFA enabled.',
     recommended: false
 };
-MFAIsEnabledForIAMUsersWithConsolePassword.schema = {type: 'boolean', default: true};
+MFAIsEnabledForIAMUsersWithConsolePassword.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 MFAIsEnabledForIAMUsersWithConsolePassword.livecheck = async function (context /*: Context */) /*: Promise<RuleResult>*/{

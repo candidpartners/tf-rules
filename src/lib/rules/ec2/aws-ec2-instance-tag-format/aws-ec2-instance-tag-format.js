@@ -18,18 +18,27 @@ EC2TagFormat.docs = {
   recommended: false
 };
 EC2TagFormat.schema = {
-  type : 'array',
-  items : {
-    type : 'object',
-    properties : {
-      name : {
-        type : 'string'
-      },
-      format : {
-        type : 'string'
-      }
-    }        
-  }
+    type: "object",
+    properties: {
+        enabled: {type: "boolean", title: "Enabled", default: true},
+        tags: {
+            title: "Tags",
+            type : 'array',
+            items : {
+                type : 'object',
+                properties : {
+                    name : {
+                        title: "Name",
+                        type : 'string'
+                    },
+                    format : {
+                        title: "Format",
+                        type : 'string'
+                    }
+                }
+            }
+        }
+    }
 };
 
 

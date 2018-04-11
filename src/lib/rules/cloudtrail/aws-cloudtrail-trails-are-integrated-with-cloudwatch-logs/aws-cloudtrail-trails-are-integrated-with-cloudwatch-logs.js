@@ -17,8 +17,14 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.docs = {
     recommended: true
 };
 CloudTrailTrailsAreIntegratedWithCloudWatchLogs.schema = {
-    type: 'boolean',
-    default: true
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
 };
 
 

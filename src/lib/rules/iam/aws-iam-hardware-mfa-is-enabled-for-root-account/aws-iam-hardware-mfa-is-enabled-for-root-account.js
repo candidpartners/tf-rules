@@ -17,7 +17,16 @@ HardwareMFAIsEnabledForRootAccount.docs = {
     description: 'The root account has hardware MFA enabled.',
     recommended: false
 };
-HardwareMFAIsEnabledForRootAccount.schema = {type: 'boolean', default: true};
+HardwareMFAIsEnabledForRootAccount.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {

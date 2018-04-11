@@ -17,7 +17,16 @@ MFAIsEnabledForRootAccount.docs = {
     description: 'The root account has MFA enabled.',
     recommended: false
 };
-MFAIsEnabledForRootAccount.schema = { type : 'boolean', default: true };
+MFAIsEnabledForRootAccount.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 MFAIsEnabledForRootAccount.livecheck = async function( context /*: Context */) /*: Promise<RuleResult> */ {

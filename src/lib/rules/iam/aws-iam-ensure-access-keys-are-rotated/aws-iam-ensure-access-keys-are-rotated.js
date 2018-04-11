@@ -18,7 +18,13 @@ IAMEnsureAccessKeysAreRotated.docs = {
     recommended: false
 };
 
-IAMEnsureAccessKeysAreRotated.schema = {type: 'number', default: 90};
+IAMEnsureAccessKeysAreRotated.schema = {
+    type: "object",
+    properties: {
+        enabled: {type: 'boolean', title: "Enabled", default: true},
+        days: {type: 'number', title: "Number of days", default: 90}
+    }
+};
 
 IAMEnsureAccessKeysAreRotated.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
     const IAM = new context.provider.IAM();

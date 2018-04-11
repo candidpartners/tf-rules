@@ -16,7 +16,16 @@ IAMSupportRoleIsAttached.docs = {
     description: 'The AWSSupportAccess IAM role is attached to one or more roles, groups, or users.',
     recommended: true
 };
-IAMSupportRoleIsAttached.schema = {type: 'boolean', default: false};
+IAMSupportRoleIsAttached.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 IAMSupportRoleIsAttached.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {

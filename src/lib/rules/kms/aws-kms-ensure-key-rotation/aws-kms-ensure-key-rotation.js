@@ -18,7 +18,16 @@ KMSKeyRotation.docs = {
     description: "All KMS keys are rotated.",
     recommended: false
 };
-KMSKeyRotation.schema = {type: 'boolean', default: true};
+KMSKeyRotation.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<RuleResult>*/ {
     let {config, provider} = context;

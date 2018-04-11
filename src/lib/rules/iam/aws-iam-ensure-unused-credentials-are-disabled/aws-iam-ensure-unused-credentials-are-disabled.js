@@ -18,8 +18,13 @@ IAMEnsureUnusedCredentialsAreDisabled.docs = {
     description: 'Credentials unused for at least 90 days are disabled.',
     recommended: false
 };
-IAMEnsureUnusedCredentialsAreDisabled.schema = {type: 'number', default: 90};
-
+IAMEnsureUnusedCredentialsAreDisabled.schema = {
+    type: "object",
+    properties: {
+        enabled: {type: 'boolean', title: "Enabled", default: true},
+        days: {type: 'number', title: "Number of days", default: 90}
+    }
+};
 
 IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;

@@ -34,15 +34,16 @@ IAMAccountPasswordPolicy.schema = {
         "PasswordReusePrevention"
     ],
     properties: {
-        MinimumPasswordLength: {type: "number", default: 14},
-        MaxPasswordAge: {type: "number", default: 90},
-        RequireSymbols: {type: "boolean", default: true},
-        RequireNumbers: {type: "boolean", default: true},
-        RequireUppercaseCharacters: {type: "boolean", default: true},
-        RequireLowercaseCharacters: {type: "boolean", default: true},
-        AllowUsersToChangePassword: {type: "boolean", default: true},
-        ExpirePasswords: {type: "boolean", default: true},
-        PasswordReusePrevention: {type: "number", default: 24}
+        enabled: {type: "boolean", title: "Enabled", default: true},
+        MinimumPasswordLength: {type: "number", title: "Minimum password length", default: 14},
+        MaxPasswordAge: {type: "number", title: "Max password age", default: 90},
+        RequireSymbols: {type: "boolean", title: "Require symbols", default: true},
+        RequireNumbers: {type: "boolean", title: "Require numbers", default: true},
+        RequireUppercaseCharacters: {type: "boolean", title: "Require uppercase characters", default: true},
+        RequireLowercaseCharacters: {type: "boolean", title: "Require lowercase characters", default: true},
+        AllowUsersToChangePassword: {type: "boolean", title: "Allow users to change password", default: true},
+        ExpirePasswords: {type: "boolean", title: "Passwords Expire", default: true},
+        PasswordReusePrevention: {type: "number", title: "Prevent password reuse", default: 24}
     },
 };
 

@@ -17,7 +17,16 @@ IAMNoRootAccountAccessKeyExists.docs = {
     description: 'No root account access key exists.',
     recommended: false
 };
-IAMNoRootAccountAccessKeyExists.schema = {type: 'boolean', default: true};
+IAMNoRootAccountAccessKeyExists.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 IAMNoRootAccountAccessKeyExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{

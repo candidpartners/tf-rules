@@ -16,7 +16,16 @@ S3CloudTrailBucketIsNotPubliclyAccessible.docs = {
     description: 'The CloudTrail Logging S3 bucket is not publicly accessible.',
     recommended: true
 };
-S3CloudTrailBucketIsNotPubliclyAccessible.schema = {type: 'boolean', default: true};
+S3CloudTrailBucketIsNotPubliclyAccessible.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {

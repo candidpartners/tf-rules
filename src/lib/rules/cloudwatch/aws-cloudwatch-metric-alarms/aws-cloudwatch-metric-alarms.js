@@ -36,20 +36,21 @@ CloudWatchMetricAlarms.docs = {
 CloudWatchMetricAlarms.schema = {
     type: 'object',
     properties: {
-        UnauthorizedAPICalls: {type: 'boolean', default: false},
-        ManagementConsoleSignInWithoutMFA: {type: 'boolean',default: false},
-        UsageOfRootAccount: {type: 'boolean',default: false},
-        IAMPolicyChanges: {type: 'boolean',default: false},
-        CloudTrailConfigurationChanges: {type: 'boolean',default: false},
-        AWSManagementConsoleAuthenticationFailures: {type: 'boolean',default: false},
-        DisablingOrScheduledDeletionOfCustomerCreatedCMKs: {type: 'boolean',default: false},
-        S3BucketPolicyChanges: {type: 'boolean',default: false},
-        AWSConfigConfigurationChanges: {type: 'boolean',default: false},
-        SecurityGroupChanges: {type: 'boolean',default: false},
-        ChangesToNetworkAccessControlLists: {type: 'boolean',default: false},
-        ChangesToNetworkGateways: {type: 'boolean',default: false},
-        RouteTableChanges: {type: 'boolean',default: false},
-        VPCChanges: {type: 'boolean',default: false}
+        enabled: {type: 'boolean', title: 'Enabled', default: true},
+        UnauthorizedAPICalls: {type: 'boolean', title: "Unauthorized API calls", default: false},
+        ManagementConsoleSignInWithoutMFA: {type: 'boolean', title: "Management console sign in without MFA", default: false},
+        UsageOfRootAccount: {type: 'boolean', title: "Usage of root account", default: false},
+        IAMPolicyChanges: {type: 'boolean', title: "IAM policy changes", default: false},
+        CloudTrailConfigurationChanges: {type: 'boolean', title: "CloudTrail configuration changes", default: false},
+        AWSManagementConsoleAuthenticationFailures: {type: 'boolean', title: "AWS management console authentication failure", default: false},
+        DisablingOrScheduledDeletionOfCustomerCreatedCMKs: {type: 'boolean', title: "disabling or scheduled deletion of customer created CMKs", default: false},
+        S3BucketPolicyChanges: {type: 'boolean', title: "S3 bucket policy changes", default: false},
+        AWSConfigConfigurationChanges: {type: 'boolean', title: "AWS Config configuration changes", default: false},
+        SecurityGroupChanges: {type: 'boolean', title: "Security group changes", default: false},
+        ChangesToNetworkAccessControlLists: {type: 'boolean', title: "Changes to network access control lists", default: false},
+        ChangesToNetworkGateways: {type: 'boolean', title: "Changes to network gateways", default: false},
+        RouteTableChanges: {type: 'boolean', title: "Route table changes", default: false},
+        VPCChanges: {type: 'boolean', title: "VPC changes", default: false}
     }
 };
 

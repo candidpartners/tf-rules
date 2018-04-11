@@ -18,8 +18,14 @@ CloudtrailLogsAreEncrypted.docs = {
     recommended: false
 };
 CloudtrailLogsAreEncrypted.schema = {
-    type: 'boolean',
-    default: true
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
 };
 
 

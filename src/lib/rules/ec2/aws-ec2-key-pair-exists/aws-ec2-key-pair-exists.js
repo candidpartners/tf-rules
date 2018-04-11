@@ -19,7 +19,16 @@ EC2KeyPairExists.docs = {
     recommended: true,
     tags: ["Live Check"]
 };
-EC2KeyPairExists.schema = {type: 'boolean', default: true};
+EC2KeyPairExists.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 EC2KeyPairExists.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {

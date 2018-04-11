@@ -17,7 +17,13 @@ IAMAvoidUseOfRootAccount.docs = {
     description: 'The root account has not logged in in the required number of days.',
     recommended: false
 };
-IAMAvoidUseOfRootAccount.schema = {type: 'number', default: 30};
+IAMAvoidUseOfRootAccount.schema = {
+    type: 'object',
+    properties: {
+        enabled: {type: 'boolean', title: "Enabled", default: true},
+        days: {type: 'number', title: "Number of days", default: 30}
+    }
+};
 
 
 IAMAvoidUseOfRootAccount.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {

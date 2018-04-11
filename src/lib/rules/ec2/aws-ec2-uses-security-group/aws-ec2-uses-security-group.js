@@ -14,56 +14,62 @@ EC2UsesSecurityGroup.tags = [["Candid", "1.0", "7"]];
 EC2UsesSecurityGroup.config_triggers = ["AWS::EC2::Instance"];
 EC2UsesSecurityGroup.paths = {EC2UsesSecurityGroup: 'aws_instance'};
 EC2UsesSecurityGroup.docs = {
-  description: 'All EC2 instances use specified security groups.',
-  recommended: true
+    description: 'All EC2 instances use specified security groups.',
+    recommended: true
 };
 EC2UsesSecurityGroup.schema = {
-  anyOf : [
-    { type : 'string' },
-    { 
-      type : 'array',
-      items : { type : 'string' }
+    type: 'object',
+    properties: {
+        enabled: {type: "boolean", title: "Enabled"},
+        security_groups: {
+            title: "Security group names",
+            type: "array",
+            items: {type: 'string'}
+        }
     }
-  ]
 };
 
 
-EC2UsesSecurityGroup.validate = function *( context ) {
-  // debug( '%O', context );
+EC2UsesSecurityGroup.validate = function* (context) {
+    // debug( '%O', context );
 
-  let result = null;
-  let match = false
-  let requiredGroups = [];
-  let message = null;
-  if( context.config ) {
-    // debug('Instance: %j', context.instance)
-    // debug('Config: %j', context.config)
-    if ( _.isArray(context.config)) {
-      _.map(context.config, sg => requiredGroups.push(sg))
-    } else if ( _.isString(context.config) ) {
-      requiredGroups.push(context.config)
+    let result = null;
+    let match = false
+    let requiredGroups = [];
+    let message = null;
+    if (context.config) {
+        // debug('Instance: %j', context.instance)
+        // debug('Config: %j', context.config)
+        if (_.isArray(context.config)) {
+            _.map(context.config, sg => requiredGroups.push(sg))
+        } else if (_.isString(context.config)) {
+            requiredGroups.push(context.config)
+        }
+
+        _.map(requiredGroups, function (sg) {
+            if (_.indexOf(context.instance.security_groups, sg) > -1 || _.indexOf(context.instance.vpc_security_group_ids, sg) > -1) {
+                match = true
+            }
+        })
+
+        // debug('Required Groups: %j', requiredGroups)
+
+        if (match) {
+            result = {
+                valid: 'success'
+            };
+        } else {
+            // debug('Match: %j', match)
+            message = context.instance.tags.ApplicationCode + " is not using any of the following security groups: " + requiredGroups.join(', ')
+            // debug('Message: %j', message)
+            result = {
+                valid: 'fail',
+                message
+            };
+            // debug('Result: %j', result)
+        }
     }
-    
-    _.map(requiredGroups, function(sg) { if ( _.indexOf(context.instance.security_groups, sg) > -1 || _.indexOf(context.instance.vpc_security_group_ids, sg) > -1 ) { match = true } })
-
-    // debug('Required Groups: %j', requiredGroups)
-
-    if( match ) {
-      result = {
-        valid : 'success'
-      };
-    } else {
-      // debug('Match: %j', match)
-      message = context.instance.tags.ApplicationCode + " is not using any of the following security groups: " + requiredGroups.join(', ')
-      // debug('Message: %j', message)
-      result = {
-        valid : 'fail',
-        message
-      };
-      // debug('Result: %j', result)
-    }
-  }
-  return result;
+    return result;
 };
 
 module.exports = EC2UsesSecurityGroup;

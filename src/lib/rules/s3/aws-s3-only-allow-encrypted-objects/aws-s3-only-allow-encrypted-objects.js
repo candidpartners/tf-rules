@@ -21,8 +21,9 @@ RuleName.docs = {
 RuleName.schema = {
     type: 'object',
     properties: {
-        AllowAES256: {type: "boolean", default: true},
-        AllowKMS: {type: "boolean", default: true},
+        enabled: {type: "boolean", title: "Enabled", default: true},
+        AllowAES256: {type: "boolean", title: "Allow AES256 encryption", default: true},
+        AllowKMS: {type: "boolean", title: "Allow KMS encryption", default: true},
         ExcludeBuckets: {
             type: "array",
             items: {type: "string"}

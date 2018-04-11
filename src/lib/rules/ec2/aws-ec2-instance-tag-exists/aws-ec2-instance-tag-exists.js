@@ -19,9 +19,16 @@ EC2TagExists.docs = {
     recommended: false
 };
 EC2TagExists.schema = {
-    type: 'array',
-    items: {
-        type: 'string'
+    type: 'object',
+    properties: {
+        enabled: {type: "boolean", title: "Enabled", default: true},
+        names: {
+            title: "Names",
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
     }
 };
 

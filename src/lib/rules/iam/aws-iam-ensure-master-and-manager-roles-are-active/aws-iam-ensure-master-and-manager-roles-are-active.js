@@ -13,7 +13,16 @@ IAMMasterAndManagerRolesAreActive.tags = [["CIS", "1.1.0", "1.18"]];
 IAMMasterAndManagerRolesAreActive.config_triggers = ["AWS::IAM::Role"];
 IAMMasterAndManagerRolesAreActive.paths = {IAMMasterAndManagerRolesAreActive: "aws_iam_role"};
 IAMMasterAndManagerRolesAreActive.docs = {description: 'Both Master and Manager IAM roles are active.', recommended: true};
-IAMMasterAndManagerRolesAreActive.schema = {type: 'boolean', default: true};
+IAMMasterAndManagerRolesAreActive.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: "Enabled",
+            default: true
+        }
+    }
+};
 
 
 IAMMasterAndManagerRolesAreActive.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */{
