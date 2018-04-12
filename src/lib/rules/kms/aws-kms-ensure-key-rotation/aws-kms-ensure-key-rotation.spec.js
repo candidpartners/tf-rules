@@ -11,7 +11,7 @@ let instance = {
 
 describe("aws-kms-ensure-key-rotation", () => {
     it("Recognizes an instance with key rotation enabled", function () {
-        const context = {config: true, instance};
+        const context = {config: {enabled: true}, instance};
         const result = rule.validate(context);
         expect(result.valid).toBe('success');
     });
@@ -20,7 +20,7 @@ describe("aws-kms-ensure-key-rotation", () => {
         let sadInstance = Object.assign({enable_key_rotation: false},instance);
         delete sadInstance.enable_key_rotation;
 
-        const context = {config: true, instance: sadInstance};
+        const context = {config: {enabled: true}, instance: sadInstance};
         const result = rule.validate(context);
         expect(result.valid).toBe('fail');
         expect(result.message).toBe('KMS key rotation is not enabled for one or more keys.');
@@ -30,7 +30,7 @@ describe("aws-kms-ensure-key-rotation", () => {
         let sadInstance = Object.assign({},instance);
         delete sadInstance.enable_key_rotation;
 
-        const context = {config: false, instance: sadInstance};
+        const context = {config: {enabled: false}, instance: sadInstance};
         const result = rule.validate(context);
         expect(result.valid).toBe('success');
     });
@@ -39,7 +39,7 @@ describe("aws-kms-ensure-key-rotation", () => {
        let provider = new AWSPromiseMock();
        provider.Service("KMS", "listKeys", {Keys: [{KeyId: "MyId", KeyArn: "MyArn"}]});
        provider.Service("KMS", "getKeyRotationStatus", [{ KeyRotationEnabled: true }]);
-       let result = await rule.livecheck({config: true, provider: provider});
+       let result = await rule.livecheck({config: {enabled: true}, provider: provider});
        expect(result.valid).toBe("success");
     });
 });

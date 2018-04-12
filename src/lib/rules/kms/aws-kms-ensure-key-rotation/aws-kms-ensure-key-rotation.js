@@ -77,7 +77,7 @@ KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<Rul
 KMSKeyRotation.validate = function (context /*: Context */) {
     let {config, instance} = context;
 
-    let enabled = config;
+    let enabled = config.enabled;
 
     if (!enabled)
         return {valid: 'success'};

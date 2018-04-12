@@ -20,4 +20,15 @@ describe("All CloudTrail resources should have log file validation enabled.", ()
         let result = await rule.livecheck({provider: GoodAWS});
         expect(result.valid).toBe('success');
     });
+
+    test("terraform good", async () => {
+        let result = rule.validate({instance:{enable_log_file_validation: true}});
+        expect(result.valid).toBe('success');
+    });
+
+    test("terraform bad", async () => {
+        let result = rule.validate({instance:{enable_log_file_validation: false}});
+        expect(result.valid).toBe('fail');
+    })
+
 }, 10000);

@@ -30,22 +30,16 @@ EC2UsesSecurityGroup.schema = {
 };
 
 
-EC2UsesSecurityGroup.validate = function* (context) {
+EC2UsesSecurityGroup.validate = async function (context) {
     // debug( '%O', context );
 
     let result = null;
-    let match = false
-    let requiredGroups = [];
+    let match = false;
+    let requiredGroups = context.config.security_groups || [];
     let message = null;
     if (context.config) {
         // debug('Instance: %j', context.instance)
         // debug('Config: %j', context.config)
-        if (_.isArray(context.config)) {
-            _.map(context.config, sg => requiredGroups.push(sg))
-        } else if (_.isString(context.config)) {
-            requiredGroups.push(context.config)
-        }
-
         _.map(requiredGroups, function (sg) {
             if (_.indexOf(context.instance.security_groups, sg) > -1 || _.indexOf(context.instance.vpc_security_group_ids, sg) > -1) {
                 match = true

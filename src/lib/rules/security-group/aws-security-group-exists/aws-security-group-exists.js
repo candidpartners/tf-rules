@@ -40,7 +40,7 @@ AWSSecurityGroupExists.validate = function* (context) {
     let queryResult = null;
     let missingGroups = [];
     let message = [];
-    if (context.config == true) {
+    if (context.config.enabled == true) {
         debug('Instance: %j', context.instance.security_groups)
         debug('Instance: %j', context.instance.vpc_security_group_ids)
         if (context.instance.security_groups) {

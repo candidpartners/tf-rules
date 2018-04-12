@@ -1,7 +1,6 @@
 'use strict';
 const AWS = require('aws-stub');
 const rule = require('./aws-ec2-key-pair-exists');
-const co = require('co');
 const _ = require('lodash');
 const debug = require('debug')('snitch/aws-ec2-key-pair-exists');
 
@@ -21,20 +20,20 @@ const KeyPairs = [
 ];
 
 describe('aws-ec2-key-pair-exists', function () {
-    it("should return a valid = 'success' when the instance key name is found", co.wrap(function* () {
+    it("should return a valid = 'success' when the instance key name is found", async function() {
         const instance = {key_name: 'real-key-name'};
         const provider = AWS('EC2', 'describeKeyPairs', {KeyPairs: [KeyPairs[0]]});
-        const context = {config: true, instance, provider};
-        const result = yield rule.validate(context);
+        const context = {config: {enabled: true}, instance, provider};
+        const result = await rule.validate(context);
         expect(result.valid).toBe('success');
-    }));
-    it("should return a valid = 'fail' when the instance key name is not found", co.wrap(function* () {
+    });
+    it("should return a valid = 'fail' when the instance key name is not found", async function() {
         const instance = {key_name: 'real-key-name'};
         const provider = AWS('EC2', 'describeKeyPairs', {KeyPairs: []});
-        const context = {config: true, instance, provider};
-        const result = yield rule.validate(context);
+        const context = {config: {enabled:true}, instance, provider};
+        const result = await rule.validate(context);
         expect(result.valid).toBe('fail');
-    }));
+    });
 });
 
 
@@ -69,12 +68,12 @@ describe('aws-ec2-key-pair-exists-livecheck', function () {
         let result = await rule.livecheck({provider});
         expect(result.valid).toBe('fail');
         expect(result.message).toBeTruthy();
-    })
+    });
 
     it("Should succeed if all ec2 instances are found with a key", async function () {
         let provider = getProvider([{KeyName: "MyKey"},{KeyName: "MyOtherKey"}]);
         let result = await rule.livecheck({provider});
         expect(result.valid).toBe('success');
-    })
+    });
 });
 
