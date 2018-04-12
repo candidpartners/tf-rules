@@ -126,19 +126,23 @@ rules :
 - aws-security-group-allows-inbound :
     enabled : true
     cidr : '127.0.0.1/32'
-    port : '80'
+    ports :
+     -  '80'
 - aws-security-group-allows-outbound :
     enabled : true
     cidr : '127.0.0.2/32'
-    port : '22'
+    ports :
+      - '22'
 - aws-security-group-does-not-allow-inbound :
     enabled : true
     cidr : '204.4.6.2/32'
-    port : '9032-9034'
+    ports :
+      - '9032-9034'
 - aws-security-group-does-not-allow-outbound :
     enabled : true
     cidr : '204.4.6.2/32'
-    port : '9032-9034'
+    ports :
+      - '9032-9034'
 - aws-security-group-exists :
     enabled : true
 

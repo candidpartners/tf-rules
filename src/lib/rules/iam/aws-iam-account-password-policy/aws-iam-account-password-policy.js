@@ -51,6 +51,7 @@ IAMAccountPasswordPolicy.schema = {
 IAMAccountPasswordPolicy.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     const IAM = new context.provider.IAM();
     let config = context.config;
+    delete config.enabled;
 
     try{
         const result = await IAM.getAccountPasswordPolicy().promise();

@@ -21,12 +21,12 @@ _AWS.Service("IAM", "getCredentialReport", content);
 describe("IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED", () => {
 
     test("It recognizes when unused credentials have been disabled", async () => {
-        let result = await rule.livecheck({config: 90, provider: _AWS});
+        let result = await rule.livecheck({config: {days: 90}, provider: _AWS});
         expect(result.valid).toBe('success');
     });
 
     test("It recognizes when unused credentials have not been disabled", async () => {
-        let result = await rule.livecheck({config: 88, provider: _AWS});
+        let result = await rule.livecheck({config: {days: 88}, provider: _AWS});
         expect(result.valid).toBe('fail');
         expect(result.message).toBeTruthy();
     });

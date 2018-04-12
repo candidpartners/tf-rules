@@ -38,7 +38,7 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
-    let dateRange = config;
+    let dateRange = config.days;
 
     function getDaysAgo(date) {
         let givenDate = new Date(date);

@@ -17,64 +17,62 @@ AWSSecurityGroupAllowOutbound.tags = [["Candid", "1.0", "12"]];
 AWSSecurityGroupAllowOutbound.config_triggers = ["AWS::::Account"];
 AWSSecurityGroupAllowOutbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupAllowOutbound.docs = {
-  description: 'Security Group allows outbound traffic through specified ports.',
-  recommended: true
+    description: 'Security Group allows outbound traffic through specified ports.',
+    recommended: true
 };
 AWSSecurityGroupAllowOutbound.schema = {
-  type : 'object',
-  properties : {
-    enabled: {type: "boolean", title: "Enabled", default: true},
-    cidr : {
-      type : 'string', 
-      pattern : "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$"
-    },
-    port : {
-      anyOf : [
-        { 
-          type : 'string',
-          pattern : '^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$'
+    type: 'object',
+    properties: {
+        enabled: {type: "boolean", title: "Enabled", default: true},
+        cidr: {
+            type: 'string',
+            title: "CIDR",
+            pattern: "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$"
         },
-        { 
-          type : 'string',
-          pattern : '^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[\-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$'
+        ports: {
+            type: 'array',
+            title: "Port numbers",
+            items: {
+                type: 'string',
+                pattern: '^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[\-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$'
+            }
         }
-      ]
     }
-  }
 };
 
 
-AWSSecurityGroupAllowOutbound.validate = function *( context ) {
-  // debug( '%O', context );
-  debug('Config: %j', context.config)
-  // debug('Instance: %j', context.instance.egress)
-  let result = null;
-  let message = [];
-  let groups = {}
-  if( context.config ) {
-    context.config['port'] = context.config.port ? context.config.port : '0-65535';
-    context.config['cidr'] = context.config.cidr ? context.config.cidr : '0.0.0.0/0'
-    // debug('Port: %j', context.config.port)
-    // debug('CIDR: %j', context.config.cidr)
-    _.map(context.instance.egress, egress => {
-      groups[context.instance.name] = cidrComparison(context.config, egress, true)
-    })
+AWSSecurityGroupAllowOutbound.validate = function* (context) {
+    // debug( '%O', context );
+    debug('Config: %j', context.config)
+    // debug('Instance: %j', context.instance.egress)
+    let result = null;
+    let message = [];
+    let groups = {}
+    if (context.config) {
+        context.config['port'] = context.config.port ? context.config.port : '0-65535';
+        context.config['cidr'] = context.config.cidr ? context.config.cidr : '0.0.0.0/0'
+        // debug('Port: %j', context.config.port)
+        // debug('CIDR: %j', context.config.cidr)
+        _.map(context.instance.egress, egress => {
+            groups[context.instance.name] = cidrComparison(context.config, egress, true)
+        })
 
-    if ( ! _.isEmpty(groups[context.instance.name]) ){
-      debug('Matching Groups: %j', groups)
-      result = {
-        valid : 'success'
-      };
-    } else {
-      message.push('Security group "' + context.instance.name + '" should have outbound traffic allowed from CIDR Block "' + context.config.cidr + '" on ports "' + context.config.port + '"')
+        if (!_.isEmpty(groups[context.instance.name])) {
+            debug('Matching Groups: %j', groups)
+            result = {
+                valid: 'success'
+            };
+        } else {
+            message.push('Security group "' + context.instance.name + '" should have outbound traffic allowed from CIDR Block "' + context.config.cidr + '" on ports "' + context.config.port + '"')
 
-      result = {
-        valid : 'fail',
-        message
-      }
+            result = {
+                valid: 'fail',
+                message
+            }
+        }
     }
-  };
-  return result;
+    ;
+    return result;
 };
 
 module.exports = AWSSecurityGroupAllowOutbound;
