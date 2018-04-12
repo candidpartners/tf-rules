@@ -107,7 +107,7 @@ function* validatePlan(params) {
                 if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
                     for (let instanceName of _.keys(searchResult.search)) {
                         let instance = searchResult.search[instanceName];
-                        let result = yield rule.validate({config, instance, plan, jp, provider, _});
+                        let result = yield Promise.resolve(rule.validate({config, instance, plan, jp, provider, _}));
                         results.push(result);
                         report(result, instanceName, rule, ruleId);
                     }

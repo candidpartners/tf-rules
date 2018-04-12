@@ -39,7 +39,10 @@ rules :
 #EBS
 - aws-ebs-volume-encryption :
     enabled: true
+
 #EC2
+- aws-ec2-ensure-instance-profile :
+    enabled: true
 - aws-ec2-ami-includes-sql-server :
     enabled : true
 - aws-ec2-instance-tag-exists :
