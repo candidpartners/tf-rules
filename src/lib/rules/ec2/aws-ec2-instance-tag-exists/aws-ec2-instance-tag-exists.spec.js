@@ -21,10 +21,10 @@ describe("aws-ec2-instance-tag-exists", () => {
                 ]
             }
         );
-        let result = await rule.livecheck({config: ["MyTag"], provider});
+        let result = await rule.livecheck({config: {names:["MyTag"]}, provider});
         expect(result.valid).toBe("success");
 
-        let failResult = await rule.livecheck({config:["OtherTag"], provider});
+        let failResult = await rule.livecheck({config: {names: ["OtherTag"]}, provider});
         expect(failResult.valid).toBe('fail');
         expect(failResult.message).toBe("EC2 Instances must have specified tags");
     });
@@ -34,7 +34,7 @@ describe("aws-ec2-instance-tag-exists", () => {
             tags: {}
         };
 
-        let config = ["MyTag"];
+        let config = {names: ["MyTag"]};
         let result = rule.validate({instance, config});
         expect(result.valid).toBe('fail');
         expect(result.message).toEqual(["MyTag tag is missing"]);

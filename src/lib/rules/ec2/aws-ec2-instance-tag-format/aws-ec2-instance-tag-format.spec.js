@@ -5,7 +5,7 @@ const co = require('co');
 const debug = require('debug')('snitch/aws-ec2-uses-key-pair');
 
 describe('aws-ec2-instance-tag-format', function() {
-    it("should return a valid = 'success'", co.wrap(function *() {
+    it("should return a valid = 'success'", async function() {
         const instance = {
             key_name : 'real-key-name',
             tags: {
@@ -20,10 +20,11 @@ describe('aws-ec2-instance-tag-format', function() {
             instance,
             provider
         };
-        const result = yield rule.validate( context );
+        const result = await rule.validate( context );
         expect(result.valid).toBe('success');
-    }));
-    it("should return a valid = 'fail'", co.wrap(function *() {
+    });
+
+    it("should return a valid = 'fail'", async function () {
         const instance = {
             tags: {
                 ApplicationCode : 'TST',
@@ -37,7 +38,7 @@ describe('aws-ec2-instance-tag-format', function() {
             instance,
             provider
         };
-        const result = yield rule.validate( context );
+        const result = await rule.validate( context );
         expect(result.valid).toBe('fail');
-    }));
+    });
 });

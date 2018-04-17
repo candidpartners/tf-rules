@@ -38,7 +38,7 @@ EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<Rule
     let {config, provider} = context;
 
     let ec2 = new provider.EC2();
-    let reqTags = config;
+    let reqTags = config.names;
 
     // Get all EC2 Instances
     let result = await ec2.describeInstances().promise();
@@ -84,7 +84,7 @@ EC2TagExists.paths = {
 };
 
 EC2TagExists.validate = function (context /*: Context */) {
-    let reqTags = context.config;
+    let reqTags = context.config.names;
 
     debug('Tag List: %j', reqTags);
 

@@ -14,14 +14,14 @@ describe('rds-encryption-key-exists', function () {
     it("should return a valid = 'success'", co.wrap(function* () {
         const instance = {kms_key_id: 'arn:fake:key:id'};
         const provider = AWS('KMS', 'listKeys', {Keys});
-        const context = {config: true, instance, provider};
+        const context = {config: {enabled: true} , instance, provider};
         const result = yield rule.validate(context);
         expect(result.valid).toBe('success');
     }));
     it("should return a valid = 'fail'", co.wrap(function* () {
         const instance = {kms_key_id: 'arn:fake:key:id:not:exist'};
         const provider = AWS('KMS', 'listKeys', {Keys});
-        const context = {config: true, instance, provider};
+        const context = {config: {enabled: true}, instance, provider};
         const result = yield rule.validate(context);
         expect(result.valid).toBe('fail');
     }));
@@ -48,10 +48,10 @@ describe('rds-encryption-key-exists', function () {
             }
         );
 
-        let result = await rule.livecheck({config: {}, provider: goodProvider});
+        let result = await rule.livecheck({config: {enabled: true}, provider: goodProvider});
         expect(result.valid).toBe("success");
 
-        let failResult = await rule.livecheck({config: {}, provider: badProvider});
+        let failResult = await rule.livecheck({config: {enabled: true}, provider: badProvider});
         expect(failResult.valid).toBe('fail');
         expect(failResult.message).toBeTruthy();
     });
@@ -73,7 +73,7 @@ describe('rds-encryption-key-exists', function () {
                 ]
             }
         );
-        let result = await rule.livecheck({config: { exclude: "MyName"}, provider: goodProvider});
+        let result = await rule.livecheck({config: { enabled: true, exclude: "MyName"}, provider: goodProvider});
         expect(result.valid).toBe("success");
     })
 });

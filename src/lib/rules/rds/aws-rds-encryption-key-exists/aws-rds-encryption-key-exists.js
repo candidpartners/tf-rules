@@ -72,7 +72,7 @@ RDSEncryptionKeyExists.livecheck = async function(context /*: Context */) /*: Pr
 RDSEncryptionKeyExists.validate = async function(context /*: Context */) {
     const kms = new context.provider.KMS();
     let result = null;
-    if (context.config == true) {
+    if (context.config.enabled == true) {
         if (context.instance.kms_key_id) {
             const queryResult = await kms.listKeys({}).promise();
             debug('%O', queryResult);

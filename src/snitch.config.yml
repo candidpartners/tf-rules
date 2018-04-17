@@ -39,7 +39,10 @@ rules :
 #EBS
 - aws-ebs-volume-encryption :
     enabled: true
+
 #EC2
+- aws-ec2-ensure-instance-profile :
+    enabled: true
 - aws-ec2-ami-includes-sql-server :
     enabled : true
 - aws-ec2-instance-tag-exists :
@@ -110,6 +113,8 @@ rules :
       - vra
 
 #S3
+- aws-s3-ensure-versioning :
+    enabled : true
 - aws-s3-only-allow-encrypted-objects:
     enabled : true
     AllowAES256: true

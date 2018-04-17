@@ -1,5 +1,4 @@
 'use strict';
-const AWS = require('aws-stub');
 const rule = require('./aws-security-group-allows-inbound');
 const debug = require('debug')('snitch/aws-security-group-allows-inbound.spec');
 const co = require('co');

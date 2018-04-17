@@ -69,7 +69,7 @@ EC2KeyPairExists.validate = async function(context /*: Context */) {
 
     const ec2 = new context.provider.EC2();
     let result = null;
-    if (context.config == true) {
+    if (context.config.enabled === true) {
         // debug('Instance: %j', context.instance)
         if (context.instance.key_name) {
             const queryResult = await ec2.describeKeyPairs({
