@@ -135,7 +135,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
     let watch = new provider.CloudWatch();
     let sns = new provider.SNS();
 
-    let noncompliant_resources = [];
+    let resources = [];
 
     // Get the names of all the CloudTrail log groups
     let trails = await trail.describeTrails().promise();
@@ -168,7 +168,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
     // Check if no metric filters exist
     if (metrics.length === 0) {
-        noncompliant_resources.push(new Resource({
+        resources.push(new Resource({
             is_compliant: false,
             resource_id: "CloudWatchLogs",
             resource_type: "AWS::CloudWatch::Alarm",
@@ -177,7 +177,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
         return new RuleResult({
             valid: "fail",
             message: `A log metric filter and alarm do not exist for any rules.`,
-            resources: noncompliant_resources
+            resources: resources
         })
     }
 
@@ -207,7 +207,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
             // Check if no metric filters exist for the specified rule
             if (activeFilter === undefined) {
-                noncompliant_resources.push(new Resource({
+                resources.push(new Resource({
                     is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
@@ -217,7 +217,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
             // Check if no alarms exist for the specified filter
             else if (filteredAlarm === undefined) {
-                noncompliant_resources.push(new Resource({
+                resources.push(new Resource({
                     is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
@@ -227,7 +227,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
             // Check if no actions exist for the specified alarm
             else if (filteredAlarm.AlarmActions.length === 0) {
-                noncompliant_resources.push(new Resource({
+                resources.push(new Resource({
                     is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
@@ -237,20 +237,30 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
             // Check if no subscriptions exist for the specified alarm
             else if (_.get(subscribers,'Subscriptions.length') === 0) {
-                noncompliant_resources.push(new Resource({
+                resources.push(new Resource({
                     is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
                     message: `does not have any subscribers linked to the alarm for ${activeFilterPatterns[i].rule}.`
                 }));
             }
+
+            // Otherwise it is compliant
+            else {
+                resources.push(new Resource({
+                    is_compliant: true,
+                    resource_id: "Cloudwatch",
+                    resource_type: "AWS::Cloudwatch::Alarm",
+                    message: `has a metric filter set up and fully configured for ${activeFilterPatterns[i].rule}.`
+                }));
+            }
         }
     }
 
     return new RuleResult({
-        valid: (noncompliant_resources.length > 0) ? "fail" : "success",
+        valid: (resources.length > 0) ? "fail" : "success",
         message: "aws-cloudwatch-metric-alarms",
-        resources: noncompliant_resources
+        resources: resources
     })
 
 };
