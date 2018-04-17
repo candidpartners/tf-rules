@@ -258,7 +258,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
     }
 
     return new RuleResult({
-        valid: (resources.length > 0) ? "fail" : "success",
+        valid: (resources.filter(x => x.is_compliant === false).length > 0) ? "fail" : "success",
         message: "aws-cloudwatch-metric-alarms",
         resources: resources
     })
