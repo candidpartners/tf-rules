@@ -22,7 +22,17 @@ pipelines:
                   cd snitch/src
                   npm i
                   npm run coverage
-
+      - e2e-test:
+          clean_workspace: true
+          jobs:
+            Unit-Test:
+              resources:
+                - terraform
+              tasks:
+              - script: |
+                  cd snitch/src
+                  npm i
+                  npm run test:e2e
       - deploy-to-npm:
           approval:
             type: manual # Require someone in the UI to manually approve the execution of this stage

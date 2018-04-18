@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "coverage": "jest --coverage",
+    "coverage": "jest --coverage .lib/*",
+    "test:e2e": "jest e2e.spec.js && jest index.spec.js",
     "cli": "node bin/snitch.js --plan",
     "livecheck": "node bin/snitch --livecheck"
   },
