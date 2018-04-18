@@ -65,6 +65,8 @@ rules :
       - "World"
 
 #IAM
+- aws-iam-no-policies-use-default-kms-keys:
+    enabled : true
 - aws-iam-account-password-policy :
     enabled : true
     MinimumPasswordLength : 14

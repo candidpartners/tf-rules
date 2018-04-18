@@ -20,6 +20,7 @@ class Context{
     /*:: config: any; */
     /*:: provider: any; */
     /*:: instance: any; */
+    /*:: services: any; */
 }
 
 class RuleResult{

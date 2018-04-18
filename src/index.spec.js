@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({region: "us-west-2"});
 
 
-jest.setTimeout(15000);
+jest.setTimeout(30000);
 
 describe("Snitch", () => {
     it("Can be called from JS", async () => {

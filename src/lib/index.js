@@ -5,6 +5,7 @@ const co = require('co');
 const Ajv = require('ajv');
 const colors = require('colors');
 const jp = require('jmespath');
+const services = require('./services/services');
 
 const symbols = require('./reporters/symbols');
 
@@ -154,7 +155,7 @@ let livecheck = co.wrap(function* (params) {
 
         // If the rule has a livecheck, call it and add it to the promise array
         if (_.isFunction(rule.livecheck)) {
-            let promise = rule.livecheck({config, provider}).then(result => {
+            let promise = rule.livecheck({config, provider, services}).then(result => {
 
                 // Add account identifier to resources
                 result.resources = result.resources.map(x => Object.assign({},x,{resource_id: `${accountAndRegion}${x.resource_id}`}))
