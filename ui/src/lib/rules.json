@@ -6,11 +6,7 @@
     "tags": [
       "Livecheck",
       "Terraform",
-      [
-        "CIS",
-        "1.1.0",
-        "2.2"
-      ]
+      "CIS | 1.1.0 | 2.2"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -23,8 +19,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -34,11 +36,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "2.1"
-      ]
+      "CIS | 1.1.0 | 2.1"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -51,8 +49,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -61,11 +65,7 @@
     "groupName": "CloudTrail",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "2.7"
-      ]
+      "CIS | 1.1.0 | 2.7"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -78,8 +78,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -89,11 +95,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "2.4"
-      ]
+      "CIS | 1.1.0 | 2.4"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -106,8 +108,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -117,76 +125,20 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "3.1"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.2"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.3"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.4"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.5"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.6"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.7"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.8"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.9"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.10"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.11"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.12"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.13"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "3.14"
-      ]
+      "CIS | 1.1.0 | 3.1",
+      "CIS | 1.1.0 | 3.2",
+      "CIS | 1.1.0 | 3.3",
+      "CIS | 1.1.0 | 3.4",
+      "CIS | 1.1.0 | 3.5",
+      "CIS | 1.1.0 | 3.6",
+      "CIS | 1.1.0 | 3.7",
+      "CIS | 1.1.0 | 3.8",
+      "CIS | 1.1.0 | 3.9",
+      "CIS | 1.1.0 | 3.10",
+      "CIS | 1.1.0 | 3.11",
+      "CIS | 1.1.0 | 3.12",
+      "CIS | 1.1.0 | 3.13",
+      "CIS | 1.1.0 | 3.14"
     ],
     "config_triggers": [
       "AWS::CloudWatch::Alarm"
@@ -201,60 +153,79 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "UnauthorizedAPICalls": {
           "type": "boolean",
+          "title": "Unauthorized API calls",
           "default": false
         },
         "ManagementConsoleSignInWithoutMFA": {
           "type": "boolean",
+          "title": "Management console sign in without MFA",
           "default": false
         },
         "UsageOfRootAccount": {
           "type": "boolean",
+          "title": "Usage of root account",
           "default": false
         },
         "IAMPolicyChanges": {
           "type": "boolean",
+          "title": "IAM policy changes",
           "default": false
         },
         "CloudTrailConfigurationChanges": {
           "type": "boolean",
+          "title": "CloudTrail configuration changes",
           "default": false
         },
         "AWSManagementConsoleAuthenticationFailures": {
           "type": "boolean",
+          "title": "AWS management console authentication failure",
           "default": false
         },
         "DisablingOrScheduledDeletionOfCustomerCreatedCMKs": {
           "type": "boolean",
+          "title": "disabling or scheduled deletion of customer created CMKs",
           "default": false
         },
         "S3BucketPolicyChanges": {
           "type": "boolean",
+          "title": "S3 bucket policy changes",
           "default": false
         },
         "AWSConfigConfigurationChanges": {
           "type": "boolean",
+          "title": "AWS Config configuration changes",
           "default": false
         },
         "SecurityGroupChanges": {
           "type": "boolean",
+          "title": "Security group changes",
           "default": false
         },
         "ChangesToNetworkAccessControlLists": {
           "type": "boolean",
+          "title": "Changes to network access control lists",
           "default": false
         },
         "ChangesToNetworkGateways": {
           "type": "boolean",
+          "title": "Changes to network gateways",
           "default": false
         },
         "RouteTableChanges": {
           "type": "boolean",
+          "title": "Route table changes",
           "default": false
         },
         "VPCChanges": {
           "type": "boolean",
+          "title": "VPC changes",
           "default": false
         }
       }
@@ -268,11 +239,7 @@
       "Livecheck",
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "1"
-      ]
+      "Candid | 1.0 | 1"
     ],
     "config_triggers": [
       "AWS::DynamoDB::Table"
@@ -289,6 +256,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
+          "title": "Enabled",
           "default": true
         },
         "exclude": {
@@ -307,11 +275,7 @@
     "tags": [
       "Livecheck",
       "Terraform",
-      [
-        "Snitch",
-        "1.0",
-        "2"
-      ]
+      "Candid | 1.0 | 2"
     ],
     "config_triggers": [
       "AWS::EC2::Volume"
@@ -331,6 +295,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
+          "title": "Enabled",
           "default": true
         },
         "exclude": {
@@ -348,11 +313,7 @@
     "groupName": "EC2",
     "tags": [
       "Terraform",
-      [
-        "Snitch",
-        "1.0",
-        "3"
-      ]
+      "Candid | 1.0 | 3"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -365,8 +326,48 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
+    }
+  },
+  {
+    "name": "aws-ec2-ensure-instance-profile",
+    "uuid": "34d1f411-895f-435c-a87c-c40e2b51272f",
+    "groupName": "EC2",
+    "tags": [
+      "Livecheck",
+      "Terraform",
+      "Recommended",
+      "CIS | 1.1.0 | 1.21"
+    ],
+    "config_triggers": [
+      "AWS::EC2::Instance"
+    ],
+    "paths": {
+      "EC2KeyPairExists": "aws_instance"
+    },
+    "docs": {
+      "description": "EC2 Instances must have an instance role.",
+      "recommended": true,
+      "tags": [
+        "Live Check"
+      ]
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -376,11 +377,7 @@
     "tags": [
       "Livecheck",
       "Terraform",
-      [
-        "Snitch",
-        "1.0",
-        "4"
-      ]
+      "Candid | 1.0 | 4"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -393,9 +390,20 @@
       "recommended": false
     },
     "schema": {
-      "type": "array",
-      "items": {
-        "type": "string"
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "names": {
+          "title": "Names",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     }
   },
@@ -405,11 +413,7 @@
     "groupName": "EC2",
     "tags": [
       "Terraform",
-      [
-        "Snitch",
-        "1.0",
-        "5"
-      ]
+      "Candid | 1.0 | 5"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -422,15 +426,28 @@
       "recommended": false
     },
     "schema": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "format": {
-            "type": "string"
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "tags": {
+          "title": "Tags",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "title": "Name",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              }
+            }
           }
         }
       }
@@ -444,11 +461,7 @@
       "Livecheck",
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "6"
-      ]
+      "Candid | 1.0 | 6"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -464,8 +477,14 @@
       ]
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -475,11 +494,7 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "7"
-      ]
+      "Candid | 1.0 | 7"
     ],
     "config_triggers": [
       "AWS::EC2::Instance"
@@ -488,21 +503,24 @@
       "EC2UsesSecurityGroup": "aws_instance"
     },
     "docs": {
-      "description": "All EC2 instances use specified security groups",
+      "description": "All EC2 instances use specified security groups.",
       "recommended": true
     },
     "schema": {
-      "anyOf": [
-        {
-          "type": "string"
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled"
         },
-        {
+        "security_groups": {
+          "title": "Security group names",
           "type": "array",
           "items": {
             "type": "string"
           }
         }
-      ]
+      }
     }
   },
   {
@@ -512,41 +530,13 @@
     "tags": [
       "Livecheck",
       "Terraform",
-      [
-        "CIS",
-        "1.1.0",
-        "1.5"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.6"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.7"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.8"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.9"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.10"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "1.11"
-      ]
+      "CIS | 1.1.0 | 1.5",
+      "CIS | 1.1.0 | 1.6",
+      "CIS | 1.1.0 | 1.7",
+      "CIS | 1.1.0 | 1.8",
+      "CIS | 1.1.0 | 1.9",
+      "CIS | 1.1.0 | 1.10",
+      "CIS | 1.1.0 | 1.11"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -555,7 +545,7 @@
       "IAMAccountPasswordPolicy": "aws_iam_account_password_policy"
     },
     "docs": {
-      "description": "The IAM account password policy complies to CIS standards.",
+      "description": "The IAM account password policy complies to specified standards.",
       "recommended": false
     },
     "schema": {
@@ -566,40 +556,54 @@
         "PasswordReusePrevention"
       ],
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "MinimumPasswordLength": {
           "type": "number",
+          "title": "Minimum password length",
           "default": 14
         },
         "MaxPasswordAge": {
           "type": "number",
+          "title": "Max password age",
           "default": 90
         },
         "RequireSymbols": {
           "type": "boolean",
+          "title": "Require symbols",
           "default": true
         },
         "RequireNumbers": {
           "type": "boolean",
+          "title": "Require numbers",
           "default": true
         },
         "RequireUppercaseCharacters": {
           "type": "boolean",
+          "title": "Require uppercase characters",
           "default": true
         },
         "RequireLowercaseCharacters": {
           "type": "boolean",
+          "title": "Require lowercase characters",
           "default": true
         },
         "AllowUsersToChangePassword": {
           "type": "boolean",
+          "title": "Allow users to change password",
           "default": true
         },
         "ExpirePasswords": {
           "type": "boolean",
+          "title": "Passwords Expire",
           "default": true
         },
         "PasswordReusePrevention": {
           "type": "number",
+          "title": "Prevent password reuse",
           "default": 24
         }
       }
@@ -611,11 +615,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.1"
-      ]
+      "CIS | 1.1.0 | 1.1"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -628,8 +628,19 @@
       "recommended": false
     },
     "schema": {
-      "type": "number",
-      "default": 30
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "days": {
+          "type": "number",
+          "title": "Number of days",
+          "default": 30
+        }
+      }
     }
   },
   {
@@ -638,11 +649,7 @@
     "groupName": "IAM",
     "tags": [
       "Terraform",
-      [
-        "CIS",
-        "1.1.0",
-        "1.24"
-      ]
+      "CIS | 1.1.0 | 1.24"
     ],
     "config_triggers": [
       "AWS::IAM::Policy"
@@ -651,12 +658,18 @@
       "IAMDoesNotAllowFullAccessPolicies": "aws_iam_policy"
     },
     "docs": {
-      "description": "No IAM policies allow full administrative privileges",
+      "description": "No IAM policies allow full administrative privileges.",
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -666,11 +679,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "1.22"
-      ]
+      "CIS | 1.1.0 | 1.22"
     ],
     "config_triggers": [
       "AWS::IAM::Role"
@@ -683,8 +692,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": false
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -693,11 +708,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.4"
-      ]
+      "CIS | 1.1.0 | 1.4"
     ],
     "config_triggers": [
       "AWS::IAM::Group"
@@ -710,8 +721,19 @@
       "recommended": false
     },
     "schema": {
-      "type": "number",
-      "default": 90
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "days": {
+          "type": "number",
+          "title": "Number of days",
+          "default": 90
+        }
+      }
     }
   },
   {
@@ -721,11 +743,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "1.18"
-      ]
+      "CIS | 1.1.0 | 1.18"
     ],
     "config_triggers": [
       "AWS::IAM::Role"
@@ -738,8 +756,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -748,11 +772,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.3"
-      ]
+      "CIS | 1.1.0 | 1.3"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -765,8 +785,19 @@
       "recommended": false
     },
     "schema": {
-      "type": "number",
-      "default": 90
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "days": {
+          "type": "number",
+          "title": "Number of days",
+          "default": 90
+        }
+      }
     }
   },
   {
@@ -775,11 +806,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.14"
-      ]
+      "CIS | 1.1.0 | 1.14"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -792,8 +819,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -802,11 +835,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.2"
-      ]
+      "CIS | 1.1.0 | 1.2"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -819,8 +848,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -829,11 +864,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.13"
-      ]
+      "CIS | 1.1.0 | 1.13"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -846,8 +877,40 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
+    }
+  },
+  {
+    "name": "aws-iam-no-policies-use-default-kms-keys",
+    "uuid": "aacd1ad6-acf0-49b4-bc00-883599007677",
+    "groupName": "IAM",
+    "tags": [
+      "Livecheck"
+    ],
+    "config_triggers": [
+      "AWS::IAM::Policy"
+    ],
+    "paths": {},
+    "docs": {
+      "description": "No IAM policies use any Default KMS (alias/aws) keys.",
+      "recommended": false
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -856,11 +919,7 @@
     "groupName": "IAM",
     "tags": [
       "Livecheck",
-      [
-        "CIS",
-        "1.1.0",
-        "1.12"
-      ]
+      "CIS | 1.1.0 | 1.12"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -873,8 +932,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -884,11 +949,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "1.16"
-      ]
+      "CIS | 1.1.0 | 1.16"
     ],
     "config_triggers": [
       "AWS::IAM::User"
@@ -901,8 +962,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -912,11 +979,7 @@
     "tags": [
       "Livecheck",
       "Terraform",
-      [
-        "CIS",
-        "1.1.0",
-        "2.8"
-      ]
+      "CIS | 1.1.0 | 2.8"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -929,8 +992,14 @@
       "recommended": false
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -941,11 +1010,7 @@
       "Livecheck",
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "8"
-      ]
+      "Candid | 1.0 | 8"
     ],
     "config_triggers": [
       "AWS::RDS::DBInstance"
@@ -960,6 +1025,11 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "exclude": {
           "type": "array",
           "items": {
@@ -976,11 +1046,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "2.6"
-      ]
+      "CIS | 1.1.0 | 2.6"
     ],
     "config_triggers": [
       "AWS::S3::Bucket"
@@ -993,8 +1059,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -1004,11 +1076,7 @@
     "tags": [
       "Livecheck",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "2.3"
-      ]
+      "CIS | 1.1.0 | 2.3"
     ],
     "config_triggers": [
       "AWS::CloudTrail::Trail"
@@ -1021,8 +1089,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -1033,11 +1107,7 @@
       "Livecheck",
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "9"
-      ]
+      "Candid | 1.0 | 9"
     ],
     "config_triggers": [
       "AWS::S3::Bucket"
@@ -1054,6 +1124,43 @@
       "properties": {
         "enabled": {
           "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "aws-s3-ensure-versioning",
+    "uuid": "875dcd25-644a-4ffd-831d-003e7a41090c",
+    "groupName": "S3",
+    "tags": [
+      "Livecheck",
+      "Recommended",
+      "Candid | 1.0 | 9"
+    ],
+    "config_triggers": [
+      "AWS::S3::Bucket"
+    ],
+    "paths": {
+      "S3": "aws_s3_bucket"
+    },
+    "docs": {
+      "description": "Ensures S3 buckets have versioning",
+      "recommended": true
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
           "default": true
         },
         "exclude": {
@@ -1071,29 +1178,32 @@
     "groupName": "S3",
     "tags": [
       "Livecheck",
-      [
-        "Snitch",
-        "1.0",
-        "10"
-      ]
+      "Candid | 1.0 | 10"
     ],
     "config_triggers": [
       "AWS::S3::Bucket"
     ],
     "paths": {},
     "docs": {
-      "description": "All S3 bucket policies only allows uploads if encryption is specified.",
+      "description": "All S3 bucket policies only allow uploads if encryption is specified.",
       "recommended": false
     },
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "AllowAES256": {
           "type": "boolean",
+          "title": "Allow AES256 encryption",
           "default": true
         },
         "AllowKMS": {
           "type": "boolean",
+          "title": "Allow KMS encryption",
           "default": true
         },
         "ExcludeBuckets": {
@@ -1112,11 +1222,7 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "11"
-      ]
+      "Candid | 1.0 | 11"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -1131,21 +1237,20 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "cidr": {
           "type": "string",
+          "title": "CIDR",
           "pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(/([0-9]|[1-2][0-9]|3[0-2]))$"
         },
         "port": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
-            }
-          ]
+          "type": "string",
+          "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$",
+          "title": "Port number"
         }
       }
     }
@@ -1157,11 +1262,7 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "12"
-      ]
+      "Candid | 1.0 | 12"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -1176,21 +1277,20 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "cidr": {
           "type": "string",
+          "title": "CIDR",
           "pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(/([0-9]|[1-2][0-9]|3[0-2]))$"
         },
         "port": {
-          "anyOf": [
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
-            }
-          ]
+          "type": "string",
+          "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$",
+          "title": "Port number"
         }
       }
     }
@@ -1202,16 +1302,8 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "CIS",
-        "1.1.0",
-        "4.1"
-      ],
-      [
-        "CIS",
-        "1.1.0",
-        "4.2"
-      ]
+      "CIS | 1.1.0 | 4.1",
+      "CIS | 1.1.0 | 4.2"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -1226,24 +1318,23 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "cidr": {
           "type": "string",
+          "title": "CIDR",
           "pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(/([0-9]|[1-2][0-9]|3[0-2]))$"
         },
-        "port": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
-            }
-          ]
+        "ports": {
+          "type": "array",
+          "title": "Port numbers",
+          "items": {
+            "type": "string",
+            "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
+          }
         }
       }
     }
@@ -1255,11 +1346,7 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "13"
-      ]
+      "Candid | 1.0 | 13"
     ],
     "config_triggers": [
       "AWS::::Account"
@@ -1274,24 +1361,23 @@
     "schema": {
       "type": "object",
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        },
         "cidr": {
           "type": "string",
+          "title": "CIDR",
           "pattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(/([0-9]|[1-2][0-9]|3[0-2]))$"
         },
-        "port": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$"
-            },
-            {
-              "type": "string",
-              "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
-            }
-          ]
+        "ports": {
+          "type": "array",
+          "title": "Port numbers",
+          "items": {
+            "type": "string",
+            "pattern": "^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])[-]?([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])?$"
+          }
         }
       }
     }
@@ -1303,11 +1389,7 @@
     "tags": [
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "14"
-      ]
+      "Candid | 1.0 | 14"
     ],
     "config_triggers": [
       "AWS::Account"
@@ -1320,8 +1402,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   },
   {
@@ -1332,11 +1420,7 @@
       "Livecheck",
       "Terraform",
       "Recommended",
-      [
-        "Snitch",
-        "1.0",
-        "15"
-      ]
+      "Candid | 1.0 | 15"
     ],
     "config_triggers": [
       "AWS::EC2::VPC"
@@ -1349,8 +1433,14 @@
       "recommended": true
     },
     "schema": {
-      "type": "boolean",
-      "default": true
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enabled",
+          "default": true
+        }
+      }
     }
   }
 ]

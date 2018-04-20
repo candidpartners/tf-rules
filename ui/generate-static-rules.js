@@ -10,6 +10,7 @@ let sanitizedRules = _.map(rules, (rule,key) => {
     if(_.isFunction(rule.validate)) tags.unshift("Terraform");
     if(_.isFunction(rule.livecheck)) tags.unshift("Livecheck");
 
+    tags = tags.map(x => _.isArray(x) ? x.join(" | ") : x);
     return {
         name: key,
         ...rule,
