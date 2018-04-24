@@ -13,22 +13,22 @@ rules :
     enabled : true
 
 #CloudWatch
-#- aws-cloudwatch-metric-alarms :
-#    enabled : true
-#    UnauthorizedAPICalls : true
-#    ManagementConsoleSignInWithoutMFA : true
-#    UsageOfRootAccount : true
-#    IAMPolicyChanges : true
-#    CloudTrailConfigurationChanges : true
-#    AWSManagementConsoleAuthenticationFailures : true
-#    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
-#    S3BucketPolicyChanges : true
-#    AWSConfigConfigurationChanges : true
-#    SecurityGroupChanges : true
-#    ChangesToNetworkAccessControlLists : true
-#    ChangesToNetworkGateways : true
-#    RouteTableChanges : true
-#    VPCChanges : true
+- aws-cloudwatch-metric-alarms :
+    enabled : true
+    UnauthorizedAPICalls : true
+    ManagementConsoleSignInWithoutMFA : true
+    UsageOfRootAccount : true
+    IAMPolicyChanges : true
+    CloudTrailConfigurationChanges : true
+    AWSManagementConsoleAuthenticationFailures : true
+    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
+    S3BucketPolicyChanges : true
+    AWSConfigConfigurationChanges : true
+    SecurityGroupChanges : true
+    ChangesToNetworkAccessControlLists : true
+    ChangesToNetworkGateways : true
+    RouteTableChanges : true
+    VPCChanges : true
 
 #DynamoDB
 - aws-dynamodb-encryption :
@@ -99,6 +99,8 @@ rules :
     enabled : true
 - aws-iam-mfa-is-enabled-for-root-account :
     enabled : true
+- aws-iam-no-initial-access-keys :
+    enabled : true
 - aws-iam-no-root-account-access-key-exists :
     enabled : true
 - aws-iam-policies-are-attached-only-to-groups-or-roles :
@@ -155,5 +157,11 @@ rules :
     enabled : true
 
 #VPC
+- aws-vpc-default-security-group-restricts-all-traffic :
+    enabled : true
+- aws-vpc-flow-logs-are-enabled :
+    enabled : true
 - aws-vpc-no-default-vpc :
+    enabled : true
+- aws-vpc-routing-tables-for-vpc-peering-are-least-access :
     enabled : true

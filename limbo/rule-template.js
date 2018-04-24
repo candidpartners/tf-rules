@@ -1,6 +1,5 @@
-const co = require('co');
-const Papa = require('papaparse');
-const {NonCompliantResource,RuleResult} = require('../../../rule-result');
+'use strict';
+const {Resource, RuleResult} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -14,26 +13,33 @@ RuleName.tags = [];
 RuleName.config_triggers = [];
 RuleName.paths = {};
 RuleName.docs = {description: '', recommended: true};
-RuleName.schema = {type: 'boolean'};
+RuleName.schema = {
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: 'Enabled',
+            default: true
+        }
+    }
+};
 
 
-RuleName.livecheck = co.wrap(function* (context) {
+RuleName.livecheck = async function (context) {
     let {config, provider} = context;
 
-    if (true) {
-        return new RuleResult({
-            valid: "fail",
-            message: "",
-            noncompliant_resources: {
+    return new RuleResult({
+        valid: () ? "fail" : "success",
+        message: "",
+        resources: ().map(vpc => {
+            return new Resource({
+                is_compliant: () ? false : true,
                 resource_id: "",
                 resource_type: "",
-                message: ""
-            }
+                message: () ? "does not have flow logging enabled" : "has flow logging enabled"
+            })
         })
-    }
-    else return new RuleResult({
-        valid: "success"
-    })
-});
+    });
+};
 
 module.exports = RuleName;

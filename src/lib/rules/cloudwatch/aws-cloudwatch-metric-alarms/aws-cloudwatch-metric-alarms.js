@@ -30,7 +30,7 @@ CloudWatchMetricAlarms.tags = [
 CloudWatchMetricAlarms.config_triggers = ["AWS::CloudWatch::Alarm"];
 CloudWatchMetricAlarms.paths = {LogMetricFilterAndAlarmExistForUnauthorizedAPICalls: "aws_cloudwatch_metric_alarm"};
 CloudWatchMetricAlarms.docs = {
-    description: 'A log metric filter and alarm exist for all rules.',
+    description: 'A log metric filter and alarm should exist for all rules.',
     recommended: true
 };
 CloudWatchMetricAlarms.schema = {
@@ -259,7 +259,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
 
     return new RuleResult({
         valid: (resources.filter(x => x.is_compliant === false).length > 0) ? "fail" : "success",
-        message: "aws-cloudwatch-metric-alarms",
+        message: "A log metric filter and alarm should exist for all rules.",
         resources: resources
     })
 
