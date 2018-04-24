@@ -140,9 +140,10 @@ rules :
       - '22'
 - aws-security-group-does-not-allow-inbound :
     enabled : true
-    cidr : '204.4.6.2/32'
+    cidr : '0.0.0.0/0'
     ports :
-      - '9032-9034'
+      - '22'
+      - '3389'
 - aws-security-group-does-not-allow-outbound :
     enabled : true
     cidr : '204.4.6.2/32'

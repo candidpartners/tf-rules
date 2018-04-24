@@ -1,9 +1,10 @@
 'use strict';
-const co = require('co')
+const co = require('co');
 const debug = require('debug')('snitch/aws-security-group-does-not-allow-inbound');
 const _ = require('lodash');
 const cidrComparison = require('../../../modules/cidr-comparison');
 const portComparison = require('../../../modules/port-comparison');
+const {Resource, RuleResult, Context} = require('../../../rule-result');
 
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -14,7 +15,7 @@ const AWSSecurityGroupDoesNotAllowInbound = {};
 AWSSecurityGroupDoesNotAllowInbound.uuid = "67477475-5d35-4444-bcb4-0c9053aa357e";
 AWSSecurityGroupDoesNotAllowInbound.groupName = "Security Group";
 AWSSecurityGroupDoesNotAllowInbound.tags = [["CIS", "1.1.0", "4.1"], ["CIS", "1.1.0", "4.2"]];
-AWSSecurityGroupDoesNotAllowInbound.config_triggers = ["AWS::::Account"];
+AWSSecurityGroupDoesNotAllowInbound.config_triggers = ["AWS::EC2::SecurityGroup"];
 AWSSecurityGroupDoesNotAllowInbound.paths = {AWSSecurityGroupAllowInbound: 'aws_security_group'};
 AWSSecurityGroupDoesNotAllowInbound.docs = {
     description: 'Security Group does not allow specified inbound traffic.',
@@ -40,11 +41,47 @@ AWSSecurityGroupDoesNotAllowInbound.schema = {
     }
 };
 
+AWSSecurityGroupDoesNotAllowInbound.livecheck = async function (context) {
+    let {config, provider} = context;
+    let ec2 = new provider.EC2();
+
+    let securityGroups = await ec2.describeSecurityGroups().promise();
+    let badGroups = [];
+
+    securityGroups.SecurityGroups.map(group => {
+        group.IpPermissions.map(permission => {
+            let ranges = _.flatten(permission.IpRanges.map(x => Object.values(x)));
+
+            if (ranges.includes("0.0.0.0/0")) {
+                if (permission.ToPort === 22 || permission.ToPort === 3389) {
+                    badGroups.push(group.GroupName);
+                }
+            }
+        })
+    });
+
+    return new RuleResult({
+        valid: (badGroups.length > 0) ? "fail" : "success",
+        message: "No security groups should allow ingress from 0.0.0.0/0 to either port 22 or 3389.",
+        resources: securityGroups.SecurityGroups.map(group => {
+
+            let port = group.IpPermissions.map(x => x.ToPort).filter(x => x === 22 || x === 3389);
+
+            return new Resource({
+                is_compliant: badGroups.includes(group.GroupName) ? false : true,
+                resource_id: group.GroupName,
+                resource_type: "AWS::EC2::SecurityGroup",
+                message: badGroups.includes(group.GroupName) ? `allows ingress from 0.0.0.0/0 to port ${port}.` : `does not allow ingress from 0.0.0.0/0 to either port 22 or 3389.`
+            })
+        })
+    })
+};
+
 AWSSecurityGroupDoesNotAllowInbound.validate = function* (context) {
     // debug( '%O', context );
     let result = null;
     let message = [];
-    let groups = {}
+    let groups = {};
     if (context.config) {
         // debug('Config: %j', context.config)
         // debug('Instance: %j', context.instance)
