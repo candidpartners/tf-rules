@@ -13,22 +13,22 @@ rules :
     enabled : true
 
 #CloudWatch
-- aws-cloudwatch-metric-alarms :
-    enabled : true
-    UnauthorizedAPICalls : true
-    ManagementConsoleSignInWithoutMFA : true
-    UsageOfRootAccount : true
-    IAMPolicyChanges : true
-    CloudTrailConfigurationChanges : true
-    AWSManagementConsoleAuthenticationFailures : true
-    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
-    S3BucketPolicyChanges : true
-    AWSConfigConfigurationChanges : true
-    SecurityGroupChanges : true
-    ChangesToNetworkAccessControlLists : true
-    ChangesToNetworkGateways : true
-    RouteTableChanges : true
-    VPCChanges : true
+#- aws-cloudwatch-metric-alarms :
+#    enabled : true
+#    UnauthorizedAPICalls : true
+#    ManagementConsoleSignInWithoutMFA : true
+#    UsageOfRootAccount : true
+#    IAMPolicyChanges : true
+#    CloudTrailConfigurationChanges : true
+#    AWSManagementConsoleAuthenticationFailures : true
+#    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
+#    S3BucketPolicyChanges : true
+#    AWSConfigConfigurationChanges : true
+#    SecurityGroupChanges : true
+#    ChangesToNetworkAccessControlLists : true
+#    ChangesToNetworkGateways : true
+#    RouteTableChanges : true
+#    VPCChanges : true
 
 #DynamoDB
 - aws-dynamodb-encryption :
@@ -65,6 +65,8 @@ rules :
       - "World"
 
 #IAM
+- aws-iam-no-policies-use-default-kms-keys:
+    enabled : true
 - aws-iam-account-password-policy :
     enabled : true
     MinimumPasswordLength : 14
