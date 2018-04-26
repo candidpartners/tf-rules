@@ -52,7 +52,7 @@ S3CloudTrailBucketAccessLoggingEnabled.livecheck = async function (context /*: C
                     is_compliant: isLoggingEnabled ? true : false,
                     resource_id: x,
                     resource_type: "AWS::S3::Bucket",
-                    message: isLoggingEnabled ? "has logging enabled" : "does not have logging enabled"
+                    message: isLoggingEnabled ? "has logging enabled." : "does not have logging enabled."
                 })
             })
         });

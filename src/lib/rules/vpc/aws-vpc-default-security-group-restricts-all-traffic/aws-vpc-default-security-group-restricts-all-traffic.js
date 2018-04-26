@@ -45,7 +45,7 @@ VPCDefaultSecurityGroupRestrictsAllTraffic.livecheck = async function (context) 
                 is_compliant: (inbound || outbound) ? false : true,
                 resource_id: `${group.VpcId} ${group.GroupName}`,
                 resource_type: "AWS::EC2::VPC",
-                message: (inbound && outbound) ? "allows both inbound and outbound traffic." : inbound ? "allows inbound traffic." : outbound ? "allows outbound traffic." : "restricts all traffic"
+                message: (inbound && outbound) ? "allows both inbound and outbound traffic." : inbound ? "allows inbound traffic." : outbound ? "allows outbound traffic." : "restricts all traffic."
             })
         })
     });

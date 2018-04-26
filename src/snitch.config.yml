@@ -81,8 +81,6 @@ rules :
 - aws-iam-avoid-use-of-root-account :
     enabled : true
     days : 90
-- aws-iam-does-not-allow-full-access-policies :
-    enabled : true
 - aws-iam-ensure-a-support-role-is-attached :
     enabled : true
 - aws-iam-ensure-access-keys-are-rotated :
@@ -100,6 +98,8 @@ rules :
 - aws-iam-mfa-is-enabled-for-root-account :
     enabled : true
 - aws-iam-no-initial-access-keys :
+    enabled : true
+- aws-iam-no-policies-with-full-privileges :
     enabled : true
 - aws-iam-no-root-account-access-key-exists :
     enabled : true

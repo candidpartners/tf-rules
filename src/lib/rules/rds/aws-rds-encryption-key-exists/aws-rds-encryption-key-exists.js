@@ -63,7 +63,7 @@ RDSEncryptionKeyExists.livecheck = async function(context /*: Context */) /*: Pr
                 is_compliant: unencrypted ? false : true,
                 resource_id: instance.DBInstanceIdentifier,
                 resource_type: "AWS::RDS::DBInstance",
-                message: unencrypted ? `is unencrypted.` : "is encrypted"
+                message: unencrypted ? `is unencrypted.` : "is encrypted."
             })
         })
     });

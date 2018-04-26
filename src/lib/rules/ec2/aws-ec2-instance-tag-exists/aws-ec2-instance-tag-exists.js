@@ -71,7 +71,7 @@ EC2TagExists.livecheck = async function(context /*: Context */) /*: Promise<Rule
                 is_compliant: hasMissingTags ? false : true,
                 resource_id: InstanceId,
                 resource_type: "AWS::EC2::Instance",
-                message: hasMissingTags ? `Missing tags ${missingTags}` : "Has required tags"
+                message: hasMissingTags ? `is missing tags ${missingTags}.` : "has all required tags."
             })
         })
     });

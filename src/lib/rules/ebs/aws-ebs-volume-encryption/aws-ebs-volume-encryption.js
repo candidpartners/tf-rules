@@ -53,7 +53,7 @@ EBSVolumeEncryption.livecheck = async function (context /*: Context */) /*: Prom
                 is_compliant: isUnencrypted ? false : true,
                 resource_id: x.VolumeId,
                 resource_type: "AWS::EC2::Volume",
-                message: isUnencrypted ? 'is unencrypted.' : "is encrypted"
+                message: isUnencrypted ? 'is unencrypted.' : "is encrypted."
             })
 
         })

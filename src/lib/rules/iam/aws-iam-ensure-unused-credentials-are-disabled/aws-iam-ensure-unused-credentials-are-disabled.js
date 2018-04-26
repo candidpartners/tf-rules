@@ -82,11 +82,13 @@ IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Con
 
             let message = "";
             if(validPassword && validAccessKeys)
-                message = "User has a valid password and access keys.";
-            if(!validPassword)
-                message += `User has a password they have not used in over ${dateRange} days. `;
-            if(!validAccessKeys)
-                message += `User has an access key they have not used in over ${dateRange} days.`;
+                message = "has a valid password and access keys.";
+            if(!validPassword && validAccessKeys)
+                message += `has a password they have not used in over ${dateRange} days. `;
+            if(!validAccessKeys && validPassword)
+                message += `has an access key they have not used in over ${dateRange} days.`;
+            if (!validPassword && !validAccessKeys)
+                message += `has a password they have not used in over ${dateRange} days, and an access key they have not used in over ${dateRange} days.`;
             return new Resource({
                 is_compliant: (validPassword && validAccessKeys),
                 message,

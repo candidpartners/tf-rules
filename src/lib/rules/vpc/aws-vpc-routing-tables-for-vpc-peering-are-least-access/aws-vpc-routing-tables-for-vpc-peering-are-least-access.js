@@ -25,9 +25,6 @@ VPCRoutingTablesForVPCPeeringAreLeastAccess.schema = {
     }
 };
 
-// I think this rule works, but I haven't been able to set up a resource to confirm a successful livecheck
-
-
 VPCRoutingTablesForVPCPeeringAreLeastAccess.livecheck = async function (context) {
     let {config, provider} = context;
 
@@ -37,11 +34,10 @@ VPCRoutingTablesForVPCPeeringAreLeastAccess.livecheck = async function (context)
 
     let peeringConnectionIds = peeringConnections.VpcPeeringConnections.map(x => x.VpcPeeringConnectionId);
 
-    let gatewayIds = routeTables.RouteTables.map(x => {
-        x.Routes.map(y => y.GatewayId)
-    });
+    let routes = routeTables.RouteTables.map(x => x.Routes);
+    let routeTableVpcs = _.flatten(routes).map(x => x.VpcPeeringConnectionId);
 
-    let connectionsWithGatewayIds = _.intersection(peeringConnectionIds, gatewayIds);
+    let connectionsWithGatewayIds = _.intersection(peeringConnectionIds, routeTableVpcs);
     let connectionsWithoutGatewayIds = peeringConnectionIds.filter(x => !connectionsWithGatewayIds.includes(x));
 
     return new RuleResult({

@@ -58,7 +58,7 @@ EC2KeyPairExists.livecheck = async function(context /*: Context */) /*: Promise<
                 is_compliant: missingKey ? false : true,
                 resource_id: inst.InstanceId,
                 resource_type: "AWS::EC2::Instance",
-                message: missingKey ? "does not have a key pair." : "has a key pair."
+                message: missingKey ? "does not have a key pair." : "has a valid key pair."
             })
         })
     })

@@ -47,11 +47,11 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = async function(context /*:
     return new RuleResult({
         valid: isInvalid ? "fail" : "success",
         message: "Users should not have policies directly attached",
-        resources: usersWithPolicies.map(x => new Resource({
-            is_compliant: false,
+        resources: userNames.map(x => new Resource({
+            is_compliant: (usersWithPolicies.includes(x)) ? false : true,
             resource_id: x,
             resource_type: "AWS::IAM::User",
-            message: "has a policy directly attached."
+            message: (usersWithPolicies.includes(x)) ? "has a policy directly attached." : "does not have any policies directly attached."
         }))
     })
 };

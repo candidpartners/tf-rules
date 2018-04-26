@@ -71,7 +71,7 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = async function (cont
             resource_type: "AWS::CloudTrail::Trail",
             message: "is integrated with CloudWatch logs."
         })
-    })
+    });
 
     return new RuleResult({
         valid: (noncompliant_resources.length > 0) ? "fail" : "success",

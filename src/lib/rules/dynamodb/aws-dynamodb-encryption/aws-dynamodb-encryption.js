@@ -62,7 +62,7 @@ DynamoDBEncryption.livecheck = async function(context /*: Context */) /*: Promis
             is_compliant: isUnencrypted ? false : true,
             resource_id: x.TableName,
             resource_type: "AWS::DynamoDB::Table",
-            message: isUnencrypted ? `is unencrypted.` : "is encrypted"
+            message: isUnencrypted ? `is unencrypted.` : "is encrypted."
         })
     });
 
@@ -84,7 +84,7 @@ DynamoDBEncryption.validate = function (context /*: Context */) {
         return {
             valid: 'fail',
             resource_type: "AWS::DynamoDB::Table",
-            message: "A dynamodb instance is not encrypted"
+            message: "A dynamodb instance is not encrypted."
         }
     }
 };

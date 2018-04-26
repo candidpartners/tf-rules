@@ -50,7 +50,7 @@ MFAIsEnabledForRootAccount.livecheck = async function( context /*: Context */) /
             is_compliant: isInvalid ? false : true,
             resource_id: rootUser.arn,
             resource_type: "AWS::IAM::User",
-            message: isInvalid ? "does not have MFA enabled." : "has MFA enabled"
+            message: isInvalid ? "does not have MFA enabled." : "has MFA enabled."
         }]
     });
 };

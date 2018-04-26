@@ -54,7 +54,7 @@ KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<Rul
                     is_compliant,
                     resource_id: x[0].KeyArn,
                     resource_type: "AWS::KMS::Key",
-                    message: (is_compliant) ? "has rotation enabled" : "does not have rotation enabled."
+                    message: (is_compliant) ? "has key rotation enabled." : "does not have key rotation enabled."
                 })
             })
         })

@@ -62,7 +62,7 @@ S3Encryption.livecheck = async function(context /*: Context */) /*: Promise<Rule
                 is_compliant: unencrypted ? false : true,
                 resource_id: x.bucket,
                 resource_type: "AWS::S3::Bucket",
-                message: unencrypted ? `is unencrypted.` : "is encrypted"
+                message: unencrypted ? `is unencrypted.` : "is encrypted."
             })
         })
     })

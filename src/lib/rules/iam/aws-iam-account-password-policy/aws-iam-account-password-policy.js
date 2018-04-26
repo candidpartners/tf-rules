@@ -72,7 +72,7 @@ IAMAccountPasswordPolicy.livecheck = async function(context /*: Context */) /*: 
                         is_compliant: false,
                         resource_id: "Password Policy",
                         resource_type:"AWS::::Account",
-                        message: "The password policy does not conform to the config. " + errors.join('\n')
+                        message: errors.join('\n')
                     })
                 ]})
         }

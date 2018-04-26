@@ -42,7 +42,7 @@ IAMSupportRoleIsAttached.livecheck = async function (context /*: Context */) /*:
             is_compliant: isInvalid ? false : true,
             resource_id: "AWSSupportAccess",
             resource_type: "AWS::IAM::Policy",
-            message: "is not attached to any roles, groups, or users."
+            message: isInvalid ? "is not attached to any roles, groups, or users." : `is attached to one or more roles, groups, or users.`
         })]
     })
 };

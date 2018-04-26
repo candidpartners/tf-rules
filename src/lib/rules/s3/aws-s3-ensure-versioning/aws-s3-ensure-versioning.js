@@ -72,7 +72,7 @@ S3Encryption.livecheck = async function(context /*: Context */) /*: Promise<Rule
                 is_compliant: hasVersioning ? true : false,
                 resource_id: x.bucket,
                 resource_type: "AWS::S3::Bucket",
-                message: hasVersioning ? `has versioning.` : "does not have versioning"
+                message: hasVersioning ? `has versioning enabled.` : "does not have versioning enabled."
             })
         })
     })

@@ -46,7 +46,7 @@ CloudtrailLogsAreEncrypted.livecheck = async function (context /*: Context*/) /*
                 is_compliant: isUnencrypted ? false : true,
                 resource_id: t.TrailARN,
                 resource_type: "AWS::CloudTrail::Trail",
-                message: isUnencrypted ? "is not encrypted.": "is encrypted"
+                message: isUnencrypted ? "is not encrypted.": "is encrypted."
             })
         })
     })

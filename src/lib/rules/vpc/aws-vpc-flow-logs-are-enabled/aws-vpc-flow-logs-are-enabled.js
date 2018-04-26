@@ -47,7 +47,7 @@ VpcFlowLogsAreEnabled.livecheck = async function (context) {
                 is_compliant: disabled.includes(vpc) ? false : true,
                 resource_id: vpc,
                 resource_type: "AWS::EC2::VPC",
-                message: disabled.includes(vpc) ? "does not have flow logging enabled" : "has flow logging enabled"
+                message: disabled.includes(vpc) ? "does not have flow logging enabled." : "has flow logging enabled."
             })
         })
     });

@@ -49,13 +49,13 @@ IAMMasterAndManagerRolesAreActive.livecheck = async function(context /*: Context
                 is_compliant: masterRole ? true : false,
                 resource_id: "IAM_Master",
                 resource_type: "AWS::IAM::Role",
-                message: masterRole ? "Account has an IAM_Master role" : "No IAM_Master role found"
+                message: masterRole ? "exists and is functioning." : "does not exist."
             },
             {
                 is_compliant: managerRole ? true : false,
                 resource_id: "IAM_Manager",
                 resource_type: "AWS::IAM::Role",
-                message: managerRole ? "Account has an IAM_Manager role" : "No IAM_Manager role found"
+                message: managerRole ? "exists and is functioning." : "does not exist."
             }
         ]
     });

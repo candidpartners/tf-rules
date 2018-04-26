@@ -83,7 +83,7 @@ IAMEnsureAccessKeysAreRotated.livecheck = async function (context /*: Context */
                 is_compliant: isValid ? true : false,
                 resource_id: x.user,
                 resource_type: "AWS::IAM::User",
-                message: isValid ? "Access keys have been rotated" : `has an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`
+                message: isValid ? "has rotated it's access keys." : `has an access key that has not been rotated in over ${dateRange} days, or has not been used since it was rotated.`
             })
         })
     });

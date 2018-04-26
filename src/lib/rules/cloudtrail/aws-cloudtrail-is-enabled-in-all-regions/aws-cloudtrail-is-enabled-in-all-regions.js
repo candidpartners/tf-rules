@@ -39,7 +39,7 @@ CloudTrailIsEnabledInAllRegions.livecheck = async function (context /*: Context 
            is_compliant: multi.includes(true) ? true : false,
            resource_id: "Cloudtrail",
            resource_type: "AWS::::Account",
-           message: "does not have IsMultiRegionTrail enabled."
+           message: multi.includes(true) ? "has IsMultiRegionTrail enabled." : "does not have IsMultiRegionTrail enabled."
        }]
     });
 };

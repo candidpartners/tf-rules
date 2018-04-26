@@ -57,7 +57,7 @@ CloudtrailLogFileValidation.validate = function (context /*: Context */) {
     if(!instance.enable_log_file_validation)
         return {
             valid: 'fail',
-            message: `Cloudtrail ${instance.name} has enable_log_file_validation set to false`
+            message: `Cloudtrail ${instance.name} has enable_log_file_validation set to false.`
         };
     else{
         return {

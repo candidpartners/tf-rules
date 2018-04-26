@@ -58,7 +58,7 @@ IAMNoPoliciesUseDefaultKMSKeys.livecheck = async function(context /*: Context */
             is_compliant,
             resource_id: Policy.PolicyName,
             resource_type: "AWS::IAM::Policy",
-            message: is_compliant ? "Policy does not use any default KMS keys" : "Policy uses default kms keys"
+            message: is_compliant ? "does not use any default KMS keys." : "uses default kms keys."
         })
     });
 

@@ -52,7 +52,7 @@ S3CloudTrailBucketIsNotPubliclyAccessible.livecheck = async function(context /*:
                     is_compliant: isPublic ? false : true,
                     resource_id: x.Resource,
                     resource_type: "AWS::S3::Bucket",
-                    message: isPublic ? "is publicly accessible." : "is not publicly accessible"
+                    message: isPublic ? "is publicly accessible." : "is not publicly accessible."
                 })
             })
         });
