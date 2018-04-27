@@ -30,17 +30,19 @@ CloudTrailIsEnabledInAllRegions.livecheck = async function (context /*: Context 
     let cloud = new provider.CloudTrail();
 
     let trails = await cloud.describeTrails().promise();
-    let multi = trails.trailList.map(x => x.IsMultiRegionTrail);
+    let multi = trails.trailList.find(x => x.IsMultiRegionTrail === true);
 
     return new RuleResult({
-       valid: (multi.includes(true)) ? "success" : "fail",
+       valid: multi ? "success" : "fail",
        message: CloudTrailIsEnabledInAllRegions.docs.description,
-       resources: [{
-           is_compliant: multi.includes(true) ? true : false,
-           resource_id: "Cloudtrail",
-           resource_type: "AWS::::Account",
-           message: multi.includes(true) ? "has IsMultiRegionTrail enabled." : "does not have IsMultiRegionTrail enabled."
-       }]
+       resources: trails.trailList.map(trail => {
+           return new Resource({
+               is_compliant: trail.IsMultiRegionTrail === true ? true : false,
+               resource_id: multi.Name,
+               resource_type: "AWS::CloudTrail::Trail",
+               message: trail.IsMultiRegionTrail === true ? `has IsMultiRegionTrail enabled.` : `does not have IsMultiRegionTrail enabled.`
+           })
+       })
     });
 };
 

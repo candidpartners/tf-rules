@@ -51,9 +51,9 @@ DefaultVPC.livecheck = async function(context /*: Context */) /*: Promise<RuleRe
         resources: [
             new Resource({
                 is_compliant: defaultVPC ? false : true,
-                resource_id: "Default_VPC",
+                resource_id: defaultVPCID,
                 resource_type: "AWS::EC2::VPC",
-                message: defaultVPC ? `${defaultVPCID} exists.` : "No Default VPC Exists."
+                message: defaultVPC ? `exists as a default VPC.` : "does not exist."
             })
         ]
     });

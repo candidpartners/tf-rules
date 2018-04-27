@@ -11,7 +11,7 @@ const CloudtrailLogFileValidation = {};
 
 CloudtrailLogFileValidation.uuid = "87dfba99-8a5e-4a7b-b408-1b41d8088a8a";
 CloudtrailLogFileValidation.groupName = "CloudTrail";
-CloudtrailLogFileValidation.tags= [["CIS","1.1.0","2.2"]];
+CloudtrailLogFileValidation.tags= [["CIS","1.1.0","2.2"], ["PCI", "3.2", "10.5.5"]];
 CloudtrailLogFileValidation.config_triggers = ["AWS::CloudTrail::Trail"];
 CloudtrailLogFileValidation.paths = {CloudtrailLogFileValidation: 'aws_cloudtrail'};
 CloudtrailLogFileValidation.docs = {
@@ -45,7 +45,7 @@ CloudtrailLogFileValidation.livecheck = async function (context /*: Context */) 
                 is_compliant: isDisabled ? false : true,
                 resource_id: t.Name,
                 resource_type: "AWS::CloudTrail::Trail",
-                message: "has log file validation disabled."
+                message: isDisabled ? "does not have log file validation enabled." : "has log file validation enabled."
             })
         })
     });

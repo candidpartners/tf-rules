@@ -60,7 +60,7 @@ IAMAccountPasswordPolicy.livecheck = async function(context /*: Context */) /*: 
         let errors =_.map(config, (value,key) => {
             let PasswordPolicyValue = PasswordPolicy[key];
             if(PasswordPolicyValue !== value)
-                return `Password Policy does not match config for ${key}`
+                return `does not match config for ${key}`
         }).filter(x => x);
 
         if(errors.length){

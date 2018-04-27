@@ -56,9 +56,9 @@ IAMAvoidUseOfRootAccount.livecheck = async function (context /*: Context */) /*:
         message: "The root account should not be used.",
         resources: [{
             is_compliant: true,
-            message: hasBeenUsedRecently ? `<root_account> logged in ${daysSinceLastUsed.toFixed(0)} days ago.` : "The root account has not been used recently.",
+            message: hasBeenUsedRecently ? `logged in ${daysSinceLastUsed.toFixed(0)} days ago.` : "has not been used recently.",
             resource_type: "AWS::::Account",
-            resource_id: "PasswordPolicy"
+            resource_id: "root"
         }]
     })
 };
