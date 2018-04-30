@@ -10,9 +10,12 @@ const Route53NoCloudjackVulnerabilities = {};
 Route53NoCloudjackVulnerabilities.uuid = "6b9469b8-b356-4ab0-bac2-f73daf3fadc9";
 Route53NoCloudjackVulnerabilities.groupName = "Route53";
 Route53NoCloudjackVulnerabilities.tags = [["Candid", "1.0", "17"]];
-Route53NoCloudjackVulnerabilities.config_triggers = ["AWS::Route53::Record"];
+Route53NoCloudjackVulnerabilities.config_triggers = ["AWS::Route53::RecordSet"];
 Route53NoCloudjackVulnerabilities.paths = {Route53NoCloudjackVulnerabilities: "aws_route53_zone"};
-Route53NoCloudjackVulnerabilities.docs = {description: 'Route53 should be configured to avoid CloudJacking vulnerabilities.', recommended: true};
+Route53NoCloudjackVulnerabilities.docs = {
+    description: 'Route53 should be configured to avoid CloudJacking vulnerabilities.',
+    recommended: true
+};
 Route53NoCloudjackVulnerabilities.schema = {
     type: 'object',
     properties: {
@@ -41,7 +44,7 @@ Route53NoCloudjackVulnerabilities.livecheck = async function (context) {
     let r53 = new provider.Route53();
     let zones = await r53.listHostedZones().promise();
     let badAliases = [];
-    let missingCNAMES = false;
+    let missingCNAMES = [];
     let totalAliases = [];
 
     for (let i = 0; i < zones.HostedZones.length; i++) {
@@ -49,7 +52,7 @@ Route53NoCloudjackVulnerabilities.livecheck = async function (context) {
         let recordSets = await r53.listResourceRecordSets({HostedZoneId: zoneId}).promise();
 
         let aliases = recordSets.ResourceRecordSets.filter(x => x.Type === "A");
-        totalAliases.concat(aliases);
+        totalAliases = [...totalAliases, ...aliases];
         let CNAMES = recordSets.ResourceRecordSets.filter(x => x.Type === "CNAME");
 
         aliases.map(alias => {
@@ -58,37 +61,25 @@ Route53NoCloudjackVulnerabilities.livecheck = async function (context) {
             }
         });
 
-        if (aliases.length !== CNAMES.length) {
-            missingCNAMES = true;
+        // If more aliases than CNAMES, assume there exists one or more alias not referencing a CF dist with a CNAME.
+        if (aliases.length > CNAMES.length) {
+            missingCNAMES.push(zones.HostedZones[i].Name)
         }
     }
 
-    if (missingCNAMES) {
-        return new RuleResult({
-            valid: (badAliases.length > 0 || missingCNAMES) ? "fail" : "success",
-            message: "Route53 should be configured to avoid CloudJacking vulnerabilities.",
-            resources: [new Resource({
-                is_compliant: false,
-                resource_id: "Route 53",
-                resource_type: "AWS::Route53::Record",
-                message: "references one or more CloudFront distributions that do not have a valid CNAME."
-            })]
-        });
-    }
-    else {
-        return new RuleResult({
-            valid: (badAliases.length > 0 || missingCNAMES) ? "fail" : "success",
-            message: "Route53 should be configured to avoid CloudJacking vulnerabilities.",
-            resources: totalAliases.map(alias => {
-                return new Resource({
-                    is_compliant: (badAliases.includes(alias.Name)) ? false : true,
-                    resource_id: alias.Name,
-                    resource_type: "AWS::Route53::Record",
-                    message: (badAliases.includes(alias.Name)) ? "does not reference a valid CloudFront distribution." : "references a valid CloudFront distribution."
-                })
+    return new RuleResult({
+        valid: (badAliases.length > 0 || missingCNAMES.length > 0) ? "fail" : "success",
+        message: "Route53 should be configured to avoid CloudJacking vulnerabilities.",
+        resources: totalAliases.map(alias => {
+            return new Resource({
+                is_compliant: (badAliases.includes(alias.Name) || missingCNAMES.includes(alias.Name)) ? false : true,
+                resource_id: alias.Name,
+                resource_type: "AWS::Route53::RecordSet",
+                message: (badAliases.includes(alias.Name) && missingCNAMES.includes(alias.Name)) ? "references one or more CloudFront distributions that do not have a valid CNAME and does not reference a valid CloudFront distribution." : missingCNAMES.includes(alias.Name) ? "references one or more CloudFront distributions that do not have a valid CNAME." : badAliases.includes(alias.Name) ? "does not reference a valid CloudFront distribution." : "references a valid CloudFront distribution."
             })
-        });
-    }
+        })
+    });
+    // }
 };
 
 module.exports = Route53NoCloudjackVulnerabilities;
