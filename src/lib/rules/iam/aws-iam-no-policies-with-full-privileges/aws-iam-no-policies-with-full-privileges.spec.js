@@ -10,7 +10,6 @@ GoodAWS.Service("IAM", "listPolicies", {
             "Arn": "arn:aws:iam::aws:policy/testPolicy",
             "DefaultVersionId": "v1",
         }
-
     ]
 });
 GoodAWS.Service("IAM", "getPolicyVersion", {
@@ -20,7 +19,6 @@ GoodAWS.Service("IAM", "getPolicyVersion", {
         "IsDefaultVersion": true,
         "CreateDate": "2016-01-14T18:37:08Z"
     }
-
 });
 
 let BadAWS = new AWSPromiseMock();
@@ -31,7 +29,6 @@ BadAWS.Service("IAM", "listPolicies", {
             "Arn": "arn:aws:iam::aws:policy/testPolicy",
             "DefaultVersionId": "v1",
         }
-
     ]
 });
 BadAWS.Service("IAM", "getPolicyVersion", {
@@ -41,7 +38,6 @@ BadAWS.Service("IAM", "getPolicyVersion", {
         "IsDefaultVersion": true,
         "CreateDate": "2016-01-14T18:37:08Z"
     }
-
 });
 
 describe("it recognizes a live check", () => {

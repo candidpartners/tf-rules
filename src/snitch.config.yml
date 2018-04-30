@@ -105,6 +105,8 @@ rules :
     enabled : true
 - aws-iam-policies-are-attached-only-to-groups-or-roles :
     enabled : true
+- aws-iam-policies-have-requested-region :
+    enabled : true
 
 #KMS
 - aws-kms-ensure-key-rotation :
@@ -115,6 +117,12 @@ rules :
     enabled : true
     exclude :
       - vra
+
+#Route53
+- aws-route53-no-cloudjack-vulnerabilities :
+    enabled : true
+    route53GoodReferences : true
+    route53GoodCnames : true
 
 #S3
 - aws-s3-ensure-versioning :
