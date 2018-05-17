@@ -2,6 +2,8 @@
 .idea
 aws-config-lambda/bin
 *.zip
+.DS_STORE
+.terraform
 
 # Logs
 .terraform
