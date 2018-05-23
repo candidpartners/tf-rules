@@ -19,6 +19,8 @@ rules :
     ManagementConsoleSignInWithoutMFA : true
     UsageOfRootAccount : true
     IAMPolicyChanges : true
+    IAMAccessKeyCreation : true
+    IAMUserCreation : true
     CloudTrailConfigurationChanges : true
     AWSManagementConsoleAuthenticationFailures : true
     DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
@@ -99,11 +101,11 @@ rules :
     enabled : true
 - aws-iam-no-initial-access-keys :
     enabled : true
-- aws-iam-no-policies-with-full-privileges :
-    enabled : true
 - aws-iam-no-root-account-access-key-exists :
     enabled : true
 - aws-iam-policies-are-attached-only-to-groups-or-roles :
+    enabled : true
+- aws-iam-policies-are-least-privileged :
     enabled : true
 - aws-iam-policies-have-requested-region :
     enabled : true

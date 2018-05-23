@@ -26,6 +26,8 @@ CloudWatchMetricAlarms.tags = [
     ["CIS", "1.1.0", "3.12"],
     ["CIS", "1.1.0", "3.13"],
     ["CIS", "1.1.0", "3.14"],
+    ["NIST", "AC", "2g"],
+    ["NIST", "AC", "2(1)"]
 ];
 CloudWatchMetricAlarms.config_triggers = ["AWS::CloudWatch::Alarm"];
 CloudWatchMetricAlarms.paths = {LogMetricFilterAndAlarmExistForUnauthorizedAPICalls: "aws_cloudwatch_metric_alarm"};
@@ -41,6 +43,8 @@ CloudWatchMetricAlarms.schema = {
         ManagementConsoleSignInWithoutMFA: {type: 'boolean', title: "Management console sign in without MFA", default: false},
         UsageOfRootAccount: {type: 'boolean', title: "Usage of root account", default: false},
         IAMPolicyChanges: {type: 'boolean', title: "IAM policy changes", default: false},
+        IAMAccessKeyCreation: {type: 'boolean', title: "IAM access key creation", default: false},
+        IAMUserCreation: {type: 'boolean', title: "IAM user creation", default: false},
         CloudTrailConfigurationChanges: {type: 'boolean', title: "CloudTrail configuration changes", default: false},
         AWSManagementConsoleAuthenticationFailures: {type: 'boolean', title: "AWS management console authentication failure", default: false},
         DisablingOrScheduledDeletionOfCustomerCreatedCMKs: {type: 'boolean', title: "disabling or scheduled deletion of customer created CMKs", default: false},
@@ -63,7 +67,7 @@ const filterPatterns = [
     {
         config: "ManagementConsoleSignInWithoutMFA",
         rule: 'management console sign-in without MFA',
-        pattern: '{ ($.eventName = "ConsoleLogin") && ($.additionalEventData.MFAUsed != "Yes") }'
+        pattern: '{ ($.eventName = ConsoleLogin) && ($.additionalEventData.MFAUsed != "Yes") }'
     },
     {
         config: "UsageOfRootAccount",
@@ -74,6 +78,16 @@ const filterPatterns = [
         config: "IAMPolicyChanges",
         rule: 'IAM policy changes',
         pattern: '{ ($.eventName = DeleteGroupPolicy) || ($.eventName = DeleteRolePolicy) || ($.eventName = DeleteUserPolicy) || ($.eventName = PutGroupPolicy) || ($.eventName = PutRolePolicy) || ($.eventName = PutUserPolicy) || ($.eventName = CreatePolicy) || ($.eventName = DeletePolicy) || ($.eventName = CreatePolicyVersion) || ($.eventName = DeletePolicyVersion) || ($.eventName = AttachRolePolicy) || ($.eventName = DetachRolePolicy) || ($.eventName = AttachUserPolicy) || ($.eventName = DetachUserPolicy) || ($.eventName = AttachGroupPolicy) || ($.eventName = DetachGroupPolicy) }'
+    },
+    {
+        config: "IAMAccessKeyCreation",
+        rule: "IAM Access Key Creation",
+        pattern: '{ ($.eventName = CreateAccessKey) }'
+    },
+    {
+        config: "IAMUserCreation",
+        rule: "IAM User Creation",
+        pattern: '{ ($.eventName = CreateUser) }'
     },
     {
         config: "CloudTrailConfigurationChanges",
@@ -221,7 +235,7 @@ CloudWatchMetricAlarms.livecheck = async function(context /*: Context */) /*: Pr
                     is_compliant: false,
                     resource_id: "CloudWatch",
                     resource_type: "AWS::CloudWatch::Alarm",
-                    message: `does not have an alarm set up for ${activeFilterPatterns[i].rule}.`
+                    message: `does not have an alarm linked to the metric filter for ${activeFilterPatterns[i].rule}.`
                 }));
             }
 

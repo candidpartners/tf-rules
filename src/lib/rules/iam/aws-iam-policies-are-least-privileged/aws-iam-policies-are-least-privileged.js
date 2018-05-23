@@ -5,15 +5,15 @@ const {Resource, RuleResult} = require('../../../rule-result');
 // Rule Definition
 //------------------------------------------------------------------------------
 
-const IAMNoPoliciesWithFullPrivileges = {};
+const IAMPoliciesAreLeastPrivileged = {};
 
-IAMNoPoliciesWithFullPrivileges.uuid = "526bb8b8-5e04-4d49-9f2a-869a3a5912c7";
-IAMNoPoliciesWithFullPrivileges.groupName = "IAM";
-IAMNoPoliciesWithFullPrivileges.tags = [["CIS", "1.1.0", "1.24"]];
-IAMNoPoliciesWithFullPrivileges.config_triggers = ["AWS::IAM::Policy"];
-IAMNoPoliciesWithFullPrivileges.paths = {IAMNoPoliciesWithFullPrivileges: "aws_iam_policy"};
-IAMNoPoliciesWithFullPrivileges.docs = {description: 'No IAM polcies should exist that allow full administrative privileges.', recommended: true};
-IAMNoPoliciesWithFullPrivileges.schema = {
+IAMPoliciesAreLeastPrivileged.uuid = "526bb8b8-5e04-4d49-9f2a-869a3a5912c7";
+IAMPoliciesAreLeastPrivileged.groupName = "IAM";
+IAMPoliciesAreLeastPrivileged.tags = [["CIS", "1.1.0", "1.24"]];
+IAMPoliciesAreLeastPrivileged.config_triggers = ["AWS::IAM::Policy"];
+IAMPoliciesAreLeastPrivileged.paths = {IAMNoPoliciesWithFullPrivileges: "aws_iam_policy"};
+IAMPoliciesAreLeastPrivileged.docs = {description: 'IAM policies should follow a least-privileged model.', recommended: true};
+IAMPoliciesAreLeastPrivileged.schema = {
     type: 'object',
     properties: {
         enabled: {
@@ -25,7 +25,7 @@ IAMNoPoliciesWithFullPrivileges.schema = {
 };
 
 
-IAMNoPoliciesWithFullPrivileges.livecheck = async function (context) {
+IAMPoliciesAreLeastPrivileged.livecheck = async function (context) {
     let {config, provider} = context;
 
     let iam = new provider.IAM();
@@ -44,16 +44,16 @@ IAMNoPoliciesWithFullPrivileges.livecheck = async function (context) {
 
     return new RuleResult({
         valid: (badPolicies.length > 0) ? "fail" : "success",
-        message: "No IAM policies should allow full administrative privileges.",
+        message: "IAM policies should follow a least-privileged model.",
         resources: policies.Policies.map(policy => {
             return new Resource({
                 is_compliant: (badPolicies.includes(policy.PolicyName)) ? false : true,
                 resource_id: policy.PolicyName,
                 resource_type: "AWS::IAM::Policy",
-                message: (badPolicies.includes(policy.PolicyName)) ? "allows full administrative privileges." : "does not allow full administrative privileges."
+                message: (badPolicies.includes(policy.PolicyName)) ? "allows full privileges." : "only allows specified privileges."
             })
         })
     });
 };
 
-module.exports = IAMNoPoliciesWithFullPrivileges;
+module.exports = IAMPoliciesAreLeastPrivileged;

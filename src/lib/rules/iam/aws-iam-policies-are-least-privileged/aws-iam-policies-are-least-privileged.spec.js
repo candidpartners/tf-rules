@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const AWSPromiseMock = require('../../../../aws-promise-mock');
-const rule = require('./aws-iam-no-policies-with-full-privileges');
+const rule = require('./aws-iam-policies-are-least-privileged');
 
 let GoodAWS = new AWSPromiseMock();
 GoodAWS.Service("IAM", "listPolicies", {
