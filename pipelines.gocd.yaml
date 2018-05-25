@@ -17,7 +17,7 @@ pipelines:
           - terraform
         artifacts:
           - build: 
-              source: src/coverage/lcov-report/*
+              source: snitch/src/coverage/lcov-report/*
               destination: test-reports/snitch-coverage/
         environment_variables:
           NODE_ENV: development
