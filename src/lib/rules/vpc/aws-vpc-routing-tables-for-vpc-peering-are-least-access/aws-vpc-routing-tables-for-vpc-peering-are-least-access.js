@@ -35,20 +35,21 @@ VPCRoutingTablesForVPCPeeringAreLeastAccess.livecheck = async function (context)
     let peeringConnectionIds = peeringConnections.VpcPeeringConnections.map(x => x.VpcPeeringConnectionId);
 
     let routes = routeTables.RouteTables.map(x => x.Routes);
-    let routeTableVpcs = _.flatten(routes).map(x => x.VpcPeeringConnectionId);
+    let routeTableVpcs = _.flatten(routes).map(x => x.GatewayId);
 
     let connectionsWithGatewayIds = _.intersection(peeringConnectionIds, routeTableVpcs);
     let connectionsWithoutGatewayIds = peeringConnectionIds.filter(x => !connectionsWithGatewayIds.includes(x));
 
+
     return new RuleResult({
         valid: (connectionsWithoutGatewayIds.length > 0) ? "fail" : "success",
         message: "Routing tables for VPC peering should be 'least access'",
-        resources: peeringConnections.VpcPeeringConnections.map(connection => {
+        resources: peeringConnectionIds.map(connection => {
             return new Resource({
-                is_compliant: (connectionsWithoutGatewayIds.includes(connection.VpcPeeringConnectionId)) ? false : true,
-                resource_id: connection.VpcPeeringConnectionId,
+                is_compliant: (connectionsWithoutGatewayIds.includes(connection)) ? false : true,
+                resource_id: connection,
                 resource_type: "AWS::EC2::VPC",
-                message: (connectionsWithoutGatewayIds.includes(connection.VpcPeeringConnectionId)) ? "does not have an associated route in any route tables." : "is established in a route table."
+                message: (connectionsWithoutGatewayIds.includes(connection)) ? "does not have an associated route in any route tables." : "is established in a route table."
             })
         })
     });

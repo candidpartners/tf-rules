@@ -94,7 +94,7 @@ module.exports.main = function* main(testVars) {
 
     const errors = snitch.validateConfig(rules, config);
 
-    if (errors.length > 0) throw {message: 'Configuration errors', errors};
+    if (errors.length > 0) throw {message: `Configuration errors ${JSON.stringify(errors)}`, errors};
 
     let inputPlan = '';
     let plan = new Plan();

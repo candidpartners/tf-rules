@@ -106,7 +106,7 @@ GoodAWS.Service("CloudWatchLogs", "describeMetricFilters",
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = "ConsoleLogin") && ($.additionalEventData.MFAUsed != "Yes") }',
+                filterPattern: '{ ($.eventName = ConsoleLogin) && ($.additionalEventData.MFAUsed != "Yes") }',
                 metricTransformations: [
                     {metricName: "MyMetric2"}
                 ]
@@ -124,63 +124,75 @@ GoodAWS.Service("CloudWatchLogs", "describeMetricFilters",
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = CreateTrail) || ($.eventName = UpdateTrail) ||($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }',
+                filterPattern: '{ ($.eventName = CreateAccessKey) }',
                 metricTransformations: [
                     {metricName: "MyMetric5"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = ConsoleLogin) && ($.errorMessage = "Failedauthentication") }',
+                filterPattern: '{ ($.eventName = CreateUser) }',
                 metricTransformations: [
                     {metricName: "MyMetric6"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventSource = kms.amazonaws.com) && (($.eventName = DisableKey) || ($.eventName = ScheduleKeyDeletion)) }',
+                filterPattern: '{ ($.eventName = CreateTrail) || ($.eventName = UpdateTrail) ||($.eventName = DeleteTrail) || ($.eventName = StartLogging) || ($.eventName = StopLogging) }',
                 metricTransformations: [
                     {metricName: "MyMetric7"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventSource = s3.amazonaws.com) && (($.eventName = PutBucketAcl) || ($.eventName = PutBucketPolicy) || ($.eventName = PutBucketCors) || ($.eventName = PutBucketLifecycle) || ($.eventName = PutBucketReplication) || ($.eventName = DeleteBucketPolicy) || ($.eventName = DeleteBucketCors) || ($.eventName = DeleteBucketLifecycle) || ($.eventName = DeleteBucketReplication)) }',
+                filterPattern: '{ ($.eventName = ConsoleLogin) && ($.errorMessage = "Failedauthentication") }',
                 metricTransformations: [
                     {metricName: "MyMetric8"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventSource = config.amazonaws.com) && (($.eventName = StopConfigurationRecorder) || ($.eventName = DeleteDeliveryChannel) || ($.eventName = PutDeliveryChannel) || ($.eventName = PutConfigurationRecorder)) }',
+                filterPattern: '{ ($.eventSource = kms.amazonaws.com) && (($.eventName = DisableKey) || ($.eventName = ScheduleKeyDeletion)) }',
                 metricTransformations: [
                     {metricName: "MyMetric9"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = AuthorizeSecurityGroupIngress) || ($.eventName = AuthorizeSecurityGroupEgress) || ($.eventName = RevokeSecurityGroupIngress) || ($.eventName = RevokeSecurityGroupEgress) || ($.eventName = CreateSecurityGroup) || ($.eventName = DeleteSecurityGroup) }',
+                filterPattern: '{ ($.eventSource = s3.amazonaws.com) && (($.eventName = PutBucketAcl) || ($.eventName = PutBucketPolicy) || ($.eventName = PutBucketCors) || ($.eventName = PutBucketLifecycle) || ($.eventName = PutBucketReplication) || ($.eventName = DeleteBucketPolicy) || ($.eventName = DeleteBucketCors) || ($.eventName = DeleteBucketLifecycle) || ($.eventName = DeleteBucketReplication)) }',
                 metricTransformations: [
                     {metricName: "MyMetric10"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = CreateNetworkAcl) || ($.eventName = CreateNetworkAclEntry) || ($.eventName = DeleteNetworkAcl) || ($.eventName = DeleteNetworkAclEntry) || ($.eventName = ReplaceNetworkAclEntry) || ($.eventName = ReplaceNetworkAclAssociation) }',
+                filterPattern: '{ ($.eventSource = config.amazonaws.com) && (($.eventName = StopConfigurationRecorder) || ($.eventName = DeleteDeliveryChannel) || ($.eventName = PutDeliveryChannel) || ($.eventName = PutConfigurationRecorder)) }',
                 metricTransformations: [
                     {metricName: "MyMetric11"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = CreateCustomerGateway) || ($.eventName = DeleteCustomerGateway) || ($.eventName = AttachInternetGateway) || ($.eventName = CreateInternetGateway) || ($.eventName = DeleteInternetGateway) || ($.eventName = DetachInternetGateway) }',
+                filterPattern: '{ ($.eventName = AuthorizeSecurityGroupIngress) || ($.eventName = AuthorizeSecurityGroupEgress) || ($.eventName = RevokeSecurityGroupIngress) || ($.eventName = RevokeSecurityGroupEgress) || ($.eventName = CreateSecurityGroup) || ($.eventName = DeleteSecurityGroup) }',
                 metricTransformations: [
                     {metricName: "MyMetric12"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = CreateRoute) || ($.eventName = CreateRouteTable) || ($.eventName = ReplaceRoute) || ($.eventName = ReplaceRouteTableAssociation) || ($.eventName = DeleteRouteTable) || ($.eventName = DeleteRoute) || ($.eventName = DisassociateRouteTable) }',
+                filterPattern: '{ ($.eventName = CreateNetworkAcl) || ($.eventName = CreateNetworkAclEntry) || ($.eventName = DeleteNetworkAcl) || ($.eventName = DeleteNetworkAclEntry) || ($.eventName = ReplaceNetworkAclEntry) || ($.eventName = ReplaceNetworkAclAssociation) }',
                 metricTransformations: [
                     {metricName: "MyMetric13"}
                 ]
             },
             {
-                filterPattern: '{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) || ($.eventName = CreateVpcPeeringConnection) || ($.eventName = DeleteVpcPeeringConnection) || ($.eventName = RejectVpcPeeringConnection) || ($.eventName = AttachClassicLinkVpc) || ($.eventName = DetachClassicLinkVpc) || ($.eventName = DisableVpcClassicLink) || ($.eventName = EnableVpcClassicLink) }',
+                filterPattern: '{ ($.eventName = CreateCustomerGateway) || ($.eventName = DeleteCustomerGateway) || ($.eventName = AttachInternetGateway) || ($.eventName = CreateInternetGateway) || ($.eventName = DeleteInternetGateway) || ($.eventName = DetachInternetGateway) }',
                 metricTransformations: [
                     {metricName: "MyMetric14"}
+                ]
+            },
+            {
+                filterPattern: '{ ($.eventName = CreateRoute) || ($.eventName = CreateRouteTable) || ($.eventName = ReplaceRoute) || ($.eventName = ReplaceRouteTableAssociation) || ($.eventName = DeleteRouteTable) || ($.eventName = DeleteRoute) || ($.eventName = DisassociateRouteTable) }',
+                metricTransformations: [
+                    {metricName: "MyMetric15"}
+                ]
+            },
+            {
+                filterPattern: '{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) || ($.eventName = CreateVpcPeeringConnection) || ($.eventName = DeleteVpcPeeringConnection) || ($.eventName = RejectVpcPeeringConnection) || ($.eventName = AttachClassicLinkVpc) || ($.eventName = DetachClassicLinkVpc) || ($.eventName = DisableVpcClassicLink) || ($.eventName = EnableVpcClassicLink) }',
+                metricTransformations: [
+                    {metricName: "MyMetric16"}
                 ]
             },
         ]
@@ -243,6 +255,14 @@ GoodAWS.Service("CloudWatch", "describeAlarms", {
         {
             MetricName: "MyMetric14",
             AlarmActions: ["arn:aws:sns:us-west-2:421471939647:CISRulesTest14"]
+        },
+        {
+            MetricName: "MyMetric15",
+            AlarmActions: ["arn:aws:sns:us-west-2:421471939647:CISRulesTest15"]
+        },
+        {
+            MetricName: "MyMetric16",
+            AlarmActions: ["arn:aws:sns:us-west-2:421471939647:CISRulesTest16"]
         }
     ]
 });
@@ -324,6 +344,8 @@ describe("A log metric filter and alarm exist for all rules.", () => {
                 ManagementConsoleSignInWithoutMFA: true,
                 UsageOfRootAccount: true,
                 IAMPolicyChanges: true,
+                IAMAccessKeyCreation: true,
+                IAMUserCreation: true,
                 CloudTrailConfigurationChanges: true,
                 AWSManagementConsoleAuthenticationFailures: true,
                 DisablingOrScheduledDeletionOfCustomerCreatedCMKs: true,
