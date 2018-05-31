@@ -37,6 +37,8 @@ rules :
     enabled : true
     exclude :
       - volker-dev-accounts
+- aws-dynamodb-point-in-time-recovery-status:
+    enabled : true
 
 #EBS
 - aws-ebs-volume-encryption :

@@ -13,15 +13,21 @@ pipelines:
     stages: &uiStages
       - unit-test:
           clean_workspace: true
-          jobs:
-            Unit-Test:
-              resources:
-                - terraform
-              tasks:
-              - script: |
-                  cd snitch/src
-                  npm i
-                  npm run coverage
+          resources:
+            - terraform
+          artifacts:
+            - build: 
+                source: snitch/src/coverage/lcov-report/*
+                destination: test-reports/snitch-coverage/
+          environment_variables:
+            NODE_ENV: development
+          tabs:
+            coverage: test-reports/snitch-coverage/index.html  
+          tasks:
+          - script: |
+              cd snitch/src
+              npm i
+              npm run coverage
       - e2e-test:
           clean_workspace: true
           jobs:
