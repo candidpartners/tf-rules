@@ -57,7 +57,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Conte
                 is_compliant: false,
                 resource_id: rootUser1.arn,
                 resource_type: "AWS::IAM::User",
-                message: "has virtual MFA enabled, hardware MFA is required for compliance."
+                message: "has virtual MFA enabled; hardware MFA is required for compliance."
             })]
         })
     }
@@ -82,7 +82,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Conte
                     is_compliant: true,
                     resource_id: rootUser1.arn,
                     resource_type: "AWS::IAM::User",
-                    message: "has virtual or hardware MFA enabled."
+                    message: "has hardware MFA enabled."
                 })
             ]
         })

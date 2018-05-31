@@ -166,6 +166,17 @@ rules :
 - aws-security-group-exists :
     enabled : true
 
+#SNS
+- aws-sns-ensure-appropriate-subscribers :
+    enabled : true
+    global_whitelist :
+      - arn:aws:lambda:us-west-2:421471939647:function:xray-demo-handler
+    topics :
+      - topic_arn : arn:aws:sns:us-west-2:421471939647:CIS-NotificationTopic
+        topic_whitelist :
+          - ethan.bower@candidpartners.com
+      - topic_arn : arn:aws:sns:us-west-2:421471939647:CodeBuildPipelineStack-MySNSTopic-11OZQI23UU45L
+
 #VPC
 - aws-vpc-default-security-group-restricts-all-traffic :
     enabled : true
