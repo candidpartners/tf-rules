@@ -33,7 +33,6 @@ ConfigServiceEnabled.schema = {
 ConfigServiceEnabled.livecheck = async (context) => {
     let {config, provider} = context;
     let message="AWS configuration is not valid";
-    try {
         const Cloud = new provider.ConfigService();
         let result=await Cloud.describeConfigurationRecorderStatus().promise();
         if(result && result.ConfigurationRecordersStatus && result.ConfigurationRecordersStatus.length >= 0)
@@ -73,17 +72,14 @@ ConfigServiceEnabled.livecheck = async (context) => {
         return new RuleResult({
             valid: IsEmpty(result) ? 'success' : 'fail',
             message: message,
-            resources: result
+            resources: [{
+                    is_compliant: IsEmpty(result),
+                    resource_id: '',
+                    resource_type: "AWS::Config::Service",
+                    message: message
+                }]
         })
-    }
-    catch (e) {
-        console.log(e);
-        return new RuleResult({
-            valid: 'fail',
-            message: e.message,
-            resources: {}
-        })
-    }
+
 
 };
 
