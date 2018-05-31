@@ -44,7 +44,7 @@ CloudtrailLogsAreEncrypted.livecheck = async function (context /*: Context*/) /*
             let isUnencrypted = !t.hasOwnProperty("KmsKeyId");
             return new Resource({
                 is_compliant: isUnencrypted ? false : true,
-                resource_id: t.TrailARN,
+                resource_id: t.Name,
                 resource_type: "AWS::CloudTrail::Trail",
                 message: isUnencrypted ? "is not encrypted.": "is encrypted."
             })

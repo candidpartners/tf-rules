@@ -34,7 +34,6 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = async function (cont
 
     let trails = await trail.describeTrails().promise();
     let noncompliant_resources = [];
-    let compliant_resources = [];
     let promises = [];
 
     trails.trailList.map(tr => {
@@ -48,35 +47,22 @@ CloudTrailTrailsAreIntegratedWithCloudWatchLogs.livecheck = async function (cont
             let latestDate = new Date(x.LatestCloudWatchLogsDeliveryTime);
             let today = new Date();
             if ((today - latestDate) > 86400000)
-                noncompliant_resources.push(tr)
-            else
-                compliant_resources.push(tr)
-        })
-    });
-
-    let bad_resources = noncompliant_resources.map(x => {
-
-        return new Resource({
-            is_compliant: false,
-            resource_id: x.Name,
-            resource_type: "AWS::CloudTrail::Trail",
-            message: "is not integrated with CloudWatch logs."
-        })
-    });
-
-    let good_resources = compliant_resources.map(x => {
-        return new Resource({
-            is_compliant: true,
-            resource_id: x.Name,
-            resource_type: "AWS::CloudTrail::Trail",
-            message: "is integrated with CloudWatch logs."
+                noncompliant_resources.push(tr);
         })
     });
 
     return new RuleResult({
         valid: (noncompliant_resources.length > 0) ? "fail" : "success",
         message: CloudTrailTrailsAreIntegratedWithCloudWatchLogs.docs.description,
-        resources: [...good_resources,...bad_resources],
+        resources: trails.trailList.map(tr => {
+            let is_noncompliant = noncompliant_resources.find(x => x.Name === tr.Name);
+            return new Resource({
+                is_compliant: is_noncompliant ? false : true,
+                resource_id: tr.Name,
+                resource_type: "AWS::CloudTrail::Trail",
+                message: is_noncompliant ? "is not integrated with CloudWatch logs." : "is integrated with CloudWatch logs."
+            })
+        })
     })
 
 };
