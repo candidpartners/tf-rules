@@ -5,7 +5,7 @@ const co = require('co');
 const Ajv = require('ajv');
 const colors = require('colors');
 const jp = require('jmespath');
-const services = require('./services/services');
+const services = require('../services/services');
 
 const symbols = require('./reporters/symbols');
 

@@ -36,43 +36,26 @@ S3Encryption.livecheck = async function(context /*: Context */) /*: Promise<Rule
     let exclude = config.exclude || [];
     let s3 = new provider.S3();
     let buckets = await s3.listBuckets().promise();
-    let bucketlist = buckets.Buckets
-    let bucketNames = bucketlist.map(x => x.Name)
+    let invalid_buckets = [];
 
-    let firstBucket = bucketNames[0]
-
-    function getBucketVersioning(bucketName){
-        var params = {
-            Bucket: bucketName
+    for (let i = 0; i < buckets.Buckets.length; i++) {
+        let versioning = await s3.getBucketVersioning({Bucket: buckets.Buckets[i].Name}).promise();
+        if (versioning.Status !== "Enabled") {
+            invalid_buckets.push(buckets.Buckets[i].Name)
         }
-       return s3.getBucketVersioning(params).promise()
-    }
-    let versionings = bucketNames.map(x => getBucketVersioning(x))
-    let versioningResults = await Promise.all(versionings);
-
-    let resultArray = []
-    for(let i = 0; i < versioningResults.length; i++){
-        let bucketname = bucketNames[i]
-        let versionResult = versioningResults[i]
-        let result = {
-            bucket: bucketname, 
-            version: versionResult
-        }
-        resultArray.push(result)
     }
 
-    let isInvalid = resultArray.some(x => x.version.Status)
     return new RuleResult({
-        valid: !isInvalid ? "success" : "fail", 
+        valid: (invalid_buckets.length > 0) ? "fail" : "success",
         message: "S3 Buckets must have versioning",
-        resources: resultArray.map(x => {
-            let hasVersioning = x.version.Status;
+        resources: buckets.Buckets.map(x => {
+            let is_invalid = invalid_buckets.find(y => y === x.Name);
 
             return new Resource({
-                is_compliant: hasVersioning ? true : false,
-                resource_id: x.bucket,
+                is_compliant: is_invalid ? false : true,
+                resource_id: x.Name,
                 resource_type: "AWS::S3::Bucket",
-                message: hasVersioning ? `has versioning enabled.` : "does not have versioning enabled."
+                message: is_invalid ? "does not have versioning enabled." : `has versioning enabled.`
             })
         })
     })

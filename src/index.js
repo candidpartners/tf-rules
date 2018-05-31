@@ -8,7 +8,7 @@ function Livecheck({provider,config, rules = Rules, config_triggers = []}){
     const errors = Snitch.validateConfig(rules, config);
     if (errors.length > 0) throw {message: 'Configuration errors', errors};
 
-    let result = Snitch.livecheck({provider,config,rules, config_triggers})
+    let result = Snitch.livecheck({provider,config,rules, config_triggers});
     return result;
 };
 

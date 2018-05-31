@@ -13,7 +13,6 @@ describe("At least one cloudtrail must be enabled in all regions", () => {
     test("it fails", async () => {
         let result = await rule.livecheck({provider: BadAWS});
         expect(result.valid).toBe('fail');
-        expect(result.message).toBe("At least one CloudTrail resource is enabled in all regions.")
     });
 
     test("it passes", async () => {

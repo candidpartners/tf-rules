@@ -17,9 +17,13 @@ CloudtrailEnsureS3BucketACLType.docs = {
 };
 
 CloudtrailEnsureS3BucketACLType.schema = {
-    type: 'array',
-    items: {
-        type: 'string'
+    type: 'object',
+    properties: {
+        enabled: {
+            type: 'boolean',
+            title: 'Enabled',
+            default: true
+        }
     }
 };
 
