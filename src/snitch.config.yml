@@ -115,6 +115,8 @@ rules :
 #KMS
 - aws-kms-ensure-key-rotation :
     enabled : true
+    exclude :
+      - cms
 
 #RDS
 - aws-rds-encryption-key-exists :
@@ -187,4 +189,7 @@ rules :
 - aws-vpc-no-default-vpc :
     enabled : true
 - aws-vpc-routing-tables-for-vpc-peering-are-least-access :
+    enabled : true
+#Config Service
+- aws-config-service-is-enabled-in-current-region :
     enabled : true

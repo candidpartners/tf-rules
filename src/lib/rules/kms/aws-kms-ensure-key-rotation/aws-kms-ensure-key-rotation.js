@@ -31,6 +31,7 @@ KMSKeyRotation.schema = {
 
 KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<RuleResult>*/ {
     let {config, provider} = context;
+    let exclude = config.exclude || [];
     let kms = new provider.KMS();
     let filters = [
         "arn:aws:kms:us-west-2:421471939647:key/9890eec1-6d8e-4d1a-a4c9-a11b28fd92c0",
@@ -38,7 +39,8 @@ KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<Rul
 
     let {Keys} = await kms.listKeys().promise();
     let filteredKeys = Keys.filter(x => !filters.includes(x.KeyArn));
-    let promises = filteredKeys.map(key => kms.getKeyRotationStatus({KeyId: key.KeyArn}).promise());
+    let Instances = _.flatMap(filteredKeys).filter(x => exclude.includes(x.KeyArn) === false);
+    let promises = Instances.map(key => kms.getKeyRotationStatus({KeyId: key.KeyArn}).promise());
     try {
         let keys = filteredKeys.map(x => x);
         let result = await Promise.all(promises);
