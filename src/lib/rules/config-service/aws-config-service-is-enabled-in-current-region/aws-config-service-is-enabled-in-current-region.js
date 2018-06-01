@@ -28,55 +28,46 @@ ConfigServiceEnabled.schema = {
         }
     }
 };
+ConfigServiceEnabled.validateS3BucketExists=async (context) => {
+    let {config, provider} = context;
+    const Cloud = new provider.ConfigService();
+    let IsValid=false;
+    let result=await Cloud.describeDeliveryChannels().promise();
+    if(result && result.DeliveryChannels && result.DeliveryChannels.length >= 0) {
+        IsValid= !IsEmpty(result.DeliveryChannels[0].s3BucketName)
+    }
+    return IsValid;
 
+};
+ConfigServiceEnabled.validateIfRoleExists= async (context) => {
+    let {config, provider} = context;
+    const Cloud = new provider.ConfigService();
+    let IsValid=false;
+    let result=await Cloud.describeConfigurationRecorders().promise();
+    if(result && result.ConfigurationRecorders && result.ConfigurationRecorders.length >= 0)
+        IsValid=!IsEmpty(result.ConfigurationRecorders[0].roleARN);
 
+    return IsValid;
+}
 ConfigServiceEnabled.livecheck = async (context) => {
     let {config, provider} = context;
-    let message="AWS configuration is not valid";
+    let message="AWS configuration is invalid or not configured for this region";
         const Cloud = new provider.ConfigService();
+        let IsValid=false;
         let result=await Cloud.describeConfigurationRecorderStatus().promise();
-        if(result && result.ConfigurationRecordersStatus && result.ConfigurationRecordersStatus.length >= 0)
-        {
-            const configurationRecordersStatus=result.ConfigurationRecordersStatus[0];
-            if(configurationRecordersStatus.recording)
-            {
-                result=await Cloud.describeDeliveryChannels().promise();
-                if(result && result.DeliveryChannels && result.DeliveryChannels.length >= 0)
-                {
-                    if(IsEmpty(result.DeliveryChannels[0].s3BucketName)) {
-                        message = "AWS configuration must have s3 bucket defined";
-                    }
-                    else {
-                        result=await Cloud.describeConfigurationRecorders().promise()
-                        if(result && result.ConfigurationRecorders && result.ConfigurationRecorders.length >= 0)
-                        {
-                            if(IsEmpty(result.ConfigurationRecorders[0].roleARN))
-                                message="AWS configuration must have a role defined";
-                            else {
-                                result={};
-                                message="";
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    message="AWS configuration is not valid"
-                }
-            }
-            else
-            {
-                message="AWS configuration is missing or should be enabled"
-            }
-        }
+        IsValid=(result && result.ConfigurationRecordersStatus && result.ConfigurationRecordersStatus.length >= 0)
+            && result.ConfigurationRecordersStatus[0].recording
+            && ConfigServiceEnabled.validateS3BucketExists(context)
+            && ConfigServiceEnabled.validateIfRoleExists(context);
+
         return new RuleResult({
-            valid: IsEmpty(result) ? 'success' : 'fail',
+            valid: IsValid ? 'success' : 'fail',
             message: message,
             resources: [{
                     is_compliant: IsEmpty(result),
                     resource_id: '',
                     resource_type: "AWS::Config::Service",
-                    message: message
+                    message: IsValid ? '' : message
                 }]
         })
 
