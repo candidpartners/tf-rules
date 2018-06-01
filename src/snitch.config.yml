@@ -1,174 +1,174 @@
 provider :
-  region : us-east-1
+  region : us-west-2
 rules :
-#
-##CloudTrail
-#- aws-cloudtrail-ensure-log-file-validation :
-#    enabled : true
-#- aws-cloudtrail-is-enabled-in-all-regions :
-#    enabled : true
-#- aws-cloudtrail-logs-are-encrypted :
-#    enabled : true
-#- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs :
-#    enabled : true
-#
-##CloudWatch
-#- aws-cloudwatch-metric-alarms :
-#    enabled : true
-#    UnauthorizedAPICalls : true
-#    ManagementConsoleSignInWithoutMFA : true
-#    UsageOfRootAccount : true
-#    IAMPolicyChanges : true
-#    IAMAccessKeyCreation : true
-#    IAMUserCreation : true
-#    CloudTrailConfigurationChanges : true
-#    AWSManagementConsoleAuthenticationFailures : true
-#    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
-#    S3BucketPolicyChanges : true
-#    AWSConfigConfigurationChanges : true
-#    SecurityGroupChanges : true
-#    ChangesToNetworkAccessControlLists : true
-#    ChangesToNetworkGateways : true
-#    RouteTableChanges : true
-#    VPCChanges : true
-#
-##DynamoDB
-#- aws-dynamodb-encryption :
-#    enabled : true
-#    exclude :
-#      - volker-dev-accounts
-#- aws-dynamodb-point-in-time-recovery-status:
-#    enabled : true
-#
-##EBS
-#- aws-ebs-volume-encryption :
-#    enabled: true
-#
-##EC2
-#- aws-ec2-ensure-instance-profile :
-#    enabled: true
-#- aws-ec2-ami-includes-sql-server :
-#    enabled : true
-#- aws-ec2-instance-tag-exists :
-#    enabled : true
-#    names:
-#      - Name
-#- aws-ec2-instance-tag-format :
-#    enabled : true
-#    tags :
-#      - name : ApplicationCode
-#      - format : '^[A-Z]{3}$'
-#      - name : Environment
-#      - format : ^(DEV|QA|TEST|STAGING|PROD)$
-#- aws-ec2-key-pair-exists :
-#    enabled : true
-#- aws-ec2-uses-security-group :
-#    enabled : true
-#    security_groups :
-#      - "Hello"
-#      - "World"
-#
-##IAM
-#- aws-iam-no-policies-use-default-kms-keys:
-#    enabled : true
-#- aws-iam-account-password-policy :
-#    enabled : true
-#    MinimumPasswordLength : 14
-#    MaxPasswordAge: 90
-#    PasswordReusePrevention: 10
-#    RequireSymbols : true
-#    RequireNumbers : true
-#    RequireUppercaseCharacters : true
-#    RequireLowercaseCharacters : true
-#    AllowUsersToChangePassword : true
-#    ExpirePasswords : true
-#- aws-iam-avoid-use-of-root-account :
-#    enabled : true
-#    days : 90
-#- aws-iam-ensure-a-support-role-is-attached :
-#    enabled : true
-#- aws-iam-ensure-access-keys-are-rotated :
-#    enabled : true
-#    days : 90
-#- aws-iam-ensure-master-and-manager-roles-are-active :
-#    enabled : true
-#- aws-iam-ensure-unused-credentials-are-disabled :
-#    enabled : true
-#    days : 90
-#- aws-iam-hardware-mfa-is-enabled-for-root-account :
-#    enabled : true
-#- aws-iam-mfa-is-enabled-for-iam-users-with-console-password :
-#    enabled : true
-#- aws-iam-mfa-is-enabled-for-root-account :
-#    enabled : true
-#- aws-iam-no-initial-access-keys :
-#    enabled : true
-#- aws-iam-no-root-account-access-key-exists :
-#    enabled : true
-#- aws-iam-policies-are-attached-only-to-groups-or-roles :
-#    enabled : true
-#- aws-iam-policies-are-least-privileged :
-#    enabled : true
-#- aws-iam-policies-have-requested-region :
-#    enabled : true
-#
-##KMS
-#- aws-kms-ensure-key-rotation :
-#    enabled : true
-#    exclude :
-#      - cms
-#
-##RDS
-#- aws-rds-encryption-key-exists :
-#    enabled : true
-#    exclude :
-#      - vra
-#
-##Route53
-#- aws-route53-no-cloudjack-vulnerabilities :
-#    enabled : true
-#    route53GoodReferences : true
-#    route53GoodCnames : true
-#
-##S3
-#- aws-s3-ensure-versioning :
-#    enabled : true
-#- aws-s3-only-allow-encrypted-objects:
-#    enabled : true
-#    AllowAES256: true
-#- aws-s3-cloudtrail-bucket-access-logging-enabled :
-#    enabled : true
-#- aws-s3-cloudtrail-bucket-is-not-publicly-accessible :
-#    enabled : true
-#- aws-s3-encryption :
-#    enabled : true
-#    exclude:
-#      - volker-dev-accounts
-#
-##Security Group
-#- aws-security-group-allows-inbound :
-#    enabled : true
-#    cidr : '127.0.0.1/32'
-#    ports :
-#     -  '80'
-#- aws-security-group-allows-outbound :
-#    enabled : true
-#    cidr : '127.0.0.2/32'
-#    ports :
-#      - '22'
-#- aws-security-group-does-not-allow-inbound :
-#    enabled : true
-#    cidr : '0.0.0.0/0'
-#    ports :
-#      - '22'
-#      - '3389'
-#- aws-security-group-does-not-allow-outbound :
-#    enabled : true
-#    cidr : '204.4.6.2/32'
-#    ports :
-#      - '9032-9034'
-#- aws-security-group-exists :
-#    enabled : true
+
+#CloudTrail
+- aws-cloudtrail-ensure-log-file-validation :
+    enabled : true
+- aws-cloudtrail-is-enabled-in-all-regions :
+    enabled : true
+- aws-cloudtrail-logs-are-encrypted :
+    enabled : true
+- aws-cloudtrail-trails-are-integrated-with-cloudwatch-logs :
+    enabled : true
+
+#CloudWatch
+- aws-cloudwatch-metric-alarms :
+    enabled : true
+    UnauthorizedAPICalls : true
+    ManagementConsoleSignInWithoutMFA : true
+    UsageOfRootAccount : true
+    IAMPolicyChanges : true
+    IAMAccessKeyCreation : true
+    IAMUserCreation : true
+    CloudTrailConfigurationChanges : true
+    AWSManagementConsoleAuthenticationFailures : true
+    DisablingOrScheduledDeletionOfCustomerCreatedCMKs : true
+    S3BucketPolicyChanges : true
+    AWSConfigConfigurationChanges : true
+    SecurityGroupChanges : true
+    ChangesToNetworkAccessControlLists : true
+    ChangesToNetworkGateways : true
+    RouteTableChanges : true
+    VPCChanges : true
+
+#DynamoDB
+- aws-dynamodb-encryption :
+    enabled : true
+    exclude :
+      - volker-dev-accounts
+- aws-dynamodb-point-in-time-recovery-status:
+    enabled : true
+
+#EBS
+- aws-ebs-volume-encryption :
+    enabled: true
+
+#EC2
+- aws-ec2-ensure-instance-profile :
+    enabled: true
+- aws-ec2-ami-includes-sql-server :
+    enabled : true
+- aws-ec2-instance-tag-exists :
+    enabled : true
+    names:
+      - Name
+- aws-ec2-instance-tag-format :
+    enabled : true
+    tags :
+      - name : ApplicationCode
+      - format : '^[A-Z]{3}$'
+      - name : Environment
+      - format : ^(DEV|QA|TEST|STAGING|PROD)$
+- aws-ec2-key-pair-exists :
+    enabled : true
+- aws-ec2-uses-security-group :
+    enabled : true
+    security_groups :
+      - "Hello"
+      - "World"
+
+#IAM
+- aws-iam-no-policies-use-default-kms-keys:
+    enabled : true
+- aws-iam-account-password-policy :
+    enabled : true
+    MinimumPasswordLength : 14
+    MaxPasswordAge: 90
+    PasswordReusePrevention: 10
+    RequireSymbols : true
+    RequireNumbers : true
+    RequireUppercaseCharacters : true
+    RequireLowercaseCharacters : true
+    AllowUsersToChangePassword : true
+    ExpirePasswords : true
+- aws-iam-avoid-use-of-root-account :
+    enabled : true
+    days : 90
+- aws-iam-ensure-a-support-role-is-attached :
+    enabled : true
+- aws-iam-ensure-access-keys-are-rotated :
+    enabled : true
+    days : 90
+- aws-iam-ensure-master-and-manager-roles-are-active :
+    enabled : true
+- aws-iam-ensure-unused-credentials-are-disabled :
+    enabled : true
+    days : 90
+- aws-iam-hardware-mfa-is-enabled-for-root-account :
+    enabled : true
+- aws-iam-mfa-is-enabled-for-iam-users-with-console-password :
+    enabled : true
+- aws-iam-mfa-is-enabled-for-root-account :
+    enabled : true
+- aws-iam-no-initial-access-keys :
+    enabled : true
+- aws-iam-no-root-account-access-key-exists :
+    enabled : true
+- aws-iam-policies-are-attached-only-to-groups-or-roles :
+    enabled : true
+- aws-iam-policies-are-least-privileged :
+    enabled : true
+- aws-iam-policies-have-requested-region :
+    enabled : true
+
+#KMS
+- aws-kms-ensure-key-rotation :
+    enabled : true
+    exclude :
+      - cms
+
+#RDS
+- aws-rds-encryption-key-exists :
+    enabled : true
+    exclude :
+      - vra
+
+#Route53
+- aws-route53-no-cloudjack-vulnerabilities :
+    enabled : true
+    route53GoodReferences : true
+    route53GoodCnames : true
+
+#S3
+- aws-s3-ensure-versioning :
+    enabled : true
+- aws-s3-only-allow-encrypted-objects:
+    enabled : true
+    AllowAES256: true
+- aws-s3-cloudtrail-bucket-access-logging-enabled :
+    enabled : true
+- aws-s3-cloudtrail-bucket-is-not-publicly-accessible :
+    enabled : true
+- aws-s3-encryption :
+    enabled : true
+    exclude:
+      - volker-dev-accounts
+
+#Security Group
+- aws-security-group-allows-inbound :
+    enabled : true
+    cidr : '127.0.0.1/32'
+    ports :
+     -  '80'
+- aws-security-group-allows-outbound :
+    enabled : true
+    cidr : '127.0.0.2/32'
+    ports :
+      - '22'
+- aws-security-group-does-not-allow-inbound :
+    enabled : true
+    cidr : '0.0.0.0/0'
+    ports :
+      - '22'
+      - '3389'
+- aws-security-group-does-not-allow-outbound :
+    enabled : true
+    cidr : '204.4.6.2/32'
+    ports :
+      - '9032-9034'
+- aws-security-group-exists :
+    enabled : true
 
 #SNS
 - aws-sns-ensure-appropriate-subscribers :
