@@ -33,7 +33,7 @@ ConfigServiceEnabled.validateS3BucketExists=async (context) => {
     const Cloud = new provider.ConfigService();
     let IsValid=false;
     let result=await Cloud.describeDeliveryChannels().promise();
-    if(result && result.DeliveryChannels && result.DeliveryChannels.length >= 0) {
+    if(result && result.DeliveryChannels && result.DeliveryChannels.length > 0) {
         IsValid= !IsEmpty(result.DeliveryChannels[0].s3BucketName)
     }
     return IsValid;
@@ -44,7 +44,7 @@ ConfigServiceEnabled.validateIfRoleExists= async (context) => {
     const Cloud = new provider.ConfigService();
     let IsValid=false;
     let result=await Cloud.describeConfigurationRecorders().promise();
-    if(result && result.ConfigurationRecorders && result.ConfigurationRecorders.length >= 0)
+    if(result && result.ConfigurationRecorders && result.ConfigurationRecorders.length > 0)
         IsValid=!IsEmpty(result.ConfigurationRecorders[0].roleARN);
 
     return IsValid;
@@ -55,16 +55,14 @@ ConfigServiceEnabled.livecheck = async (context) => {
         const Cloud = new provider.ConfigService();
         let IsValid=false;
         let result=await Cloud.describeConfigurationRecorderStatus().promise();
-        IsValid=(result && result.ConfigurationRecordersStatus && result.ConfigurationRecordersStatus.length >= 0)
-            && result.ConfigurationRecordersStatus[0].recording
-            && ConfigServiceEnabled.validateS3BucketExists(context)
-            && ConfigServiceEnabled.validateIfRoleExists(context);
+         if(result && result.ConfigurationRecordersStatus && result.ConfigurationRecordersStatus.length > 0)
+             IsValid= result.ConfigurationRecordersStatus[0].recording && ConfigServiceEnabled.validateS3BucketExists(context) && ConfigServiceEnabled.validateIfRoleExists(context);
 
         return new RuleResult({
             valid: IsValid ? 'success' : 'fail',
-            message: message,
+            message: IsValid ? '' : message,
             resources: [{
-                    is_compliant: IsEmpty(result),
+                    is_compliant: IsValid ? true : false,
                     resource_id: '',
                     resource_type: "AWS::Config::Service",
                     message: IsValid ? '' : message
