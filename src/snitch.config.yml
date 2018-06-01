@@ -92,11 +92,11 @@ rules :
     days : 90
 - aws-iam-ensure-master-and-manager-roles-are-active :
     enabled : true
-- aws-iam-ensure-unused-credentials-are-disabled :
-    enabled : true
-    days : 90
-- aws-iam-hardware-mfa-is-enabled-for-root-account :
-    enabled : true
+#- aws-iam-ensure-unused-credentials-are-disabled :
+#    enabled : true
+#    days : 90
+#- aws-iam-hardware-mfa-is-enabled-for-root-account :
+#    enabled : true
 #- aws-iam-mfa-is-enabled-for-iam-users-with-console-password :
 #    enabled : true
 #- aws-iam-mfa-is-enabled-for-root-account :
