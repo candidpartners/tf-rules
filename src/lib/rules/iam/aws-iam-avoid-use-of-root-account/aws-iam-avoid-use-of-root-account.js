@@ -34,8 +34,8 @@ IAMAvoidUseOfRootAccount.livecheck = async function (context /*: Context */) /*:
     //let report = await IAM.getCredentialReport().promise();
 
     //let content = report.Content.toString();
-    let content=await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
-    console.log(content);
+    let content = await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
+    // console.log(content);
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
