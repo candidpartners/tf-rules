@@ -22,23 +22,27 @@ let content2 = {
 };
 
 let _AWS1 = new AWSPromiseMock();
-_AWS1.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
-_AWS1.Service("IAM", "getCredentialReport", content1);
+let mockService1 = { IAM: {
+        GetIAMCredentialReport: () => Promise.resolve(csv1)
+    }
+};
 
 let _AWS2 = new AWSPromiseMock();
-_AWS2.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
-_AWS2.Service("IAM", "getCredentialReport", content2);
+let mockService2 = { IAM: {
+        GetIAMCredentialReport: () => Promise.resolve(csv2)
+    }
+};
 
 describe("IAMNoRootAccountAccessKeyExists", () => {
 
     test("It recognizes when the root account still has an access key.", async () => {
-        let result = await rule.livecheck({provider: _AWS1});
+        let result = await rule.livecheck({provider: _AWS1,services:mockService1});
         expect(result.valid).toBe('fail');
         expect(result.message).toBeTruthy()
     });
 
     test("It recognizes when the root account does not have an access key.", async () => {
-        let result = await rule.livecheck({provider: _AWS2});
+        let result = await rule.livecheck({provider: _AWS2,services:mockService2});
         expect(result.valid).toBe('success');
     });
 }, 10000);
