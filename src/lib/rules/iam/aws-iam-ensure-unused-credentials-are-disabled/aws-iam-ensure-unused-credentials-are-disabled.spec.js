@@ -9,24 +9,19 @@ tes3.user,false,N/A,true,${(new Date(new Date() - 1000 * 60 * 60 * 24 * 89)).toD
 tes4.user,false,N/A,false,N/A,true,${(new Date(new Date() - 1000 * 60 * 60 * 24 * 89)).toDateString()}`;
 
 let _AWS = new AWSPromiseMock();
-let content = {
-    "Content": csv,
-    "GeneratedTime": "2018-03-01T15:28:51Z",
-    "ReportFormat": "text/csv"
+let MockService = { IAM: {
+        GetIAMCredentialReport: () => Promise.resolve(csv)
+    }
 };
-
-_AWS.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
-_AWS.Service("IAM", "getCredentialReport", content);
-
 describe("IAM_ENSURE_UNUSED_CREDENTIALS_ARE_DISABLED", () => {
 
     test("It recognizes when unused credentials have been disabled", async () => {
-        let result = await rule.livecheck({config: {days: 90}, provider: _AWS});
+        let result = await rule.livecheck({config: {days: 90}, provider: _AWS,services:MockService});
         expect(result.valid).toBe('success');
     });
 
     test("It recognizes when unused credentials have not been disabled", async () => {
-        let result = await rule.livecheck({config: {days: 88}, provider: _AWS});
+        let result = await rule.livecheck({config: {days: 88}, provider: _AWS,services:MockService});
         expect(result.valid).toBe('fail');
         expect(result.message).toBeTruthy();
     });

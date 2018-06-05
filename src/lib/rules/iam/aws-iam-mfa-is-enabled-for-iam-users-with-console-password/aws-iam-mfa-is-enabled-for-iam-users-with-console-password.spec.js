@@ -14,12 +14,11 @@ describe("mfa-is-enabled-for-iam-users-with-console-password", () => {
     test("Can confirm if valid = fail", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM","generateCredentialReport",{});
-        provider.Service("IAM","getCredentialReport", {
-            Content: csv
-        });
-
-        let result = await rule.livecheck({provider: provider});
+        let mockService = { IAM: {
+                GetIAMCredentialReport: () => Promise.resolve(csv)
+            }
+        };
+        let result = await rule.livecheck({provider: provider,services:mockService});
         expect(result.valid).toBe('fail');
         expect(result.resources).toHaveLength(1);
     })
@@ -27,12 +26,13 @@ describe("mfa-is-enabled-for-iam-users-with-console-password", () => {
     test("Can confirm if valid = fail", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM","generateCredentialReport",{});
-        provider.Service("IAM","getCredentialReport", {
-            Content: csv2
-        });
+        let mockService = { IAM: {
+                GetIAMCredentialReport: () => Promise.resolve(csv2)
+            }
+        };
 
-        let result = await rule.livecheck({provider: provider});
+
+        let result = await rule.livecheck({provider: provider,services:mockService});
         expect(result.valid).toBe('success');
     })
 });

@@ -22,7 +22,7 @@ pipelines:
           environment_variables:
             NODE_ENV: development
           tabs:
-            coverage: test-reports/snitch-coverage/index.html  
+            Coverage: test-reports/snitch-coverage/index.html
           tasks:
           - script: |
               cd snitch/src

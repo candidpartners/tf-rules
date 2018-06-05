@@ -164,6 +164,8 @@ let livecheck = co.wrap(function* (params) {
                     ruleId,
                     result
                 }
+            }).catch(err => {
+                console.error({ err, rule})
             })
 
 

@@ -27,14 +27,15 @@ IAMEnsureAccessKeysAreRotated.schema = {
 };
 
 IAMEnsureAccessKeysAreRotated.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
-    const IAM = new context.provider.IAM();
+   // const IAM = new context.provider.IAM();
     let {config, provider} = context;
 
     // Get credential report
-    await IAM.generateCredentialReport().promise();
-    let report = await IAM.getCredentialReport().promise();
-
-    let content = report.Content.toString();
+    // await IAM.generateCredentialReport().promise();
+    // let report = await IAM.getCredentialReport().promise();
+    //
+    // let content = report.Content.toString();
+    let content=await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
