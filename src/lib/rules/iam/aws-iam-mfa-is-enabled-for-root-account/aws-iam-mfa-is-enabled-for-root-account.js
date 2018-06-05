@@ -31,12 +31,13 @@ MFAIsEnabledForRootAccount.schema = {
 
 MFAIsEnabledForRootAccount.livecheck = async function( context /*: Context */) /*: Promise<RuleResult> */ {
 
-    let IAM = new context.provider.IAM();
-
-    await IAM.generateCredentialReport().promise();
-    let report = await IAM.getCredentialReport().promise();
-
-    let content = report.Content.toString();
+    // let IAM = new context.provider.IAM();
+    //
+    // await IAM.generateCredentialReport().promise();
+    // let report = await IAM.getCredentialReport().promise();
+    //
+    // let content = report.Content.toString();
+    let content=await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 

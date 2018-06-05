@@ -14,11 +14,15 @@ describe("mfa-is-enabled-for-root-account", () => {
     test("It fails becuase a no MFA device exists on the account.", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM", "generateCredentialReport", {});
-        provider.Service("IAM", "getCredentialReport", {Content: csv});
+
+        let mockService = { IAM: {
+                GetIAMCredentialReport: () => Promise.resolve(csv)
+            }
+        };
+
         provider.Service("IAM", "listVirtualMFADevices", {});
 
-        let result = await rule.livecheck({provider: provider});
+        let result = await rule.livecheck({provider: provider,services:mockService});
         expect(result.valid).toBe('fail');
         expect(result.message).toBe('Root account does not have hardware MFA enabled.');
     });
@@ -26,10 +30,11 @@ describe("mfa-is-enabled-for-root-account", () => {
     test("It fails becuase a virtual MFA device exists on the root account.", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM", "generateCredentialReport", {});
-        provider.Service("IAM", "getCredentialReport", {
-            Content: csv
-        });
+        let mockService = { IAM: {
+                GetIAMCredentialReport: () => Promise.resolve(csv)
+            }
+        };
+
         provider.Service("IAM", "listVirtualMFADevices", {
             "VirtualMFADevices": [
                 {
@@ -44,7 +49,7 @@ describe("mfa-is-enabled-for-root-account", () => {
             ]
         });
 
-        let result = await rule.livecheck({provider: provider});
+        let result = await rule.livecheck({provider: provider,services:mockService});
         expect(result.valid).toBe('fail');
         expect(result.message).toBe('Root account does not have hardware MFA enabled.');
     });
@@ -52,11 +57,14 @@ describe("mfa-is-enabled-for-root-account", () => {
     test("Can confirm if valid = success", async () => {
 
         let provider = new AWSMock();
-        provider.Service("IAM", "generateCredentialReport", {});
-        provider.Service("IAM", "getCredentialReport", {Content: csv2});
+        let mockService = { IAM: {
+                GetIAMCredentialReport: () => Promise.resolve(csv2)
+            }
+        };
+
         provider.Service("IAM", "listVirtualMFADevices", {});
 
-        let result = await rule.livecheck({provider: provider});
+        let result = await rule.livecheck({provider: provider,services:mockService});
         expect(result.valid).toBe('success');
     })
 });

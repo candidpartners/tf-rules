@@ -28,13 +28,8 @@ IAMEnsureUnusedCredentialsAreDisabled.schema = {
 
 IAMEnsureUnusedCredentialsAreDisabled.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {
     let {config, provider} = context;
-    const IAM = new context.provider.IAM();
 
-    // Get credential report
-    await IAM.generateCredentialReport().promise();
-    let report = await IAM.getCredentialReport().promise();
-
-    let content = report.Content.toString();
+    let content=await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
