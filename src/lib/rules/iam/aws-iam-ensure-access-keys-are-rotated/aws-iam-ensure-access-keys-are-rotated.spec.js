@@ -7,24 +7,28 @@ tes3.user,false,${(new Date(new Date() - 1000 * 60 * 60 * 24 * 88)).toDateString
 tes4.user,false,N/A,N/A,true,${(new Date(new Date() - 1000 * 60 * 60 * 24 * 80)).toDateString()},${(new Date(new Date() - 1000 * 60 * 60 * 24 * 89)).toDateString()}`;
 
 let _AWS = new AWSPromiseMock();
-let content = {
-    "Content": csv,
-    "GeneratedTime": "2018-03-01T15:28:51Z",
-    "ReportFormat": "text/csv"
+let MockService = { IAM: {
+        GetIAMCredentialReport: () => Promise.resolve(csv)
+    }
 };
+// let content = {
+//     "Content": csv,
+//     "GeneratedTime": "2018-03-01T15:28:51Z",
+//     "ReportFormat": "text/csv"
+// };
 
-_AWS.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
-_AWS.Service("IAM", "getCredentialReport", content);
+// _AWS.Service("IAM", "generateCredentialReport", {"State": "COMPLETE"});
+// _AWS.Service("IAM", "getCredentialReport", content);
 
 describe("IAM_ENSURE_ACCESS_KEYS_ARE_ROTATED", () => {
 
     test("It recognizes when the keys are rotated recently enough", async () => {
-        let result = await rule.livecheck({config: 90, provider: _AWS});
+        let result = await rule.livecheck({config: 90, provider: _AWS,services:MockService});
         expect(result.valid).toBe('success');
     });
 
     test("It recognizes when the keys are not rotated recently enough", async () => {
-        let result = await rule.livecheck({config: 60, provider: _AWS});
+        let result = await rule.livecheck({config: 60, provider: _AWS,services:MockService});
         expect(result.valid).toBe('fail');
         expect(result.message).toBeTruthy();
     });

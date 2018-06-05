@@ -30,12 +30,11 @@ HardwareMFAIsEnabledForRootAccount.schema = {
 
 
 HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {
-    let IAM = new context.provider.IAM();
 
-    await IAM.generateCredentialReport().promise();
-    let report1 = await IAM.getCredentialReport().promise();
+    // await IAM.generateCredentialReport().promise();
+    // let report1 = await IAM.getCredentialReport().promise();
 
-    let content = report1.Content.toString();
+    let content=await context.services.IAM.GetIAMCredentialReport({provider: context.provider, additionalParams: {}});
     let csv = Papa.parse(content, {header: true});
     let {data} = csv;
 
@@ -43,6 +42,7 @@ HardwareMFAIsEnabledForRootAccount.livecheck = async function (context /*: Conte
 
     let virtualRoot = undefined;
     if (rootUser1.mfa_active === "true") {
+        const IAM = new context.provider.IAM();
         let virtualReport = await IAM.listVirtualMFADevices().promise();
         if (virtualReport.VirtualMFADevices) {
             virtualRoot = virtualReport.VirtualMFADevices.find(x => x.SerialNumber.includes("mfa/root-account-mfa-device"));
