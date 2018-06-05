@@ -92,6 +92,16 @@ rules :
     days : 90
 - aws-iam-ensure-master-and-manager-roles-are-active :
     enabled : true
+- aws-iam-ensure-specified-groups-and-roles-exist :
+    enabled : true
+    groups :
+      - "Administrators"
+      - "Volker.UI"
+      - "TEST-GROUP"
+    roles :
+      - "Admin-Role"
+      - "Admin_Role"
+      - "TEST-ROLE"
 - aws-iam-ensure-unused-credentials-are-disabled :
     enabled : true
     days : 90
