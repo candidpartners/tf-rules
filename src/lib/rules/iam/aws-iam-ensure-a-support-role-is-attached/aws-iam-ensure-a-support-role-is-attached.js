@@ -18,13 +18,7 @@ IAMSupportRoleIsAttached.docs = {
 };
 IAMSupportRoleIsAttached.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

@@ -19,11 +19,6 @@ Route53NoCloudjackVulnerabilities.docs = {
 Route53NoCloudjackVulnerabilities.schema = {
     type: 'object',
     properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        },
         route53GoodReferences: {
             type: 'boolean',
             title: 'All Route53 aliases reference a valid CloudFront distribution.',

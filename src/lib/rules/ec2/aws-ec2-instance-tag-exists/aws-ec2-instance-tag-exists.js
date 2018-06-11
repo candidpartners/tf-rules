@@ -21,7 +21,6 @@ EC2TagExists.docs = {
 EC2TagExists.schema = {
     type: 'object',
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         names: {
             title: "Names",
             type: 'array',

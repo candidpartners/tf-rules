@@ -16,13 +16,7 @@ VPCRoutingTablesForVPCPeeringAreLeastAccess.paths = {VPCRoutingTablesForVPCPeeri
 VPCRoutingTablesForVPCPeeringAreLeastAccess.docs = {description: 'Routing tables for VPC peering should be "least access"', recommended: false};
 VPCRoutingTablesForVPCPeeringAreLeastAccess.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        }
-    }
+    properties: {}
 };
 
 VPCRoutingTablesForVPCPeeringAreLeastAccess.livecheck = async function (context) {

@@ -20,13 +20,7 @@ AWSSecurityGroupExists.docs = {
 
 AWSSecurityGroupExists.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

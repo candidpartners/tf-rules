@@ -21,13 +21,7 @@ S3CloudTrailBucketAccessLoggingEnabled.docs = {
 };
 S3CloudTrailBucketAccessLoggingEnabled.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 S3CloudTrailBucketAccessLoggingEnabled.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {

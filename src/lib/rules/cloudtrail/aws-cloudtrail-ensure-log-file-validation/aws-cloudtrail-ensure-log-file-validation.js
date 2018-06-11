@@ -20,13 +20,7 @@ CloudtrailLogFileValidation.docs = {
 };
 CloudtrailLogFileValidation.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 CloudtrailLogFileValidation.livecheck = async function (context /*: Context */) /*: Promise<RuleResult> */ {

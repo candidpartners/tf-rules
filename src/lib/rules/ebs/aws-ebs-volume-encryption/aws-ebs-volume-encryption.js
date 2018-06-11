@@ -20,9 +20,7 @@ EBSVolumeEncryption.docs = {
 };
 EBSVolumeEncryption.schema = {
     type: 'object',
-    required: ["enabled"],
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         exclude: {
             type: 'array',
             items: {

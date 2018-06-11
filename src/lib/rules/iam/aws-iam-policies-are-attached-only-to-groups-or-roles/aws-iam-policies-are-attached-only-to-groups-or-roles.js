@@ -9,7 +9,7 @@ const IAMPoliciesAreAttachedOnlyToGroupsOrRoles = {};
 
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.uuid = "deea587e-7c7a-4319-b570-32abea518f82";
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.groupName = "IAM";
-IAMPoliciesAreAttachedOnlyToGroupsOrRoles.tags = [["CIS", "1.1.0", "1.16"]];
+IAMPoliciesAreAttachedOnlyToGroupsOrRoles.tags = [["CIS", "1.1.0", "1.16"], ["NIST", "AC-2", "7(a)"]];
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.config_triggers = ["AWS::IAM::User"];
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.paths = {IAMPoliciesAreAttachedOnlyToGroupsOrRoles: "aws_iam_user"};
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.docs = {
@@ -18,13 +18,7 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.docs = {
 };
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {

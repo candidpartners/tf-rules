@@ -15,13 +15,7 @@ IAMMasterAndManagerRolesAreActive.paths = {IAMMasterAndManagerRolesAreActive: "a
 IAMMasterAndManagerRolesAreActive.docs = {description: 'Both Master and Manager IAM roles are active.', recommended: true};
 IAMMasterAndManagerRolesAreActive.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 
