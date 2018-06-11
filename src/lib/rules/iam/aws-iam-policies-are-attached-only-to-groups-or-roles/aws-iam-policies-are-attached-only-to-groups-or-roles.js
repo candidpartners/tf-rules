@@ -18,13 +18,7 @@ IAMPoliciesAreAttachedOnlyToGroupsOrRoles.docs = {
 };
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 IAMPoliciesAreAttachedOnlyToGroupsOrRoles.livecheck = async function(context /*: Context */) /*: Promise<RuleResult> */ {

@@ -21,13 +21,7 @@ DynamoDBPontInTimeRecoveryStatus.docs = {
 };
 DynamoDBPontInTimeRecoveryStatus.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: false
-        }
-    }
+    properties: {}
 };
 //------------------------------------------------------------------------------
 // livecheck
@@ -47,7 +41,7 @@ DynamoDBPontInTimeRecoveryStatus.livecheck = async function(context) {
             is_compliant: isEnabled==='ENABLED' ? true : false,
             resource_id: tableName,
             resource_type: "AWS::DynamoDB::Table",
-            message: `is ${isEnabled.toLowerCase()}`
+            message: (isEnabled === 'ENABLED') ? "has point-in-time recovery enabled." : "does not have point-in-time recovery enabled."
         }
     });
     const resources = await Promise.all(promises);

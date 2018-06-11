@@ -15,13 +15,7 @@ CloudTrailIsEnabledInAllRegions.paths = {CloudTrailIsEnabledInAllRegions: "aws_c
 CloudTrailIsEnabledInAllRegions.docs = {description: 'At least one CloudTrail resource is enabled in all regions.', recommended: true};
 CloudTrailIsEnabledInAllRegions.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

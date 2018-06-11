@@ -15,13 +15,7 @@ IAMPoliciesAreLeastPrivileged.paths = {IAMNoPoliciesWithFullPrivileges: "aws_iam
 IAMPoliciesAreLeastPrivileged.docs = {description: 'IAM policies should follow a least-privileged model.', recommended: true};
 IAMPoliciesAreLeastPrivileged.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

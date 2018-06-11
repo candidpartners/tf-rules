@@ -21,7 +21,6 @@ DynamoDBEncryption.docs = {
 DynamoDBEncryption.schema = {
     type: 'object',
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         exclude: {
             type: "array",
             items: {

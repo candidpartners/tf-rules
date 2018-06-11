@@ -21,8 +21,11 @@ IAMEnsureAccessKeysAreRotated.docs = {
 IAMEnsureAccessKeysAreRotated.schema = {
     type: "object",
     properties: {
-        enabled: {type: 'boolean', title: "Enabled", default: true},
-        days: {type: 'number', title: "Number of days", default: 90}
+        days: {
+            type: 'number',
+            title: "Number of days",
+            default: 90
+        }
     }
 };
 

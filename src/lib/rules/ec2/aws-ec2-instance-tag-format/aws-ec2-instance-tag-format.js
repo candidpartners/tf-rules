@@ -20,7 +20,6 @@ EC2TagFormat.docs = {
 EC2TagFormat.schema = {
     type: "object",
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         tags: {
             title: "Tags",
             type: 'array',

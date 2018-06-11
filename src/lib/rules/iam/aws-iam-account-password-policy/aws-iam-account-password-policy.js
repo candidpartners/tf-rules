@@ -34,7 +34,6 @@ IAMAccountPasswordPolicy.schema = {
         "PasswordReusePrevention"
     ],
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         MinimumPasswordLength: {type: "number", title: "Minimum password length", default: 14},
         MaxPasswordAge: {type: "number", title: "Max password age", default: 90},
         RequireSymbols: {type: "boolean", title: "Require symbols", default: true},

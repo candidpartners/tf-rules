@@ -16,11 +16,6 @@ SnsEnsureAppropriateSubscribers.docs = {description: 'The list of subscribers to
 SnsEnsureAppropriateSubscribers.schema = {
     type: 'object',
     properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        },
         global_whitelist: { // Users in this list can be subscribed to any topic
             type: 'array',
             title: 'Global Whitelist',
@@ -34,13 +29,13 @@ SnsEnsureAppropriateSubscribers.schema = {
             items: {
                 type: 'object',
                 properties: {
-                    topic_arn: {
+                    arn: {
                         type: 'string',
-                        title: 'Topic ARN'
+                        title: 'ARN'
                     },
-                    topic_whitelist: { // Only users that are in this list should be subscribed to this topic
+                    whitelist: { // Only users that are in this list should be subscribed to this topic
                         type: 'array',
-                        title: 'Topic Whitelist',
+                        title: 'Whitelist',
                         items: {
                             type: 'string'
                         }

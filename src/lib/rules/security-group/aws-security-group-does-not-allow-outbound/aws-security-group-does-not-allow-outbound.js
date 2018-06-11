@@ -23,7 +23,6 @@ AWSSecurityGroupDoesNotAllowOutbound.docs = {
 AWSSecurityGroupDoesNotAllowOutbound.schema = {
     type: 'object',
     properties: {
-        enabled: {type: "boolean", title: "Enabled", default: true},
         cidr: {
             type: 'string',
             title: 'CIDR',

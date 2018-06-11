@@ -15,13 +15,7 @@ VPCDefaultSecurityGroupRestrictsAllTraffic.paths = {VPCDefaultSecurityGroupRestr
 VPCDefaultSecurityGroupRestrictsAllTraffic.docs = {description: 'The default security group of every VPC should restrict all traffic.', recommended: true};
 VPCDefaultSecurityGroupRestrictsAllTraffic.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

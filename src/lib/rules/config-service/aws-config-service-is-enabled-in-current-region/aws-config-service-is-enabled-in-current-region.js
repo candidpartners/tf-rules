@@ -20,13 +20,7 @@ ConfigServiceEnabled.docs = {
 };
 ConfigServiceEnabled.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: false
-        }
-    }
+    properties: {}
 };
 ConfigServiceEnabled.validateS3BucketExists=async (context) => {
     let {config, provider} = context;
@@ -61,12 +55,18 @@ ConfigServiceEnabled.livecheck = async (context) => {
         return new RuleResult({
             valid: IsValid ? 'success' : 'fail',
             message: IsValid ? '' : message,
-            resources: [{
-                    is_compliant: IsValid ? true : false,
-                    resource_id: '',
-                    resource_type: "AWS::Config::Service",
-                    message: IsValid ? '' : message
-                }]
+            resources: [new Resource({
+                is_compliant: IsValid ? true : false,
+                resource_id: "ConfigService",
+                resource_type: "AWS::ConfigService::Enabled",
+                message: IsValid ? `is enabled in this region.` : "is not enabled in this region."
+            })]
+            // resources: [{
+            //         is_compliant: IsValid ? true : false,
+            //         resource_id: '',
+            //         resource_type: "AWS::Config::Service",
+            //         message: IsValid ? '' : message
+            //     }]
         })
 
 

@@ -16,13 +16,7 @@ VpcFlowLogsAreEnabled.paths = {VpcFlowLogsAreEnabled: "aws_flow_log"};
 VpcFlowLogsAreEnabled.docs = {description: 'Flow logging should be enabled in all VPCs', recommended: true};
 VpcFlowLogsAreEnabled.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

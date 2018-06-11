@@ -20,13 +20,7 @@ KMSKeyRotation.docs = {
 };
 KMSKeyRotation.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 KMSKeyRotation.livecheck = async function(context /*: Context*/) /*: Promise<RuleResult>*/ {

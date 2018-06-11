@@ -15,13 +15,7 @@ IAMNoInitialAccessKeys.paths = {IAMNoInitialAccessKeys: "aws_iam_user"};
 IAMNoInitialAccessKeys.docs = {description: 'Access keys should not be set up during initial IAM user setup.', recommended: false};
 IAMNoInitialAccessKeys.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        }
-    }
+    properties: {}
 };
 
 

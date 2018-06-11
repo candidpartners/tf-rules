@@ -16,11 +16,6 @@ IAMEnsureSpecifiedGroupsAndRolesExist.docs = {description: 'The user should spec
 IAMEnsureSpecifiedGroupsAndRolesExist.schema = {
     type: 'object',
     properties: {
-        enabled: {
-            type: 'boolean',
-            title: 'Enabled',
-            default: true
-        },
         groups: {
           type: 'array',
           title: 'Groups',

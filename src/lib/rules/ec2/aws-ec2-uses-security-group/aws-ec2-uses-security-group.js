@@ -20,7 +20,6 @@ EC2UsesSecurityGroup.docs = {
 EC2UsesSecurityGroup.schema = {
     type: 'object',
     properties: {
-        enabled: {type: "boolean", title: "Enabled"},
         security_groups: {
             title: "Security group names",
             type: "array",

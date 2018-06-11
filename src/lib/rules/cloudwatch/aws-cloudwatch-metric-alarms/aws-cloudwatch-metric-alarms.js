@@ -38,7 +38,6 @@ CloudWatchMetricAlarms.docs = {
 CloudWatchMetricAlarms.schema = {
     type: 'object',
     properties: {
-        enabled: {type: 'boolean', title: 'Enabled', default: true},
         UnauthorizedAPICalls: {type: 'boolean', title: "Unauthorized API calls", default: false},
         ManagementConsoleSignInWithoutMFA: {type: 'boolean', title: "Management console sign in without MFA", default: false},
         UsageOfRootAccount: {type: 'boolean', title: "Usage of root account", default: false},

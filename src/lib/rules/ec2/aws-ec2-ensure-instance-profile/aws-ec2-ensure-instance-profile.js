@@ -21,13 +21,7 @@ EC2EnsureInstanceRole.docs = {
 
 EC2EnsureInstanceRole.schema = {
     type: 'object',
-    properties: {
-        enabled: {
-            type: 'boolean',
-            title: "Enabled",
-            default: true
-        }
-    }
+    properties: {}
 };
 
 
@@ -56,7 +50,7 @@ EC2EnsureInstanceRole.livecheck = async function (context /*: Context */) /*: Pr
         is_compliant: getInstanceRoleARN(x) ? true : false,
         resource_id: x.InstanceId,
         resource_type: "AWS::EC2::Instance",
-        message: getInstanceRoleARN(x) ? `has instance profile: ${getInstanceRoleARN(x)}.` : `does not have an instance profile.`
+        message: getInstanceRoleARN(x) ? `has instance profile ${getInstanceRoleARN(x)}.` : `does not have an instance profile.`
     }));
 
     return new RuleResult({

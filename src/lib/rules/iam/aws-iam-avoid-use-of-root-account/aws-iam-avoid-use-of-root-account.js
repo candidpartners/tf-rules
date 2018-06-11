@@ -20,8 +20,11 @@ IAMAvoidUseOfRootAccount.docs = {
 IAMAvoidUseOfRootAccount.schema = {
     type: 'object',
     properties: {
-        enabled: {type: 'boolean', title: "Enabled", default: true},
-        days: {type: 'number', title: "Number of days", default: 30}
+        days: {
+            type: 'number',
+            title: "Number of days",
+            default: 30
+        }
     }
 };
 
