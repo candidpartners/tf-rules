@@ -12,11 +12,13 @@ VpcFlowLogsAreEnabled.uuid = "7fbba5df-8c3b-4150-b2e0-2bfa221e3c89";
 VpcFlowLogsAreEnabled.groupName = "VPC";
 VpcFlowLogsAreEnabled.tags = [["CID", "1.1.0", "4.3"]];
 VpcFlowLogsAreEnabled.config_triggers = ["AWS::EC2::VPC"];
-VpcFlowLogsAreEnabled.paths = {VpcFlowLogsAreEnabled: "aws_flow_log"};
+VpcFlowLogsAreEnabled.paths = {VpcFlowLogsAreEnabled: "aws_vpc"};
 VpcFlowLogsAreEnabled.docs = {description: 'Flow logging should be enabled in all VPCs', recommended: true};
 VpcFlowLogsAreEnabled.schema = {
     type: 'object',
-    properties: {}
+    properties: {
+        enabled: {type: "boolean"}
+    }
 };
 
 
@@ -46,5 +48,35 @@ VpcFlowLogsAreEnabled.livecheck = async function (context) {
         })
     });
 };
+
+VpcFlowLogsAreEnabled.validate = async function(context){
+
+    let vpc = context.instance;
+    let instancePath = context.instancePath;
+    let plan = context.plan;
+    let graph = context.graph;
+
+    // console.log(plan);
+    let flowLogs = _.map(plan.aws_flow_log || {}, (flowLog, name) => {
+        return `aws_flow_log.${name}`
+    })
+
+
+    let attachedFlowLog = flowLogs.find(x => {
+        let connections = graph.getConnectionsFromNode(x);
+        return connections.includes(instancePath);
+    })
+
+    if(attachedFlowLog)
+        return {valid: "success"}
+
+    else {
+        return {
+            valid: 'fail',
+            resource_type: "AWS::EC2::VPC",
+            message: "A VPC exists without flowlogs"
+        } 
+    }
+}
 
 module.exports = VpcFlowLogsAreEnabled;

@@ -1,6 +1,6 @@
 {
   "name": "@candidpartners/snitch",
-  "version": "2.3.34",
+  "version": "2.4.0",
   "description": "Rules engine for checking Terraform",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "error"
   ],
   "bin": {
-    "snitch": "./bin/snitch.js"
+    "snitch": "./bin/snitch-cli.js"
   },
   "author": "Aaron Bawcom <abawcom@gmail.com>",
   "license": "ISC",
@@ -33,6 +33,7 @@
     "aws-sdk": "^2.203.0",
     "co": "^4.6.0",
     "colors": "^1.1.2",
+    "commander": "^2.15.1",
     "debug": "^2.5.2",
     "get-stdin": "^5.0.1",
     "in-range": "^1.0.0",
