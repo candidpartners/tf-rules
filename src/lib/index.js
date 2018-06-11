@@ -83,11 +83,12 @@ function report(result, instanceName, rule, ruleId) {
     }
 }
 
-function* validatePlan(params) {
+async function validatePlan(params) {
     const plan = params.plan;
     const provider = params.provider;
     debug('allConfig: %j', params.config);
     let results = [];
+
     if (_.isObject(plan) && !_.isArray(plan) && !_.isEmpty(plan)) {
         for (let ruleInstance of params.config) {
             debug('ruleInstance: %j', ruleInstance);
@@ -108,7 +109,7 @@ function* validatePlan(params) {
                 if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
                     for (let instanceName of _.keys(searchResult.search)) {
                         let instance = searchResult.search[instanceName];
-                        let result = yield Promise.resolve(rule.validate({config, instance, plan, jp, provider, _}));
+                        let result = await Promise.resolve(rule.validate({config, instance, plan, jp, provider, _}));
                         results.push(result);
                         report(result, instanceName, rule, ruleId);
                     }

@@ -72,6 +72,7 @@ module.exports.main = function* main(testVars) {
     // CLI only arguments
     let cliArgs = require('nconf').argv();
 
+    console.log(cliArgs);
     // Get Version
     if (cliArgs.get('v') || cliArgs.get('version')) {
         console.log(packageJSON.version);

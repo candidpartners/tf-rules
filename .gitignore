@@ -4,6 +4,7 @@ aws-config-lambda/bin
 *.zip
 .DS_STORE
 .terraform
+terraform-sandbox
 
 # Logs
 .terraform
