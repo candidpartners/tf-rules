@@ -50,6 +50,7 @@ program
             console.log("Running terraform plan");
             planOutput = cp.execSync("terraform plan -no-color").toString();
             if (context.output) {
+                console.log("Writing plan output to file")
                 fs.writeFileSync('./plan_output.txt', planOutput)
             }
         }
@@ -62,7 +63,8 @@ program
         } else {
             console.log("Running terraform graph")
             graphOutput = cp.execSync("terraform graph").toString();
-            if (program.output) {
+            if (context.output) {
+                console.log("Writing graph output to file")
                 fs.writeFileSync('./graph_output.txt', graphOutput)
             }
         }

@@ -105,11 +105,28 @@ async function validatePlan(params) {
                 search: jp.search(plan, paths[path])
             }));
 
+            console.log(plan);
+
             for (let searchResult of searchResults) {
                 if (_.isObject(searchResult.search) && !_.isArray(searchResult.search)) {
+
+                    // Get Path
+                    let obj = rule.paths;
+                    let path = obj[Object.keys(obj)[0]];
+
                     for (let instanceName of _.keys(searchResult.search)) {
                         let instance = searchResult.search[instanceName];
-                        let result = await Promise.resolve(rule.validate({config, instance, plan, jp, provider, _}));
+                        let result = await Promise.resolve(rule.validate({
+                            config,
+                            instance,
+                            instanceName,
+                            instancePath: `${path}.${instanceName}`,
+                            plan,
+                            jp,
+                            provider,
+                            _,
+                            graph: params.graph
+                        }));
                         results.push(result);
                         report(result, instanceName, rule, ruleId);
                     }

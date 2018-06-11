@@ -138,3 +138,5 @@ rules :
 #VPC
 - aws-vpc-no-default-vpc :
     enabled : true
+- aws-vpc-flow-logs-are-enabled :
+    enabled : true
