@@ -34,14 +34,12 @@ describe("Rules", () => {
         })
     });
 
-    test("Each rule config is an object, with a property of enabled", () => {
+    test("Each rule config is an object", () => {
         let invalidRules = [];
         _.forEach(rules,(rule,ruleName) => {
             try{
                 expect(rule.schema).toBeTruthy();
                 expect(rule.schema.type).toBe("object");
-                expect(rule.schema.properties.enabled).toBeTruthy();
-                expect(rule.schema.properties.enabled.type).toBeTruthy();
             } catch(err){
                 invalidRules.push(ruleName);
             }
