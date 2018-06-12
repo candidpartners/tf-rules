@@ -9,7 +9,7 @@ const IAMPoliciesHaveRequestedRegion = {};
 
 IAMPoliciesHaveRequestedRegion.uuid = "0f5358c2-35bc-4dbb-8750-ffdc53d58423";
 IAMPoliciesHaveRequestedRegion.groupName = "IAM";
-IAMPoliciesHaveRequestedRegion.tags = [["Candid", "1.0", "16"]];
+IAMPoliciesHaveRequestedRegion.tags = [["Candid", "1.0", "10"]];
 IAMPoliciesHaveRequestedRegion.config_triggers = ["AWS::IAM::Policy"];
 IAMPoliciesHaveRequestedRegion.paths = {IAMPoliciesHaveRequestedRegion: "aws_iam_policy"};
 IAMPoliciesHaveRequestedRegion.docs = {description: 'All IAM policies should have a RequestedRegion condition.', recommended: true};

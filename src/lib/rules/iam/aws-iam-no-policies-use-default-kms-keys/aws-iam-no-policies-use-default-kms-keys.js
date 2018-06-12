@@ -10,7 +10,7 @@ const IAMNoPoliciesUseDefaultKMSKeys = {};
 
 IAMNoPoliciesUseDefaultKMSKeys.uuid = "aacd1ad6-acf0-49b4-bc00-883599007677";
 IAMNoPoliciesUseDefaultKMSKeys.groupName = "IAM";
-IAMNoPoliciesUseDefaultKMSKeys.tags = [];
+IAMNoPoliciesUseDefaultKMSKeys.tags = [["Candid", "1.0", "9"]];
 IAMNoPoliciesUseDefaultKMSKeys.config_triggers = ["AWS::IAM::Policy"];
 IAMNoPoliciesUseDefaultKMSKeys.paths = {};
 IAMNoPoliciesUseDefaultKMSKeys.docs = {

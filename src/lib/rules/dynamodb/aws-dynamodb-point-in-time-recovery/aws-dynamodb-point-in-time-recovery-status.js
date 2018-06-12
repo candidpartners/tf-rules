@@ -12,7 +12,7 @@ const DynamoDBPontInTimeRecoveryStatus = {};
 
 DynamoDBPontInTimeRecoveryStatus.uuid = "b5ed58c5-2989-4bd3-f2bb-1f245405cb74";
 DynamoDBPontInTimeRecoveryStatus.groupName = "DynamoDB";
-DynamoDBPontInTimeRecoveryStatus.tags = [["Candid", "1.0", "1"]];
+DynamoDBPontInTimeRecoveryStatus.tags = [["Candid", "1.0", "2"]];
 DynamoDBPontInTimeRecoveryStatus.config_triggers = ["AWS::DynamoDB::Table"];
 DynamoDBPontInTimeRecoveryStatus.paths = {ContinuousBackupsDescription: "aws_dynamodb_table"};
 DynamoDBPontInTimeRecoveryStatus.docs = {

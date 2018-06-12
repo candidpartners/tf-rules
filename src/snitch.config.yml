@@ -58,7 +58,6 @@ rules :
       - "World"
 
 #IAM
-- aws-iam-no-policies-use-default-kms-keys: {}
 - aws-iam-account-password-policy :
     MinimumPasswordLength : 14
     MaxPasswordAge: 90
@@ -90,6 +89,7 @@ rules :
 - aws-iam-mfa-is-enabled-for-iam-users-with-console-password : {}
 - aws-iam-mfa-is-enabled-for-root-account : {}
 - aws-iam-no-initial-access-keys : {}
+- aws-iam-no-policies-use-default-kms-keys: {}
 - aws-iam-no-root-account-access-key-exists : {}
 - aws-iam-policies-are-attached-only-to-groups-or-roles : {}
 - aws-iam-policies-are-least-privileged : {}
@@ -111,14 +111,14 @@ rules :
     route53GoodCnames : true
 
 #S3
-- aws-s3-ensure-versioning : {}
-- aws-s3-only-allow-encrypted-objects:
-    AllowAES256: true
 - aws-s3-cloudtrail-bucket-access-logging-enabled : {}
 - aws-s3-cloudtrail-bucket-is-not-publicly-accessible : {}
 - aws-s3-encryption :
     exclude:
       - volker-dev-accounts
+- aws-s3-ensure-versioning : {}
+- aws-s3-only-allow-encrypted-objects:
+    AllowAES256: true
 
 #Security Group
 - aws-security-group-allows-inbound :

@@ -11,7 +11,7 @@ const S3Encryption = {};
 
 S3Encryption.uuid = "875dcd25-644a-4ffd-831d-003e7a41090c";
 S3Encryption.groupName = "S3";
-S3Encryption.tags = [["Candid", "1.0", "9"]];
+S3Encryption.tags = [["Candid", "1.0", "14"]];
 S3Encryption.config_triggers = ["AWS::S3::Bucket"];
 S3Encryption.paths = {S3Encryption: "aws_s3_bucket"};
 S3Encryption.docs = {

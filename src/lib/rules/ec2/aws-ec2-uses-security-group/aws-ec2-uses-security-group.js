@@ -10,7 +10,7 @@ const EC2UsesSecurityGroup = {};
 
 EC2UsesSecurityGroup.uuid = "fc877cb6-c786-414a-a06d-50dbde92db74";
 EC2UsesSecurityGroup.groupName = "EC2";
-EC2UsesSecurityGroup.tags = [["Candid", "1.0", "7"]];
+EC2UsesSecurityGroup.tags = [["Candid", "1.0", "8"]];
 EC2UsesSecurityGroup.config_triggers = ["AWS::EC2::Instance"];
 EC2UsesSecurityGroup.paths = {EC2UsesSecurityGroup: 'aws_instance'};
 EC2UsesSecurityGroup.docs = {

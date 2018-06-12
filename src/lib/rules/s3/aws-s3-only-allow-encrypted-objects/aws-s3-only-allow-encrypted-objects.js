@@ -10,7 +10,7 @@ const RuleName = {};
 
 RuleName.uuid = "6151e4fa-3814-462c-a017-1dc89a60ea0b";
 RuleName.groupName = "S3";
-RuleName.tags = [["Candid", "1.0", "10"]];
+RuleName.tags = [["Candid", "1.0", "15"]];
 RuleName.config_triggers = ["AWS::S3::Bucket"];
 RuleName.paths = {};
 RuleName.docs = {

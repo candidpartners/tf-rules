@@ -9,7 +9,7 @@ const Route53NoCloudjackVulnerabilities = {};
 
 Route53NoCloudjackVulnerabilities.uuid = "6b9469b8-b356-4ab0-bac2-f73daf3fadc9";
 Route53NoCloudjackVulnerabilities.groupName = "Route53";
-Route53NoCloudjackVulnerabilities.tags = [["Candid", "1.0", "17"]];
+Route53NoCloudjackVulnerabilities.tags = [["Candid", "1.0", "12"]];
 Route53NoCloudjackVulnerabilities.config_triggers = ["AWS::Route53::RecordSet"];
 Route53NoCloudjackVulnerabilities.paths = {Route53NoCloudjackVulnerabilities: "aws_route53_zone"};
 Route53NoCloudjackVulnerabilities.docs = {
