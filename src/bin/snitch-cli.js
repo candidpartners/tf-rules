@@ -17,6 +17,7 @@ const DotFile = require('./dot-file-parser');
 program
     .command("livecheck")
     .option("-c, --config <config_file>")
+    .option("-j, --json", "Output as JSON")
     .action((context) => {
         let config = GetConfigFile(context.config);
         AWS.config.update({ region: config.provider.region });
@@ -24,11 +25,15 @@ program
             rules,
             config: config.rules,
             provider: AWS,
-            report: true
+            report: !context.json
         })
-            .then(OnSuccessfulRun)
+            .then(result => {
+                if(context.json)
+                    console.log(JSON.stringify(result,null,2));
+                OnSuccessfulRun(result)
+            })
             .catch(OnError)
-    })
+    });
 
 
 // Terraform
@@ -76,6 +81,7 @@ program
     })
 
 // Set up CLI
+program.version(packageJson.version);
 program.parse(process.argv);
 
 
@@ -105,10 +111,10 @@ function GetConfigFile(config_path = "snitch.config.yml") {
 
 function OnSuccessfulRun(result) {
     if (result.every(x => x.valid === 'success')) {
-        console.log('All resources are compliant')
+        // console.log('All resources are compliant')
         process.exit(0);
     } else {
-        console.log('Some resources are not compliant')
+        // console.log('Some resources are not compliant')
         process.exit(1);
     }
 }
